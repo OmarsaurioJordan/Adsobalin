@@ -12,6 +12,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.shape.Polygon;
+import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import javafx.stage.Screen;
 
 public abstract class GUIs extends Scene {
     
@@ -20,15 +23,31 @@ public abstract class GUIs extends Scene {
     protected GraphicsContext gc;
     protected Group gui;
     
+    // para oscurecer lo que este fuera del area de dibujado
+    private Rectangle fondo = new Rectangle();
+    
     public GUIs(Stage raiz) {
         super(new Group(), Adsobalin.width, Adsobalin.height);
         this.raiz = raiz;
+        gui = (Group)getRoot();
+        
+        // poner un rectangulo negro al fondo
+        fondo.setFill(Color.BLACK);
+        gui.getChildren().add(fondo);
         
         // crea la clase que permite el dibujado de imagenes
         Canvas lienzo = new Canvas(Adsobalin.width, Adsobalin.height);
-        this.gui = (Group)this.getRoot();
         gui.getChildren().add(lienzo);
-        this.gc = lienzo.getGraphicsContext2D();
+        gc = lienzo.getGraphicsContext2D();
+    }
+    
+    public void setFondo(double escala) {
+        double scW = Screen.getPrimary().getVisualBounds().getWidth();
+        double scH = Screen.getPrimary().getVisualBounds().getHeight();
+        fondo.setX(-scW / escala);
+        fondo.setY(-scH / escala);
+        fondo.setWidth((scW * 2d) / escala);
+        fondo.setHeight((scH * 2d) / escala);
     }
     
     protected Label setLabel(String texto, float posX, float posY) {
@@ -38,7 +57,7 @@ public abstract class GUIs extends Scene {
         txt.setLayoutX(posX);
         txt.setLayoutY(posY);
         txt.setPrefWidth(200f * Adsobalin.escala);
-        this.gui.getChildren().add(txt);
+        gui.getChildren().add(txt);
         return txt;
     }
     
@@ -89,7 +108,7 @@ public abstract class GUIs extends Scene {
         // coloca el boton en la interfaz en la posicion x,y
         boton.setLayoutX(posX - lado / 2f);
         boton.setLayoutY(posY - lado / 2f);
-        this.gui.getChildren().add(boton);
+        gui.getChildren().add(boton);
         return boton;
     }
 }

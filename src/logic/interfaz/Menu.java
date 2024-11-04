@@ -34,12 +34,12 @@ public class Menu extends GUIs {
         super(raiz);
         
         // permite guardar la informacion de la interfaz cuando esta cierra
-        this.raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
+        raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
             if (oldScn == this) {
                 guardarDatos();
             }
         });
-        this.raiz.setOnCloseRequest(event -> {
+        raiz.setOnCloseRequest(event -> {
             guardarDatos();
         });
         
@@ -52,24 +52,24 @@ public class Menu extends GUIs {
         float esc = (float)Adsobalin.escala;
         
         // pintar el fondo de la interfaz
-        this.gc.setFill(Color.rgb(
+        gc.setFill(Color.rgb(
                 (179 + 220) / 2,
                 (167 + 220) / 2,
                 (125 + 220) / 2
         ));
-        this.gc.fillRect(0, 0, ww, hh);
+        gc.fillRect(0, 0, ww, hh);
         
         // colocar el titulo principal arriba en el centro
         float[] wh = {489f * 0.5f * esc, 323f * 0.5f * esc};
         Image titulo = new Image("assets/interfaz/titulo.png",
             wh[0], wh[1], false, false);
-        this.gc.drawImage(titulo, ww / 2f - wh[0] / 2f, hh * 0.05f);
+        gc.drawImage(titulo, ww / 2f - wh[0] / 2f, hh * 0.05f);
         
         // colocar el simbolo de omwekiatl en la esquina inferior izquierda
         wh[0] = 175f * 0.6f * esc; wh[1] = 200f * 0.6f * esc;
         Image creditos = new Image("assets/interfaz/creditos.png",
             wh[0], wh[1], false, false);
-        this.gc.drawImage(creditos, ww * 0.02f, hh * 0.98f - wh[1]);
+        gc.drawImage(creditos, ww * 0.02f, hh * 0.98f - wh[1]);
         
         // colocar la version de compilacion arriba a la izquierda
         setLabel("v" + Adsobalin.version, ww * 0.05f, hh * 0.05f);
@@ -87,7 +87,7 @@ public class Menu extends GUIs {
         fieldNombre.setLayoutX(ww * 0.4f - 100f * esc);
         fieldNombre.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
         fieldNombre.setPrefWidth(100f * esc);
-        this.gui.getChildren().add(fieldNombre);
+        gui.getChildren().add(fieldNombre);
         
         // colocar una caja de escritura al lado derecho, para IP
         setLabel("IP de server o vacío", ww * 0.5f + 10f * esc,
@@ -102,7 +102,7 @@ public class Menu extends GUIs {
         fieldIP.setLayoutX(ww * 0.5);
         fieldIP.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
         fieldIP.setPrefWidth(200f * esc);
-        this.gui.getChildren().add(fieldIP);
+        gui.getChildren().add(fieldIP);
         
         // colocar el gran boton de play abajo a la derecha
         Button play = setButton("assets/interfaz/play",
@@ -126,28 +126,28 @@ public class Menu extends GUIs {
     
     private void ejecutar() {
         // al pulsar el boton grande de play
-        this.raiz.setScene(new Lobby(this.raiz));
+        raiz.setScene(new Lobby(raiz));
     }
     
     private void cambiarEstilo(int direccion) {
         // al pulsar alguno de los botones de cambio de estilo
-        this.estilo += direccion;
-        if (this.estilo <= 0) {
-            this.estilo = 28;
+        estilo += direccion;
+        if (estilo <= 0) {
+            estilo = 28;
         }
-        else if (this.estilo > 28) {
-            this.estilo = 1;
+        else if (estilo > 28) {
+            estilo = 1;
         }
         setAvatar(false);
     }
     
     private void cambiarGrupo() {
         // al pulsar el avatar cambia de grupo (color)
-        if (this.grupo == Adsobalin.AZUL) {
-            this.grupo = Adsobalin.ROJO;
+        if (grupo == Adsobalin.AZUL) {
+            grupo = Adsobalin.ROJO;
         }
         else {
-            this.grupo = Adsobalin.AZUL;
+            grupo = Adsobalin.AZUL;
         }
         setAvatar(false);
     }
@@ -156,11 +156,11 @@ public class Menu extends GUIs {
         // primero se obtienen las imagenes de estado del boton
         float lado = 120f * 0.75f * (float)Adsobalin.escala;
         for (int i = 0; i < 29; i++) {
-            this.rojo[i] = new Image("assets/rojos/rojo" + i + ".png",
+            rojo[i] = new Image("assets/rojos/rojo" + i + ".png",
                 lado, lado, false, false);
         }
         for (int i = 0; i < 29; i++) {
-            this.azul[i] = new Image("assets/azules/azul" + i + ".png",
+            azul[i] = new Image("assets/azules/azul" + i + ".png",
                 lado, lado, false, false);
         }
         
@@ -168,7 +168,7 @@ public class Menu extends GUIs {
         Button boton = new Button();
         boton.setFocusTraversable(false);
         boton.setBackground(Background.EMPTY);
-        boton.setGraphic(this.sprAvatar);
+        boton.setGraphic(sprAvatar);
         setAvatar(false);
         
         // se crea la mascara de colision con forma circular
@@ -186,7 +186,7 @@ public class Menu extends GUIs {
         // coloca el boton en la interfaz en la posicion x,y
         boton.setLayoutX(posX - lado / 2f);
         boton.setLayoutY(posY - lado / 2f);
-        this.gui.getChildren().add(boton);
+        gui.getChildren().add(boton);
         return boton;
     }
     
@@ -194,43 +194,43 @@ public class Menu extends GUIs {
         // pone como tal la imagen correspondiente al boton
         if (isReversed) {
             // la coloca con color invertido
-            if (this.grupo == Adsobalin.AZUL) {
-                this.sprAvatar.setImage(this.rojo[this.estilo]);
+            if (grupo == Adsobalin.AZUL) {
+                sprAvatar.setImage(rojo[estilo]);
             }
             else {
-                this.sprAvatar.setImage(this.azul[this.estilo]);
+                sprAvatar.setImage(azul[estilo]);
             }
         }
         else {
             // o con el color que realmente debe tener
-            if (this.grupo == Adsobalin.AZUL) {
-                this.sprAvatar.setImage(this.azul[this.estilo]);
+            if (grupo == Adsobalin.AZUL) {
+                sprAvatar.setImage(azul[estilo]);
             }
             else {
-                this.sprAvatar.setImage(this.rojo[this.estilo]);
+                sprAvatar.setImage(rojo[estilo]);
             }
         }
     }
     
     private void leerDatos() {
         Random rnd = new Random();
-        this.grupo = 1 + rnd.nextInt(2); // 1 a 2
-        this.estilo = 1 + rnd.nextInt(28); // 1 a 28
-        if (this.data.cargarData(this.datapath)) {
-            this.grupo = Integer.parseInt(
-                this.data.getData("grupo", String.valueOf(this.grupo)));
-            this.estilo = Integer.parseInt(
-                this.data.getData("estilo", String.valueOf(this.estilo)));
-            this.fieldNombre.setText(this.data.getData("nombre", ""));
-            this.fieldIP.setText(this.data.getData("ip", ""));
+        grupo = 1 + rnd.nextInt(2); // 1 a 2
+        estilo = 1 + rnd.nextInt(28); // 1 a 28
+        if (data.cargarData(datapath)) {
+            grupo = Integer.parseInt(
+                data.getData("grupo", String.valueOf(grupo)));
+            estilo = Integer.parseInt(
+                data.getData("estilo", String.valueOf(estilo)));
+            fieldNombre.setText(data.getData("nombre", ""));
+            fieldIP.setText(data.getData("ip", ""));
         }
     }
     
     private void guardarDatos() {
-        this.data.setData("grupo", String.valueOf(this.grupo));
-        this.data.setData("estilo", String.valueOf(this.estilo));
-        this.data.setData("nombre", this.fieldNombre.getText());
-        this.data.setData("ip", this.fieldIP.getText());
-        this.data.guardarData(this.datapath);
+        data.setData("grupo", String.valueOf(grupo));
+        data.setData("estilo", String.valueOf(estilo));
+        data.setData("nombre", fieldNombre.getText());
+        data.setData("ip", fieldIP.getText());
+        data.guardarData(datapath);
     }
 }
