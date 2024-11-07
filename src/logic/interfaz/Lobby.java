@@ -2,6 +2,7 @@ package logic.interfaz;
 // interfaz de espera para comenzar y configurar la partida
 
 import java.util.ArrayList;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
@@ -15,7 +16,7 @@ public class Lobby extends GUIs {
     // guarda los nombres de usuarios conectados
     ArrayList<Label> nombres = new ArrayList<>();
     
-    public Lobby(Stage raiz) {
+    public Lobby(Stage raiz, boolean isServer) {
         super(raiz);
         
         // variables compactas para escritura eficiente
@@ -44,27 +45,29 @@ public class Lobby extends GUIs {
             new Background(bcol[1])
         };
         String[] letra = {"A", "B"};
+        Label auxLabel;
         for (int x = 0; x < 2; x++) {
             for (int y = 0; y < 9; y++) {
-                nombres.add(setLabel(
+                auxLabel = setLabel(
                         "*" + letra[x] + (y + 1) + "*",
                         ww * 0.4f - 100f * esc + x * (ww * 0.2f),
-                        hh * 0.3f + y * (32f * esc)
-                ));
-                nombres.get(nombres.size() - 1).setPrefWidth(50f *
-                        Adsobalin.escala);
-                nombres.get(nombres.size() - 1).setBackground(bck[x]);
+                        hh * 0.28f + y * (32f * esc)
+                );
+                auxLabel.setPrefWidth(100f * Adsobalin.escala);
+                auxLabel.setAlignment(Pos.CENTER);
+                auxLabel.setBackground(bck[x]);
+                nombres.add(auxLabel);
             }
         }
         
         // colocar el gran boton de play abajo a la derecha
         Button play = setButton("assets/interfaz/play",
                 ww * 0.82f, hh * 0.8f, 138f, true);
-        play.setOnAction(event -> rejugar());
+        play.setOnAction(event -> ejecutar());
     }
     
-    public void rejugar() {
-        // tratar de volver al lobby
+    public void ejecutar() {
+        // poner en marcha el juego, solo el servidor puede hacerlo
     }
 }
 

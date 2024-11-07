@@ -1,6 +1,9 @@
 package logic.interfaz;
 // ofrece funcionalidades para todas las interfacez
 
+import javafx.animation.FadeTransition;
+import javafx.util.Duration;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.Group;
 import javafx.scene.text.Font;
@@ -12,6 +15,8 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
@@ -126,5 +131,39 @@ public abstract class GUIs extends Scene {
         Font actual = label.getFont();
         label.setFont(new Font(actual.getName(),
                 newSize * Adsobalin.escala));
+    }
+    
+    public void setMensaje(String texto, boolean isOk) {
+        // obtener la talla de la interfaz
+        float ww = (float)Adsobalin.width;
+        float hh = (float)Adsobalin.height;
+        
+        // crear el label como tal asignando sus propiedades
+        Label msj = setLabel(texto, ww * 0.3f, hh * 0.91f);
+        msj.setPrefWidth(ww * 0.4f);
+        msj.setAlignment(Pos.CENTER);
+        
+        // pintar el fondo dependiendo del tipo de mensaje
+        Color col;
+        if (isOk) {
+            col = Color.color(200f / 255f, 220f / 255f, 250f / 255f);
+        }
+        else {
+            col = Color.color(250f / 255f, 200f / 255f, 200f / 255f);
+        }
+        BackgroundFill bcol = new BackgroundFill(
+                col, CornerRadii.EMPTY, null);
+        msj.setBackground(new Background(bcol));
+        
+        // configurar la animacion
+        FadeTransition fadeOut = new FadeTransition(
+                Duration.seconds(3), msj);
+        fadeOut.setFromValue(1.0);
+        fadeOut.setToValue(0.0);
+        fadeOut.setDelay(Duration.seconds(1));
+        fadeOut.setOnFinished(event -> gui.getChildren().remove(msj));
+
+        // iniciar la animacion
+        fadeOut.play();
     }
 }

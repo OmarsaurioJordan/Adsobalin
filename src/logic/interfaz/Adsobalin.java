@@ -27,6 +27,9 @@ public class Adsobalin extends Application {
     public static int AZUL = 1;
     public static int ROJO = 2;
     
+    // instancia un objeto que administra la comunicacion
+    public static Conector conector = new Conector();
+    
     public static void main(String[] args) {
         launch(args);
     }

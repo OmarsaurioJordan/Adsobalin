@@ -121,7 +121,22 @@ public class Menu extends GUIs {
     
     private void ejecutar() {
         // al pulsar el boton grande de play
-        raiz.setScene(new Lobby(raiz));
+        String nombre = fieldNombre.getText();
+        if (nombre.isEmpty()) {
+            setMensaje("escriba un nombre", false);
+        }
+        else {
+            String ip = fieldIP.getText();
+            if (ip.isEmpty()) {
+                raiz.setScene(new Lobby(raiz, true));
+            }
+            else if (!isIPv4(ip)) {
+                setMensaje("escriba una IP válida", false);
+            }
+            else {
+                setMensaje("solicitud enviada", true);
+            }
+        }
     }
     
     private void cambiarEstilo(int direccion) {
@@ -133,7 +148,7 @@ public class Menu extends GUIs {
         else if (estilo > 28) {
             estilo = 1;
         }
-        setAvatar(false);
+        drawAvatar(false);
     }
     
     private void cambiarGrupo() {
@@ -144,7 +159,7 @@ public class Menu extends GUIs {
         else {
             grupo = Adsobalin.AZUL;
         }
-        setAvatar(false);
+        drawAvatar(false);
     }
     
     private Button setAvatar(float posX, float posY) {
@@ -164,7 +179,7 @@ public class Menu extends GUIs {
         boton.setFocusTraversable(false);
         boton.setBackground(Background.EMPTY);
         boton.setGraphic(sprAvatar);
-        setAvatar(false);
+        drawAvatar(false);
         
         // se crea la mascara de colision con forma circular
         Circle circulo = new Circle(lado / 2f);
@@ -173,10 +188,10 @@ public class Menu extends GUIs {
         boton.setClip(circulo);
         
         // se establece el comportamiento del mouse para cambiar estados
-        boton.setOnMouseEntered(event -> setAvatar(true));
-        boton.setOnMouseExited(event -> setAvatar(false));
-        boton.setOnMousePressed(event -> setAvatar(true));
-        boton.setOnMouseReleased(event -> setAvatar(false));
+        boton.setOnMouseEntered(event -> drawAvatar(true));
+        boton.setOnMouseExited(event -> drawAvatar(false));
+        boton.setOnMousePressed(event -> drawAvatar(true));
+        boton.setOnMouseReleased(event -> drawAvatar(false));
         
         // coloca el boton en la interfaz en la posicion x,y
         boton.setLayoutX(posX - lado / 2f);
@@ -185,7 +200,7 @@ public class Menu extends GUIs {
         return boton;
     }
     
-    private void setAvatar(boolean isReversed) {
+    private void drawAvatar(boolean isReversed) {
         // pone como tal la imagen correspondiente al boton
         if (isReversed) {
             // la coloca con color invertido
@@ -230,5 +245,24 @@ public class Menu extends GUIs {
         data.setData("nombre", fieldNombre.getText());
         data.setData("ip", fieldIP.getText());
         data.guardarData(datapath);
+    }
+    
+    private boolean isIPv4(String ip) {
+        try {
+            String[] tramo = ip.split("\\.");
+            if (tramo.length != 4) {
+                return false;
+            }
+            for (int i = 0; i < 4; i++) {
+                int num = Integer.parseInt(tramo[i]);
+                if (num < 0 || num > 255) {
+                    return false;
+                }
+            }
+        }
+        catch (Exception ex) {
+            return false;
+        }
+        return true;
     }
 }
