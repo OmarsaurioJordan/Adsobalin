@@ -3,6 +3,7 @@ package logic.interfaz;
 
 import javafx.scene.Scene;
 import javafx.scene.Group;
+import javafx.scene.text.Font;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
@@ -110,5 +111,20 @@ public abstract class GUIs extends Scene {
         boton.setLayoutY(posY - lado / 2f);
         gui.getChildren().add(boton);
         return boton;
+    }
+    
+    protected void pintarFondo() {
+        gc.setFill(Color.rgb(
+                (179 + 220) / 2,
+                (167 + 220) / 2,
+                (125 + 220) / 2
+        ));
+        gc.fillRect(0, 0, Adsobalin.width, Adsobalin.height);
+    }
+    
+    protected void fontSize(Label label, double newSize) {
+        Font actual = label.getFont();
+        label.setFont(new Font(actual.getName(),
+                newSize * Adsobalin.escala));
     }
 }

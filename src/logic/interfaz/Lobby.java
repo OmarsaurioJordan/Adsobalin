@@ -1,12 +1,78 @@
 package logic.interfaz;
 // interfaz de espera para comenzar y configurar la partida
 
+import java.util.ArrayList;
 import javafx.stage.Stage;
+import javafx.scene.control.Label;
+import javafx.scene.control.Button;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.CornerRadii;
+import javafx.scene.paint.Color;
 
 public class Lobby extends GUIs {
+    
+    // guarda los nombres de usuarios conectados
+    ArrayList<Label> nombres = new ArrayList<>();
     
     public Lobby(Stage raiz) {
         super(raiz);
         
+        // variables compactas para escritura eficiente
+        float ww = (float)Adsobalin.width;
+        float hh = (float)Adsobalin.height;
+        float esc = (float)Adsobalin.escala;
+        
+        // pintar el fondo de la interfaz
+        pintarFondo();
+        
+        // poner titulo de la interfaz
+        Label titulo = setLabel("Lobby", ww * 0.35f, hh * 0.1f);
+        fontSize(titulo, 28);
+        
+        // colocar los nombres en dos columnas
+        BackgroundFill[] bcol = {
+            new BackgroundFill(
+                Color.color(200f / 255f, 220f / 255f, 250f / 255f),
+                    CornerRadii.EMPTY, null),
+            new BackgroundFill(
+                Color.color(250f / 255f, 200f / 255f, 200f / 255f),
+                    CornerRadii.EMPTY, null)
+        };
+        Background[] bck = {
+            new Background(bcol[0]),
+            new Background(bcol[1])
+        };
+        String[] letra = {"A", "B"};
+        for (int x = 0; x < 2; x++) {
+            for (int y = 0; y < 9; y++) {
+                nombres.add(setLabel(
+                        "*" + letra[x] + (y + 1) + "*",
+                        ww * 0.4f - 100f * esc + x * (ww * 0.2f),
+                        hh * 0.3f + y * (32f * esc)
+                ));
+                nombres.get(nombres.size() - 1).setPrefWidth(50f *
+                        Adsobalin.escala);
+                nombres.get(nombres.size() - 1).setBackground(bck[x]);
+            }
+        }
+        
+        // colocar el gran boton de play abajo a la derecha
+        Button play = setButton("assets/interfaz/play",
+                ww * 0.82f, hh * 0.8f, 138f, true);
+        play.setOnAction(event -> rejugar());
+    }
+    
+    public void rejugar() {
+        // tratar de volver al lobby
     }
 }
+
+/*
+- poner color fondo o decoracion a nombres
+- poner titulo de la interfaz "lobby"
+- poner checkbox de agregar luego
+- poner 3 reguladores de creacion de mundo
+- poner boton de regresar al menu principal
+- poner boton de cambio de grupo
+*/

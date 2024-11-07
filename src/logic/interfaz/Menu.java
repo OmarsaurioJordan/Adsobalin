@@ -52,12 +52,7 @@ public class Menu extends GUIs {
         float esc = (float)Adsobalin.escala;
         
         // pintar el fondo de la interfaz
-        gc.setFill(Color.rgb(
-                (179 + 220) / 2,
-                (167 + 220) / 2,
-                (125 + 220) / 2
-        ));
-        gc.fillRect(0, 0, ww, hh);
+        pintarFondo();
         
         // colocar el titulo principal arriba en el centro
         float[] wh = {489f * 0.5f * esc, 323f * 0.5f * esc};
@@ -217,16 +212,19 @@ public class Menu extends GUIs {
         grupo = 1 + rnd.nextInt(2); // 1 a 2
         estilo = 1 + rnd.nextInt(28); // 1 a 28
         if (data.cargarData(datapath)) {
-            grupo = Integer.parseInt(
-                data.getData("grupo", String.valueOf(grupo)));
-            estilo = Integer.parseInt(
-                data.getData("estilo", String.valueOf(estilo)));
-            fieldNombre.setText(data.getData("nombre", ""));
-            fieldIP.setText(data.getData("ip", ""));
+            if (!data.getData("inicial", "1").equals("1")) {
+                grupo = Integer.parseInt(
+                    data.getData("grupo", String.valueOf(grupo)));
+                estilo = Integer.parseInt(
+                    data.getData("estilo", String.valueOf(estilo)));
+                fieldNombre.setText(data.getData("nombre", ""));
+                fieldIP.setText(data.getData("ip", ""));
+            }
         }
     }
     
     private void guardarDatos() {
+        data.setData("inicial", "0");
         data.setData("grupo", String.valueOf(grupo));
         data.setData("estilo", String.valueOf(estilo));
         data.setData("nombre", fieldNombre.getText());
