@@ -7,9 +7,9 @@ import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import java.util.Random;
+import logic.sincronia.Envios;
 
 public class Menu extends GUIs {
     
@@ -75,7 +75,7 @@ public class Menu extends GUIs {
         TextField fieldNombre = this.fieldNombre;
         fieldNombre.setFont(Adsobalin.letras);
         fieldNombre.textProperty().addListener((obs, oldV, newV) -> {
-            if (newV.length() > 4) {
+            if (newV.length() > Adsobalin.nameLength) {
                 fieldNombre.setText(oldV);
             }
         });
@@ -121,8 +121,13 @@ public class Menu extends GUIs {
     
     private void ejecutar() {
         // al pulsar el boton grande de play
-        String nombre = fieldNombre.getText();
-        if (nombre.isEmpty()) {
+        String nombre = filtroTexto(fieldNombre.getText(),
+                Adsobalin.nameLength);
+        if (!nombre.equals(fieldNombre.getText())) {
+            fieldNombre.setText(nombre);
+            setMensaje("escriba un nombre válido", false);
+        }
+        else if (nombre.isEmpty()) {
             setMensaje("escriba un nombre", false);
         }
         else {
@@ -134,6 +139,7 @@ public class Menu extends GUIs {
                 setMensaje("escriba una IP válida", false);
             }
             else {
+                Envios.sendHola(nombre, ip, estilo, grupo);
                 setMensaje("solicitud enviada", true);
             }
         }
@@ -264,5 +270,25 @@ public class Menu extends GUIs {
             return false;
         }
         return true;
+    }
+    
+    private String filtroTexto(String texto, int limite) {
+        // el limite puede ser 0 o -1 para no imponer un limite
+        String f = "abcdefghijklmnopqrstuvwxyz0123456789" +
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ(){}[]:;-_?=,.+/*#$%&!|<>";
+        String txt = "";
+        int lim = 0;
+        char c;
+        for (int i = 0; i < texto.length(); i++) {
+            c = texto.charAt(i);
+            if (f.indexOf(c) != -1) {
+                txt += c;
+                lim++;
+                if (lim == limite) {
+                    break;
+                }
+            }
+        }
+        return txt;
     }
 }
