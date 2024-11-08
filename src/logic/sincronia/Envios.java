@@ -7,8 +7,9 @@ import logic.interfaz.Adsobalin;
 public abstract class Envios {
     
     // listado de tipos de mensajes
-    public static final byte MSJ_HOLA = 0;
-    public static final byte MSJ_MSJ = 1;
+    public static final byte MSJ_HOLA = 0; // C
+    public static final byte MSJ_MSJ = 1; // S
+    public static final byte MSJ_WELCOME = 2; // S
     
     // listado de tipos de submensajes
     public static final byte SUB_VERSION = 0;
@@ -25,6 +26,22 @@ public abstract class Envios {
         
         // ingresar los datos especificos
         buff.putShort((short)Adsobalin.VERSION);
+        buff.put((byte)estilo);
+        buff.put((byte)grupo);
+        Conector.buffPutString(buff, nombre);
+        
+        // empaquetar el buffer y enviarlo
+        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+    }
+    
+    public static boolean sendWelcome(String nombre, String destino,
+            int estilo, int grupo, int ind) {
+        // crear un buffer para armar el mensaje
+        ByteBuffer buff = Conector.newBuffer(MSJ_WELCOME,
+            3 + nombre.length() + 1);
+        
+        // ingresar los datos especificos
+        buff.put((byte)ind);
         buff.put((byte)estilo);
         buff.put((byte)grupo);
         Conector.buffPutString(buff, nombre);

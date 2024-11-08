@@ -30,6 +30,8 @@ public class Menu extends GUIs {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_MENU;
         Adsobalin.isServer = false;
+        Adsobalin.myServer = "";
+        Adsobalin.userClean();
         
         // permite guardar la informacion de la interfaz cuando esta cierra
         raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
@@ -119,13 +121,13 @@ public class Menu extends GUIs {
     
     private void ejecutar() {
         // al pulsar el boton grande de play
-        String nombre = filtroTexto(fieldNombre.getText(),
+        Adsobalin.nombre = filtroTexto(fieldNombre.getText(),
                 Adsobalin.NAME_LEN);
-        if (!nombre.equals(fieldNombre.getText())) {
-            fieldNombre.setText(nombre);
+        if (!Adsobalin.nombre.equals(fieldNombre.getText())) {
+            fieldNombre.setText(Adsobalin.nombre);
             setMensaje("escriba un nombre válido", false);
         }
-        else if (nombre.isEmpty()) {
+        else if (Adsobalin.nombre.isEmpty()) {
             setMensaje("escriba un nombre", false);
         }
         else {
@@ -137,7 +139,7 @@ public class Menu extends GUIs {
                 setMensaje("escriba una IP válida", false);
             }
             else {
-                Envios.sendHola(nombre, ip,
+                Envios.sendHola(Adsobalin.nombre, ip,
                         Adsobalin.estilo, Adsobalin.grupo);
                 setMensaje("solicitud enviada", true);
             }

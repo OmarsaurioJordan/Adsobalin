@@ -6,24 +6,26 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import javafx.stage.Stage;
-import java.util.Arrays;
+import logic.interfaz.Adsobalin;
 
 public class Conector {
     
     // identificador unico del software para sus mensajes UDP
-    public static final int softID = 69750244;
+    public static final int SOFT_ID = 69750244;
     // este debug es para enviar datos a puerto + 1
-    private static final boolean selfDebug = true;
+    private static final boolean PORT_DEBUG = true;
     // talla del buffer de recepcion, ajustar al minimo necesario
-    private static final int limiteLecturaBuffer = 2048;
+    private static final int LIM_LEC_BUF = 2048;
+    // tiempo tras el cual desconectar usuarios inactivos
+    public static final float PING = 5f;
     
     // informacion de usuarios conectados si es servidor
     // el id es el indice del arreglo
     // el grupo depende de si es id < 9 o no
-    private static String[] userIP = new String[18];
-    private static String[] userName = new String[18];
-    private static int[] userStyle = new int[18];
-    private static float[] userPing = new float[18];
+    public static String[] userIP = new String[18];
+    public static String[] userName = new String[18];
+    public static int[] userStyle = new int[18];
+    public static float[] userPing = new float[18];
     
     // nodo base de todo el software
     private Stage raiz;
@@ -42,12 +44,7 @@ public class Conector {
             socket = null;
         }
         // inicializar los datos de conexiones a servidor
-        for (var i = 0; i < 18; i++) {
-            userIP[i] = "";
-            userName[i] = "";
-            userStyle[i] = 0;
-            userPing[i] = 0f;
-        }
+        Adsobalin.userClean();
     }
     
     public void setEscuchar(Stage raiz) {
@@ -69,7 +66,7 @@ public class Conector {
         try {
             InetAddress dir = InetAddress.getByName(destino);
             DatagramPacket pack;
-            if (selfDebug) {
+            if (PORT_DEBUG) {
                 pack = new DatagramPacket(
                     data, data.length, dir, puerto + 1);
             }
@@ -87,11 +84,11 @@ public class Conector {
     
     private void recibeMsj() {
         Recepciones recividor = new Recepciones(raiz);
-        byte[] buff = new byte[limiteLecturaBuffer];
+        byte[] buff = new byte[LIM_LEC_BUF];
         while (true) {
             try {
                 DatagramPacket pack = new DatagramPacket(
-                        buff, limiteLecturaBuffer);
+                        buff, LIM_LEC_BUF);
                 socket.receive(pack);
                 String ip = pack.getAddress().toString();
                 recividor.depuraMsj(arr2buf(pack.getData()), ip);
@@ -142,29 +139,8 @@ public class Conector {
         // la talla involucra solo a los datos externos, no el header
         ByteBuffer buff = ByteBuffer.allocate(
                 Integer.BYTES + 1 + talla);
-        buff.putInt(softID);
+        buff.putInt(SOFT_ID);
         buff.put(idMsj);
         return buff;
-    }
-    
-    public static boolean userContIP(String ip) {
-        return Arrays.asList(userIP).contains(ip);
-    }
-    
-    public static boolean userContNombre(String nombre) {
-        return Arrays.asList(userName).contains(nombre);
-    }
-    
-    public static boolean userContEstilo(int estilo) {
-        return Arrays.stream(userStyle).anyMatch(n -> n == estilo);
-    }
-    
-    public static boolean userHayCupo() {
-        for (int i = 0; i < 18; i++) {
-            if (userIP[i].isEmpty()) {
-                return true;
-            }
-        }
-        return false;
     }
 }

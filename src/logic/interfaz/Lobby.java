@@ -10,6 +10,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.paint.Color;
+import logic.sincronia.Conector;
 
 public class Lobby extends GUIs {
     
@@ -65,10 +66,31 @@ public class Lobby extends GUIs {
         // las cosas que solo el servidor vera
         if (isServer) {
             
+            // agregar sus datos automaticamente
+            Adsobalin.userAdd("127.0.0.1", Adsobalin.nombre,
+                    Adsobalin.estilo, Adsobalin.grupo);
+            reDibujar();
+            
             // colocar el gran boton de play abajo a la derecha
             Button play = setButton("assets/interfaz/play",
                     ww * 0.82f, hh * 0.8f, 138f, true);
             play.setOnAction(event -> ejecutar());
+        }
+    }
+    
+    public void reDibujar() {
+        for (int i = 0; i < 18; i++) {
+            if (Conector.userName[i].isEmpty()) {
+                if (i < 9) {
+                    nombres.get(i).setText("*A" + (i + 1) + "*");
+                }
+                else {
+                    nombres.get(i).setText("*B" + (i - 8) + "*");
+                }
+            }
+            else {
+                nombres.get(i).setText(Conector.userName[i]);
+            }
         }
     }
     
