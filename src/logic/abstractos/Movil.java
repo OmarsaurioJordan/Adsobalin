@@ -32,7 +32,7 @@ public abstract class Movil extends Objeto {
     // es la cantidad de municion disponible
     protected int municion = 12;
     // grupo al que pertenece
-    protected int grupo = Adsobalin.LIBRE;
+    protected int grupo = Adsobalin.GRU_LIBRE;
     
     public Movil(float[] posicion, int depth) {
         super(posicion, depth, 12f);

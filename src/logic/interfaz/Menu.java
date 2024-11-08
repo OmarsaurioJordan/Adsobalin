@@ -13,10 +13,6 @@ import logic.sincronia.Envios;
 
 public class Menu extends GUIs {
     
-    // configuracion elegida por el usuario
-    private int grupo = Adsobalin.LIBRE;
-    private int estilo = 0;
-    
     // guarda todos los sprites de avatares
     private Image[] rojo = new Image[29];
     private Image[] azul = new Image[29];
@@ -28,10 +24,12 @@ public class Menu extends GUIs {
     
     // objeto para guardar configuracion
     private SaveGame data = new SaveGame();
-    private String datapath = "src/config/config.properties";
+    private final String DATAPATH = "src/config/config.properties";
     
     public Menu(Stage raiz) {
         super(raiz);
+        Adsobalin.estado = Adsobalin.EST_MENU;
+        Adsobalin.isServer = false;
         
         // permite guardar la informacion de la interfaz cuando esta cierra
         raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
@@ -47,9 +45,9 @@ public class Menu extends GUIs {
         leerDatos();
         
         // variables compactas para escritura eficiente
-        float ww = (float)Adsobalin.width;
-        float hh = (float)Adsobalin.height;
-        float esc = (float)Adsobalin.escala;
+        float ww = (float)Adsobalin.WIDTH;
+        float hh = (float)Adsobalin.HEIGHT;
+        float esc = (float)Adsobalin.ESCALA;
         
         // pintar el fondo de la interfaz
         pintarFondo();
@@ -67,37 +65,37 @@ public class Menu extends GUIs {
         gc.drawImage(creditos, ww * 0.02f, hh * 0.98f - wh[1]);
         
         // colocar la version de compilacion arriba a la izquierda
-        setLabel("v" + Adsobalin.version, ww * 0.05f, hh * 0.05f);
+        setLabel("v" + Adsobalin.VERSION, ww * 0.05f, hh * 0.05f);
         
         // colocar una caja de escritura al lado izquierdo, para nombre
         setLabel("Nombre", ww * 0.4f - 100f * esc + 10f * esc,
                 323f * 0.5f * esc + hh * 0.2f - 32f * esc);
-        TextField fieldNombre = this.fieldNombre;
-        fieldNombre.setFont(Adsobalin.letras);
-        fieldNombre.textProperty().addListener((obs, oldV, newV) -> {
-            if (newV.length() > Adsobalin.nameLength) {
-                fieldNombre.setText(oldV);
+        TextField fNombre = fieldNombre;
+        fNombre.setFont(Adsobalin.letras);
+        fNombre.textProperty().addListener((obs, oldV, newV) -> {
+            if (newV.length() > Adsobalin.NAME_LEN) {
+                fNombre.setText(oldV);
             }
         });
-        fieldNombre.setLayoutX(ww * 0.4f - 100f * esc);
-        fieldNombre.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
-        fieldNombre.setPrefWidth(100f * esc);
-        gui.getChildren().add(fieldNombre);
+        fNombre.setLayoutX(ww * 0.4f - 100f * esc);
+        fNombre.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
+        fNombre.setPrefWidth(100f * esc);
+        gui.getChildren().add(fNombre);
         
         // colocar una caja de escritura al lado derecho, para IP
         setLabel("IP de server o vacío", ww * 0.5f + 10f * esc,
                 323f * 0.5f * esc + hh * 0.2f - 32f * esc);
-        TextField fieldIP = this.fieldIP;
-        fieldIP.setFont(Adsobalin.letras);
-        fieldIP.textProperty().addListener((obs, oldV, newV) -> {
+        TextField fIP = fieldIP;
+        fIP.setFont(Adsobalin.letras);
+        fIP.textProperty().addListener((obs, oldV, newV) -> {
             if (newV.length() > 15) {
-                fieldIP.setText(oldV);
+                fIP.setText(oldV);
             }
         });
-        fieldIP.setLayoutX(ww * 0.5);
-        fieldIP.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
-        fieldIP.setPrefWidth(200f * esc);
-        gui.getChildren().add(fieldIP);
+        fIP.setLayoutX(ww * 0.5);
+        fIP.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
+        fIP.setPrefWidth(200f * esc);
+        gui.getChildren().add(fIP);
         
         // colocar el gran boton de play abajo a la derecha
         Button play = setButton("assets/interfaz/play",
@@ -122,7 +120,7 @@ public class Menu extends GUIs {
     private void ejecutar() {
         // al pulsar el boton grande de play
         String nombre = filtroTexto(fieldNombre.getText(),
-                Adsobalin.nameLength);
+                Adsobalin.NAME_LEN);
         if (!nombre.equals(fieldNombre.getText())) {
             fieldNombre.setText(nombre);
             setMensaje("escriba un nombre válido", false);
@@ -139,7 +137,8 @@ public class Menu extends GUIs {
                 setMensaje("escriba una IP válida", false);
             }
             else {
-                Envios.sendHola(nombre, ip, estilo, grupo);
+                Envios.sendHola(nombre, ip,
+                        Adsobalin.estilo, Adsobalin.grupo);
                 setMensaje("solicitud enviada", true);
             }
         }
@@ -147,30 +146,30 @@ public class Menu extends GUIs {
     
     private void cambiarEstilo(int direccion) {
         // al pulsar alguno de los botones de cambio de estilo
-        estilo += direccion;
-        if (estilo <= 0) {
-            estilo = 28;
+        Adsobalin.estilo += direccion;
+        if (Adsobalin.estilo <= 0) {
+            Adsobalin.estilo = 28;
         }
-        else if (estilo > 28) {
-            estilo = 1;
+        else if (Adsobalin.estilo > 28) {
+            Adsobalin.estilo = 1;
         }
         drawAvatar(false);
     }
     
     private void cambiarGrupo() {
         // al pulsar el avatar cambia de grupo (color)
-        if (grupo == Adsobalin.AZUL) {
-            grupo = Adsobalin.ROJO;
+        if (Adsobalin.grupo == Adsobalin.GRU_AZUL) {
+            Adsobalin.grupo = Adsobalin.GRU_ROJO;
         }
         else {
-            grupo = Adsobalin.AZUL;
+            Adsobalin.grupo = Adsobalin.GRU_AZUL;
         }
         drawAvatar(false);
     }
     
     private Button setAvatar(float posX, float posY) {
         // primero se obtienen las imagenes de estado del boton
-        float lado = 120f * 0.75f * (float)Adsobalin.escala;
+        float lado = 120f * 0.75f * (float)Adsobalin.ESCALA;
         for (int i = 0; i < 29; i++) {
             rojo[i] = new Image("assets/rojos/rojo" + i + ".png",
                 lado, lado, false, false);
@@ -189,8 +188,8 @@ public class Menu extends GUIs {
         
         // se crea la mascara de colision con forma circular
         Circle circulo = new Circle(lado / 2f);
-        circulo.setCenterX(lado / 2f + 7f * Adsobalin.escala);
-        circulo.setCenterY(lado / 2f + 2f * Adsobalin.escala);
+        circulo.setCenterX(lado / 2f + 7f * Adsobalin.ESCALA);
+        circulo.setCenterY(lado / 2f + 2f * Adsobalin.ESCALA);
         boton.setClip(circulo);
         
         // se establece el comportamiento del mouse para cambiar estados
@@ -210,34 +209,36 @@ public class Menu extends GUIs {
         // pone como tal la imagen correspondiente al boton
         if (isReversed) {
             // la coloca con color invertido
-            if (grupo == Adsobalin.AZUL) {
-                sprAvatar.setImage(rojo[estilo]);
+            if (Adsobalin.grupo == Adsobalin.GRU_AZUL) {
+                sprAvatar.setImage(rojo[Adsobalin.estilo]);
             }
             else {
-                sprAvatar.setImage(azul[estilo]);
+                sprAvatar.setImage(azul[Adsobalin.estilo]);
             }
         }
         else {
             // o con el color que realmente debe tener
-            if (grupo == Adsobalin.AZUL) {
-                sprAvatar.setImage(azul[estilo]);
+            if (Adsobalin.grupo == Adsobalin.GRU_AZUL) {
+                sprAvatar.setImage(azul[Adsobalin.estilo]);
             }
             else {
-                sprAvatar.setImage(rojo[estilo]);
+                sprAvatar.setImage(rojo[Adsobalin.estilo]);
             }
         }
     }
     
     private void leerDatos() {
         Random rnd = new Random();
-        grupo = 1 + rnd.nextInt(2); // 1 a 2
-        estilo = 1 + rnd.nextInt(28); // 1 a 28
-        if (data.cargarData(datapath)) {
+        Adsobalin.grupo = 1 + rnd.nextInt(2); // 1 a 2
+        Adsobalin.estilo = 1 + rnd.nextInt(28); // 1 a 28
+        if (data.cargarData(DATAPATH)) {
             if (!data.getData("inicial", "1").equals("1")) {
-                grupo = Integer.parseInt(
-                    data.getData("grupo", String.valueOf(grupo)));
-                estilo = Integer.parseInt(
-                    data.getData("estilo", String.valueOf(estilo)));
+                Adsobalin.grupo = Integer.parseInt(
+                    data.getData("grupo",
+                            String.valueOf(Adsobalin.grupo)));
+                Adsobalin.estilo = Integer.parseInt(
+                    data.getData("estilo",
+                            String.valueOf(Adsobalin.estilo)));
                 fieldNombre.setText(data.getData("nombre", ""));
                 fieldIP.setText(data.getData("ip", ""));
             }
@@ -246,11 +247,11 @@ public class Menu extends GUIs {
     
     private void guardarDatos() {
         data.setData("inicial", "0");
-        data.setData("grupo", String.valueOf(grupo));
-        data.setData("estilo", String.valueOf(estilo));
+        data.setData("grupo", String.valueOf(Adsobalin.grupo));
+        data.setData("estilo", String.valueOf(Adsobalin.estilo));
         data.setData("nombre", fieldNombre.getText());
         data.setData("ip", fieldIP.getText());
-        data.guardarData(datapath);
+        data.guardarData(DATAPATH);
     }
     
     private boolean isIPv4(String ip) {

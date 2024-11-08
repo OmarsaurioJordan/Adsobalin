@@ -33,7 +33,7 @@ public abstract class GUIs extends Scene {
     private Rectangle fondo = new Rectangle();
     
     public GUIs(Stage raiz) {
-        super(new Group(), Adsobalin.width, Adsobalin.height);
+        super(new Group(), Adsobalin.WIDTH, Adsobalin.HEIGHT);
         this.raiz = raiz;
         gui = (Group)getRoot();
         
@@ -42,7 +42,7 @@ public abstract class GUIs extends Scene {
         gui.getChildren().add(fondo);
         
         // crea la clase que permite el dibujado de imagenes
-        Canvas lienzo = new Canvas(Adsobalin.width, Adsobalin.height);
+        Canvas lienzo = new Canvas(Adsobalin.WIDTH, Adsobalin.HEIGHT);
         gui.getChildren().add(lienzo);
         gc = lienzo.getGraphicsContext2D();
     }
@@ -62,7 +62,7 @@ public abstract class GUIs extends Scene {
         txt.setFont(Adsobalin.letras);
         txt.setLayoutX(posX);
         txt.setLayoutY(posY);
-        txt.setPrefWidth(200f * Adsobalin.escala);
+        txt.setPrefWidth(200f * Adsobalin.ESCALA);
         gui.getChildren().add(txt);
         return txt;
     }
@@ -71,7 +71,7 @@ public abstract class GUIs extends Scene {
             float posX, float posY, float talla, boolean isRight) {
         // crear boton triangular posicionado en la interfaz x,y
         // primero se obtienen las 3 imagenes de estado del boton
-        float lado = talla * 0.75f * (float)Adsobalin.escala;
+        float lado = talla * 0.75f * (float)Adsobalin.ESCALA;
         Image normal = new Image(pathMocho + "0.png",
             lado, lado, false, false);
         Image sobre = new Image(pathMocho + "1.png",
@@ -88,7 +88,7 @@ public abstract class GUIs extends Scene {
         
         // se crea la mascara de colision con forma triangular
         Polygon triangulo = new Polygon();
-        double desf = 5f * Adsobalin.escala;
+        double desf = 5f * Adsobalin.ESCALA;
         if (isRight) {
             triangulo.getPoints().addAll(
                     desf * 2f, desf,
@@ -124,19 +124,19 @@ public abstract class GUIs extends Scene {
                 (167 + 220) / 2,
                 (125 + 220) / 2
         ));
-        gc.fillRect(0, 0, Adsobalin.width, Adsobalin.height);
+        gc.fillRect(0, 0, Adsobalin.WIDTH, Adsobalin.HEIGHT);
     }
     
     protected void fontSize(Label label, double newSize) {
         Font actual = label.getFont();
         label.setFont(new Font(actual.getName(),
-                newSize * Adsobalin.escala));
+                newSize * Adsobalin.ESCALA));
     }
     
     public void setMensaje(String texto, boolean isOk) {
         // obtener la talla de la interfaz
-        float ww = (float)Adsobalin.width;
-        float hh = (float)Adsobalin.height;
+        float ww = (float)Adsobalin.WIDTH;
+        float hh = (float)Adsobalin.HEIGHT;
         
         // crear el label como tal asignando sus propiedades
         Label msj = setLabel(texto, ww * 0.3f, hh * 0.91f);

@@ -18,11 +18,13 @@ public class Lobby extends GUIs {
     
     public Lobby(Stage raiz, boolean isServer) {
         super(raiz);
+        Adsobalin.estado = Adsobalin.EST_LOBBY;
+        Adsobalin.isServer = isServer;
         
         // variables compactas para escritura eficiente
-        float ww = (float)Adsobalin.width;
-        float hh = (float)Adsobalin.height;
-        float esc = (float)Adsobalin.escala;
+        float ww = (float)Adsobalin.WIDTH;
+        float hh = (float)Adsobalin.HEIGHT;
+        float esc = (float)Adsobalin.ESCALA;
         
         // pintar el fondo de la interfaz
         pintarFondo();
@@ -53,17 +55,21 @@ public class Lobby extends GUIs {
                         ww * 0.4f - 100f * esc + x * (ww * 0.2f),
                         hh * 0.28f + y * (32f * esc)
                 );
-                auxLabel.setPrefWidth(100f * Adsobalin.escala);
+                auxLabel.setPrefWidth(100f * Adsobalin.ESCALA);
                 auxLabel.setAlignment(Pos.CENTER);
                 auxLabel.setBackground(bck[x]);
                 nombres.add(auxLabel);
             }
         }
         
-        // colocar el gran boton de play abajo a la derecha
-        Button play = setButton("assets/interfaz/play",
-                ww * 0.82f, hh * 0.8f, 138f, true);
-        play.setOnAction(event -> ejecutar());
+        // las cosas que solo el servidor vera
+        if (isServer) {
+            
+            // colocar el gran boton de play abajo a la derecha
+            Button play = setButton("assets/interfaz/play",
+                    ww * 0.82f, hh * 0.8f, 138f, true);
+            play.setOnAction(event -> ejecutar());
+        }
     }
     
     public void ejecutar() {
@@ -72,8 +78,6 @@ public class Lobby extends GUIs {
 }
 
 /*
-- poner color fondo o decoracion a nombres
-- poner titulo de la interfaz "lobby"
 - poner checkbox de agregar luego
 - poner 3 reguladores de creacion de mundo
 - poner boton de regresar al menu principal

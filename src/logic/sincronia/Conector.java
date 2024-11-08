@@ -6,21 +6,31 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import javafx.stage.Stage;
+import java.util.Arrays;
 
 public class Conector {
     
     // identificador unico del software para sus mensajes UDP
-    private static int softID = 69750244;
+    public static final int softID = 69750244;
     // este debug es para enviar datos a puerto + 1
-    private static boolean selfDebug = true;
+    private static final boolean selfDebug = true;
+    // talla del buffer de recepcion, ajustar al minimo necesario
+    private static final int limiteLecturaBuffer = 2048;
+    
+    // informacion de usuarios conectados si es servidor
+    // el id es el indice del arreglo
+    // el grupo depende de si es id < 9 o no
+    private static String[] userIP = new String[18];
+    private static String[] userName = new String[18];
+    private static int[] userStyle = new int[18];
+    private static float[] userPing = new float[18];
+    
+    // nodo base de todo el software
+    private Stage raiz;
     // conexion donde se envian y reciben datos
     private static DatagramSocket socket;
     // todos los jugadores usaran el mismo puerto
     private static int puerto;
-    // talla del buffer de recepcion, ajustar al minimo necesario
-    private static int limiteLecturaBuffer = 2048;
-    // nodo base de todo el software
-    protected Stage raiz;
     
     public Conector(int puerto) {
         this.puerto = puerto;
@@ -30,6 +40,13 @@ public class Conector {
         }
         catch (Exception ex) {
             socket = null;
+        }
+        // inicializar los datos de conexiones a servidor
+        for (var i = 0; i < 18; i++) {
+            userIP[i] = "";
+            userName[i] = "";
+            userStyle[i] = 0;
+            userPing[i] = 0f;
         }
     }
     
@@ -128,5 +145,26 @@ public class Conector {
         buff.putInt(softID);
         buff.put(idMsj);
         return buff;
+    }
+    
+    public static boolean userContIP(String ip) {
+        return Arrays.asList(userIP).contains(ip);
+    }
+    
+    public static boolean userContNombre(String nombre) {
+        return Arrays.asList(userName).contains(nombre);
+    }
+    
+    public static boolean userContEstilo(int estilo) {
+        return Arrays.stream(userStyle).anyMatch(n -> n == estilo);
+    }
+    
+    public static boolean userHayCupo() {
+        for (int i = 0; i < 18; i++) {
+            if (userIP[i].isEmpty()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
