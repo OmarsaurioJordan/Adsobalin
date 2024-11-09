@@ -11,6 +11,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Label;
 import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -57,7 +58,7 @@ public abstract class GUIs extends Scene {
     }
     
     protected Label setLabel(String texto, float posX, float posY) {
-        // creacion de textos estaticos posicionados en x,y
+        // creacion de texto estatico posicionado en x,y
         Label txt = new Label(texto);
         txt.setFont(Adsobalin.letras);
         txt.setLayoutX(posX);
@@ -116,6 +117,16 @@ public abstract class GUIs extends Scene {
         boton.setLayoutY(posY - lado / 2f);
         gui.getChildren().add(boton);
         return boton;
+    }
+    
+    protected CheckBox setCheckBox(String texto, float posX, float posY) {
+        // creacion de cajon de seleccion posicionado en x,y
+        CheckBox chk = new CheckBox(texto);
+        chk.setFont(Adsobalin.letras);
+        chk.setLayoutX(posX);
+        chk.setLayoutY(posY);
+        gui.getChildren().add(chk);
+        return chk;
     }
     
     protected void pintarFondo() {

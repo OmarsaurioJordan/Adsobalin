@@ -62,12 +62,14 @@ public class Recepciones {
         if (version != Adsobalin.VERSION) {
             Envios.sendMsj(Envios.SUB_VERSION, emisor);
         }
-        else if (Adsobalin.userContIP(emisor)) {
-            if (grupo != Adsobalin.userGetGrupo(emisor)) {
-                // Tarea
-            }
+        else if (Adsobalin.userGetInd(emisor) != -1) {
+            // primero se eliminan los datos del usuario de la tabla
+            int ind = Adsobalin.userGetInd(emisor);
+            Adsobalin.userClean(ind);
+            // se agrega el nuevo usuario a la tabla de usuarios
+            newUser(estilo, grupo, nombre, emisor);
         }
-        else if (!Adsobalin.userHayCupo()) {
+        else if (Adsobalin.userHayCupo() == -1) {
             Envios.sendMsj(Envios.SUB_CUPO, emisor);
         }
         else if (!(Adsobalin.estado == Adsobalin.EST_LOBBY ||
@@ -82,30 +84,38 @@ public class Recepciones {
             Envios.sendMsj(Envios.SUB_NOMBRE, emisor);
         }
         else {
-            // el mensaje welcome es para poner al cliente activo y
-            // en escucha, pero el servidor en este punto ya comenzara
-            // a enviar rafagas de mensajes para la sincronia
-            int ind = Adsobalin.userAdd(emisor, nombre, estilo, grupo);
-            Envios.sendWelcome(nombre, emisor, estilo, grupo, ind);
-            if (Adsobalin.estado == Adsobalin.EST_LOBBY) {
-                Lobby gui = (Lobby)raiz.getScene();
-                gui.reDibujar();
-            }
+            // se agrega el nuevo usuario a la tabla de usuarios
+            newUser(estilo, grupo, nombre, emisor);
+        }
+    }
+    
+    private void newUser(int estilo, int grupo,
+            String nombre, String emisor) {
+        // el mensaje welcome es para poner al cliente activo y
+        // en escucha, pero el servidor en este punto ya comenzara
+        // a enviar rafagas de mensajes para la sincronia
+        int ind = Adsobalin.userAdd(emisor, nombre, estilo, grupo);
+        int newGrupo = Adsobalin.userGetGrupo(ind);
+        Envios.sendWelcome(nombre, emisor, estilo, newGrupo, ind);
+        // el servidor redibuja la lista de conectados
+        if (Adsobalin.estado == Adsobalin.EST_LOBBY) {
+            Lobby gui = (Lobby)raiz.getScene();
+            gui.reDibujar();
         }
     }
     
     private void recWelcome(int ind, int estilo, int grupo,
             String nombre, String emisor) {
-        // reafirma que los datos del jugador son los dados por el servidor
-        Adsobalin.indice = ind;
-        Adsobalin.estilo = estilo;
-        Adsobalin.grupo = grupo;
-        Adsobalin.nombre = nombre;
-        // al haber servidor asociado el cliente oira y enviara rafagas
-        Conector.myServer = emisor;
-        // esto es para evitar estar conectado y en el menu principal a la vez
-        // pero luego puede que se cambie la interfaz con la sincronia
         if (Adsobalin.estado == Adsobalin.EST_MENU) {
+            // afirma que los datos del jugador son los dados por el servidor
+            Adsobalin.indice = ind;
+            Adsobalin.estilo = estilo;
+            Adsobalin.grupo = grupo;
+            Adsobalin.nombre = nombre;
+            // al haber servidor asociado el cliente oira y enviara rafagas
+            Conector.myServer = emisor;
+            // para evitar estar conectado y en el menu principal a la vez
+            // pero luego puede que se cambie la interfaz con la sincronia
             raiz.setScene(new Lobby(raiz, false));
         }
     }

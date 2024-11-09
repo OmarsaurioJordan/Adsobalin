@@ -24,7 +24,7 @@ public class Menu extends GUIs {
     
     // objeto para guardar configuracion
     private SaveGame data = new SaveGame();
-    private final String DATAPATH = "src/config/config.properties";
+    
     
     public Menu(Stage raiz) {
         super(raiz);
@@ -67,7 +67,7 @@ public class Menu extends GUIs {
         gc.drawImage(creditos, ww * 0.02f, hh * 0.98f - wh[1]);
         
         // colocar la version de compilacion arriba a la izquierda
-        setLabel("v" + Adsobalin.VERSION, ww * 0.05f, hh * 0.05f);
+        setLabel("versión\n   " + Adsobalin.VERSION, ww * 0.05f, hh * 0.05f);
         
         // colocar una caja de escritura al lado izquierdo, para nombre
         setLabel("Nombre", ww * 0.4f - 100f * esc + 10f * esc,
@@ -232,8 +232,8 @@ public class Menu extends GUIs {
     private void leerDatos() {
         Adsobalin.grupo = 1 + Adsobalin.DADO.nextInt(2); // 1 a 2
         Adsobalin.estilo = 1 + Adsobalin.DADO.nextInt(28); // 1 a 28
-        if (data.cargarData(DATAPATH)) {
-            if (!data.getData("inicial", "1").equals("1")) {
+        if (data.cargarData(Adsobalin.DATAPATH)) {
+            if (data.getData("inicial", "0").equals("1")) {
                 Adsobalin.grupo = Integer.parseInt(
                     data.getData("grupo",
                             String.valueOf(Adsobalin.grupo)));
@@ -247,12 +247,12 @@ public class Menu extends GUIs {
     }
     
     private void guardarDatos() {
-        data.setData("inicial", "0");
+        data.setData("inicial", "1");
         data.setData("grupo", String.valueOf(Adsobalin.grupo));
         data.setData("estilo", String.valueOf(Adsobalin.estilo));
         data.setData("nombre", fieldNombre.getText());
         data.setData("ip", fieldIP.getText());
-        data.guardarData(DATAPATH);
+        data.guardarData(Adsobalin.DATAPATH);
     }
     
     private boolean isIPv4(String ip) {

@@ -58,6 +58,9 @@ public class Adsobalin extends Application {
     public static int estilo = 0;
     public static int indice = -1;
     
+    // donde guarda el archivo de configuracion
+    public static final String DATAPATH = "src/config/config.properties";
+    
     public static void main(String[] args) {
         conector = new Conector(PUERTO);
         if (conector.isSocketOk()) {
@@ -111,10 +114,6 @@ public class Adsobalin extends Application {
         gui.setFondo(sc);
     }
     
-    public static boolean userContIP(String ip) {
-        return Arrays.asList(Conector.userIP).contains(ip);
-    }
-    
     public static boolean userContNombre(String nombre) {
         return Arrays.asList(Conector.userName).contains(nombre);
     }
@@ -123,13 +122,15 @@ public class Adsobalin extends Application {
         return Arrays.stream(Conector.userStyle).anyMatch(n -> n == estilo);
     }
     
-    public static boolean userHayCupo() {
+    public static int userHayCupo() {
+        int ind = -1;
         for (int i = 0; i < 18; i++) {
             if (Conector.userIP[i].isEmpty()) {
-                return true;
+                ind = i;
+                break;
             }
         }
-        return false;
+        return ind;
     }
     
     public static int userGetInd(String ip) {
@@ -143,6 +144,10 @@ public class Adsobalin extends Application {
     
     public static int userGetGrupo(String ip) {
         int ind = userGetInd(ip);
+        return userGetGrupo(ind);
+    }
+    
+    public static int userGetGrupo(int ind) {
         if (ind == -1) {
             return GRU_LIBRE;
         }
@@ -152,11 +157,9 @@ public class Adsobalin extends Application {
         return GRU_ROJO;
     }
     
-    public static int userAdd(String ip, String nombre,
-            int estilo, int grupo) {
-        // primero debe buscar un espacio disponible, segun grupo deseado
+    public static int userCupoGrupo(int indGrupo) {
         int ind = -1;
-        if (grupo == GRU_AZUL) {
+        if (indGrupo == GRU_AZUL) {
             for (int i = 0; i < 9; i++) {
                 if (Conector.userIP[i].isEmpty()) {
                     ind = i;
@@ -164,7 +167,7 @@ public class Adsobalin extends Application {
                 }
             }
         }
-        else {
+        else if (indGrupo == GRU_ROJO) {
             for (int i = 9; i < 18; i++) {
                 if (Conector.userIP[i].isEmpty()) {
                     ind = i;
@@ -172,14 +175,16 @@ public class Adsobalin extends Application {
                 }
             }
         }
+        return ind;
+    }
+    
+    public static int userAdd(String ip, String nombre,
+            int estilo, int grupo) {
+        // primero debe buscar un espacio disponible, segun grupo deseado
+        int ind = userCupoGrupo(grupo);
         // ignorar el grupo deseado y buscar en todo el espacio
         if (ind == -1) {
-            for (int i = 0; i < 18; i++) {
-                if (Conector.userIP[i].isEmpty()) {
-                    ind = i;
-                    break;
-                }
-            }
+            ind = userHayCupo();
         }
         // en caso de hallarlo, ingresara los datos
         if (ind != -1) {
@@ -191,12 +196,16 @@ public class Adsobalin extends Application {
         return ind;
     }
     
+    public static void userClean(int ind) {
+        Conector.userIP[ind] = "";
+        Conector.userName[ind] = "";
+        Conector.userStyle[ind] = 0;
+        Conector.userPing[ind] = 0f;
+    }
+    
     public static void userClean() {
         for (var i = 0; i < 18; i++) {
-            Conector.userIP[i] = "";
-            Conector.userName[i] = "";
-            Conector.userStyle[i] = 0;
-            Conector.userPing[i] = 0f;
+            userClean(i);
         }
     }
 }
