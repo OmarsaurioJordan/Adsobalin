@@ -20,8 +20,9 @@ public class Conector {
     public static final float PING = 5f;
     
     // informacion de usuarios conectados si es servidor
-    // el id es el indice del arreglo
-    // el grupo depende de si es id < 9 o no
+    // el ind de usuario es el indice en el arreglo
+    // el grupo depende de si es ind < 9 o no
+    // cuando el nombre es vacio, se supone es un bot
     public static String[] userIP = new String[18];
     public static String[] userName = new String[18];
     public static int[] userStyle = new int[18];

@@ -63,11 +63,19 @@ public class Recepciones {
             Envios.sendMsj(Envios.SUB_VERSION, emisor);
         }
         else if (Adsobalin.userGetInd(emisor) != -1) {
-            // primero se eliminan los datos del usuario de la tabla
             int ind = Adsobalin.userGetInd(emisor);
-            Adsobalin.userClean(ind);
-            // se agrega el nuevo usuario a la tabla de usuarios
-            newUser(estilo, grupo, nombre, emisor);
+            if (Adsobalin.estado == Adsobalin.EST_JUEGO) {
+                // no permitira actualizacion, solo le da permiso de ingreso
+                Envios.sendWelcome(Conector.userName[ind], emisor,
+                        Conector.userStyle[ind],
+                        Adsobalin.userGetGrupo(ind), ind);
+            }
+            else {
+                // primero se eliminan los datos del usuario
+                Adsobalin.userClean(ind);
+                // se agrega el nuevo usuario para actualizarlo
+                newUser(estilo, grupo, nombre, emisor);
+            }
         }
         else if (Adsobalin.userHayCupo() == -1) {
             Envios.sendMsj(Envios.SUB_CUPO, emisor);
