@@ -9,11 +9,15 @@ import javafx.scene.text.Font;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javax.swing.JOptionPane;
+import java.util.Random;
 
 public class Adsobalin extends Application {
     
     // para poder conectarse solo con instancias de misma version
     public static final int VERSION = 1;
+    
+    // sistema aleatorio para todo el software
+    public static Random DADO = new Random();
     
     // la talla de todos los componentes visuales, todo es escalable
     public static final double WIDTH = 720d; // 720
@@ -53,9 +57,6 @@ public class Adsobalin extends Application {
     public static int grupo = GRU_LIBRE;
     public static int estilo = 0;
     public static int indice = -1;
-    // cuando es cliente guarda ip servidor
-    //indica que esta a la escucha para por ejemplo cambiar de interfaz
-    public static String myServer = "";
     
     public static void main(String[] args) {
         conector = new Conector(PUERTO);

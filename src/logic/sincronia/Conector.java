@@ -13,7 +13,7 @@ public class Conector {
     // identificador unico del software para sus mensajes UDP
     public static final int SOFT_ID = 69750244;
     // este debug es para enviar datos a puerto + 1
-    private static final boolean PORT_DEBUG = true;
+    private static final boolean PORT_DEBUG = false;
     // talla del buffer de recepcion, ajustar al minimo necesario
     private static final int LIM_LEC_BUF = 2048;
     // tiempo tras el cual desconectar usuarios inactivos
@@ -33,6 +33,10 @@ public class Conector {
     private static DatagramSocket socket;
     // todos los jugadores usaran el mismo puerto
     private static int puerto;
+    
+    // cuando es cliente guarda ip servidor
+    //indica que esta a la escucha para por ejemplo cambiar de interfaz
+    public static String myServer = "";
     
     public Conector(int puerto) {
         this.puerto = puerto;

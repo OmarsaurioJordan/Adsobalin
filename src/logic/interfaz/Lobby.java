@@ -63,6 +63,11 @@ public class Lobby extends GUIs {
             }
         }
         
+        // poner el boton superior izquierdo para retornar al menu
+        Button volver = setButton("assets/interfaz/left",
+                ww * 0.05f, hh * 0.07f, 72f, false);
+        volver.setOnAction(event -> volverAlMenu());
+        
         // las cosas que solo el servidor vera
         if (isServer) {
             
@@ -87,6 +92,9 @@ public class Lobby extends GUIs {
                 else {
                     nombres.get(i).setText("*B" + (i - 8) + "*");
                 }
+            }
+            else if (Conector.userName[i].equals(Adsobalin.nombre)) {
+                nombres.get(i).setText("(" + Conector.userName[i] + ")");
             }
             else {
                 nombres.get(i).setText(Conector.userName[i]);

@@ -87,6 +87,10 @@ public class Recepciones {
             // a enviar rafagas de mensajes para la sincronia
             int ind = Adsobalin.userAdd(emisor, nombre, estilo, grupo);
             Envios.sendWelcome(nombre, emisor, estilo, grupo, ind);
+            if (Adsobalin.estado == Adsobalin.EST_LOBBY) {
+                Lobby gui = (Lobby)raiz.getScene();
+                gui.reDibujar();
+            }
         }
     }
     
@@ -98,7 +102,7 @@ public class Recepciones {
         Adsobalin.grupo = grupo;
         Adsobalin.nombre = nombre;
         // al haber servidor asociado el cliente oira y enviara rafagas
-        Adsobalin.myServer = emisor;
+        Conector.myServer = emisor;
         // esto es para evitar estar conectado y en el menu principal a la vez
         // pero luego puede que se cambie la interfaz con la sincronia
         if (Adsobalin.estado == Adsobalin.EST_MENU) {

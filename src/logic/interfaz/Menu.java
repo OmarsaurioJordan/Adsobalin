@@ -8,8 +8,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.shape.Circle;
-import java.util.Random;
 import logic.sincronia.Envios;
+import logic.sincronia.Conector;
 
 public class Menu extends GUIs {
     
@@ -30,7 +30,7 @@ public class Menu extends GUIs {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_MENU;
         Adsobalin.isServer = false;
-        Adsobalin.myServer = "";
+        Conector.myServer = "";
         Adsobalin.userClean();
         
         // permite guardar la informacion de la interfaz cuando esta cierra
@@ -104,15 +104,15 @@ public class Menu extends GUIs {
                 ww * 0.82f, hh * 0.8f, 138f, true);
         play.setOnAction(event -> ejecutar());
         
-        // colocar un boton de cambio de estilo a la derecha
-        Button next = setButton("assets/interfaz/right",
-                ww * 0.63f, hh * 0.75f, 72f, true);
-        next.setOnAction(event -> cambiarEstilo(1));
-        
         // colocar un boton de cambio de estilo a la izquierda
         Button previous = setButton("assets/interfaz/left",
                 ww * 0.37f, hh * 0.75f, 72f, false);
         previous.setOnAction(event -> cambiarEstilo(-1));
+        
+        // colocar un boton de cambio de estilo a la derecha
+        Button next = setButton("assets/interfaz/right",
+                ww * 0.63f, hh * 0.75f, 72f, true);
+        next.setOnAction(event -> cambiarEstilo(1));
         
         // colocar el boton con la forma del avatar
         Button avatar = setAvatar(ww / 2f, hh * 0.75f);
@@ -230,9 +230,8 @@ public class Menu extends GUIs {
     }
     
     private void leerDatos() {
-        Random rnd = new Random();
-        Adsobalin.grupo = 1 + rnd.nextInt(2); // 1 a 2
-        Adsobalin.estilo = 1 + rnd.nextInt(28); // 1 a 28
+        Adsobalin.grupo = 1 + Adsobalin.DADO.nextInt(2); // 1 a 2
+        Adsobalin.estilo = 1 + Adsobalin.DADO.nextInt(28); // 1 a 28
         if (data.cargarData(DATAPATH)) {
             if (!data.getData("inicial", "1").equals("1")) {
                 Adsobalin.grupo = Integer.parseInt(
@@ -278,7 +277,7 @@ public class Menu extends GUIs {
     private String filtroTexto(String texto, int limite) {
         // el limite puede ser 0 o -1 para no imponer un limite
         String f = "abcdefghijklmnopqrstuvwxyz0123456789" +
-            "ABCDEFGHIJKLMNOPQRSTUVWXYZ(){}[]:;-_?=,.+/*#$%&!|<>";
+            "ABCDEFGHIJKLMNOPQRSTUVWXYZ";//(){}[]:;-_?=,.+/*#$%&!|<>";
         String txt = "";
         int lim = 0;
         char c;
