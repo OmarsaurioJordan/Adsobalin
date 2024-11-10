@@ -49,6 +49,7 @@ public abstract class GUIs extends Scene {
     }
     
     public void setFondo(double escala) {
+        // pone un fondo negro detras de toda el area de dibujado
         double scW = Screen.getPrimary().getVisualBounds().getWidth();
         double scH = Screen.getPrimary().getVisualBounds().getHeight();
         fondo.setX(-scW / escala);

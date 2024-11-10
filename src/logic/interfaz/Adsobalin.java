@@ -17,7 +17,7 @@ public class Adsobalin extends Application {
     public static final int VERSION = 1;
     
     // sistema aleatorio para todo el software
-    public static Random DADO = new Random();
+    public static Random DADO = new Random(System.currentTimeMillis());
     
     // la talla de todos los componentes visuales, todo es escalable
     public static final double WIDTH = 720d; // 720

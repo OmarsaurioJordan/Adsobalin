@@ -3,6 +3,8 @@ package logic.abstractos;
 
 public abstract class Tools {
     
+    public static float NO_COLI = -100f;
+    
     public static float[] vecSuma(float[] vec1, float[] vec2) {
         float[] res = {vec1[0] + vec2[0], vec1[1] + vec2[1]};
         return res;
@@ -43,12 +45,12 @@ public abstract class Tools {
     
     public static float circleColision(float[] pos1, float radio1,
             float[] pos2, float radio2) {
-        // retorna direccion de rebote normal o -100 si no hubo colision
+        // retorna direccion de rebote normal o NO_COLI si no hubo colision
         float dist = vecDistancia(pos1, pos2);
         if (dist < radio1 + radio2) {
             return vecDireccion(pos1, pos2);
         }
-        return -100f;
+        return NO_COLI;
     }
     
     public static float[] circleLimitar(float[] centro, float radio,

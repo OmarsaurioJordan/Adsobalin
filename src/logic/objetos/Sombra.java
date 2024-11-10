@@ -1,12 +1,14 @@
 package logic.objetos;
 // ente sincronizado, es automata o player de otra maquina
 
+import javafx.scene.canvas.GraphicsContext;
 import logic.abstractos.Movil;
+import logic.abstractos.Objeto;
 
 public class Sombra extends Movil {
     
     public Sombra(float[] posicion) {
-        super(posicion, 6);
+        super(posicion, Objeto.OBJ_SOMBRA);
     }
     
     @Override
@@ -15,7 +17,7 @@ public class Sombra extends Movil {
     }
     
     @Override
-    public void draw() {
+    public void draw(GraphicsContext gc) {
         
     }
 }

@@ -16,6 +16,9 @@ import logic.sincronia.Envios;
 
 public class Lobby extends GUIs {
     
+    // densidad de obstaculos maxima permitida
+    public static final int DENSI_OBST_MAX = 6;
+    
     // guarda los nombres de usuarios conectados
     private ArrayList<Label> nombres = new ArrayList<>();
     private ArrayList<CheckBox> activaNPCs = new ArrayList<>();
@@ -216,7 +219,15 @@ public class Lobby extends GUIs {
     }
     
     public void ejecutar() {
-        // poner en marcha el juego, solo el servidor puede hacerlo
+        Adsobalin.isEncursable = chkConex.isSelected();
+        boolean[] npcok = new boolean[18];
+        for (int i = 0; i < 18; i++) {
+            npcok[i] = activaNPCs.get(i).isSelected();
+        }
+        raiz.setScene(new Mundo(raiz, npcok,
+                Integer.parseInt(configMap.get(0).getText()),
+                Integer.parseInt(configMap.get(1).getText()),
+                Integer.parseInt(configMap.get(2).getText())));
     }
     
     private void cambioGrupo() {
@@ -246,7 +257,7 @@ public class Lobby extends GUIs {
     }
     
     private void setObstaculos(int direccion) {
-        setConfigDir(configMap.get(1), direccion, 0, 6);
+        setConfigDir(configMap.get(1), direccion, 0, DENSI_OBST_MAX);
     }
     
     private void setDuracion(int direccion) {

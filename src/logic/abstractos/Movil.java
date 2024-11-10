@@ -7,12 +7,12 @@ import logic.interfaz.Adsobalin;
 public abstract class Movil extends Objeto {
     
     // es la rapidez con que se mueven los entes
-    public static float velocidad = 100f;
+    public static final float VELOCIDAD = 100f;
     
     // los moviles mueven su ubicacion y luego la posicion la sigue
     protected float[] ubicacion = {0f, 0f};
     // identificador unico que se mantiene entre varias maquinas
-    protected int idWeb = -1;
+    protected int indice = -1;
     // para mostrar el nickname del jugador propietario
     protected String nombre = "";
     
@@ -34,17 +34,15 @@ public abstract class Movil extends Objeto {
     // grupo al que pertenece
     protected int grupo = Adsobalin.GRU_LIBRE;
     
-    public Movil(float[] posicion, int depth) {
-        super(posicion, depth, 12f);
+    public Movil(float[] posicion, int myTipo) {
+        super(posicion, myTipo, 12f * (float)Adsobalin.ESCALA);
         this.ubicacion = posicion;
     }
-    
-    public abstract void step(float delta);
     
     protected void moverSync(float delta) {
         // hace que la posicion se acerque a la ubicacion
         posicion = Tools.vecInterpolar(posicion, ubicacion,
-                2f * delta, 2f * velocidad * delta);
+                2f * delta, 2f * VELOCIDAD * delta);
     }
     
     protected void temporizar(float delta) {
