@@ -52,8 +52,13 @@ public class Mundo extends GUIs {
         // ejecutar por primera vez el juego
         creaBases();
         if (Adsobalin.isServer) {
-            creaArboles((float)obstaculos / (float)Lobby.DENSI_OBST_MAX);
-            creaDecorados();
+            // crea arboles
+            CreaElementosRandom((float)obstaculos /
+                    (float)Lobby.DENSI_OBST_MAX,
+                    Arbol.class, Solido.RADIO, 2.5f, Solido.class);
+            // crea decorados
+            CreaElementosRandom(1f, Baldoza.class,
+                    Decorado.RADIO, 2.5f, Baldoza.class);
         }
         
         // crear el loop principal de simulacion
@@ -72,23 +77,32 @@ public class Mundo extends GUIs {
     }
     
     private void creaBases() {
-        
+        // dos bases azules a la izquierda
+        float[] pos0 = {radioMundo * 0.2f, radioMundo * 0.8f};
+        Base b0 = new Base(pos0);
+        b0.setGrupo(true);
+        float[] pos1 = {radioMundo * 0.2f, radioMundo * 1.2f};
+        Base b1 = new Base(pos1);
+        b1.setGrupo(true);
+        // dos bases rojas a la derecha
+        float[] pos2 = {radioMundo * 1.8f, radioMundo * 0.8f};
+        Base b2 = new Base(pos2);
+        b2.setGrupo(false);
+        float[] pos3 = {radioMundo * 1.8f, radioMundo * 1.2f};
+        Base b3 = new Base(pos3);
+        b3.setGrupo(false);
     }
     
-    private void creaDecorados() {
-        
-    }
-    
-    private void creaArboles(float densidad) {
+    private void CreaElementosRandom(float densidad, Class<?> claseNew,
+            float radioNew, float propSeparacion, Class<?> claseColi) {
         // halla el area del circulo del mundo
         float densiMundo = (float)Math.PI * (float)Math.pow(radioMundo, 2);
-        // halla el area del circulo de un solido, luego halla la relacion
-        densiMundo /= (float)Math.PI * (float)Math.pow(Solido.RADIO, 2);
-        // la relacion es el max de arboles que caben, una proporcion es total
+        // halla el area del circulo de un elemento, luego halla la relacion
+        densiMundo /= (float)Math.PI * (float)Math.pow(radioNew, 2);
+        // la relacion es el max de elementos que caben, tot una proposcion de
         int total = (int)(densiMundo * (densidad * 0.01f));
-        // punto en el centro del mundo
+        // creara muchos elementos
         float[] pos;
-        // creara muchos arboles
         for (int i = 0; i < total; i++) {
             do {
                 // primero elige un punto al azar en el cuadrado
@@ -100,11 +114,11 @@ public class Mundo extends GUIs {
                     continue;
                 }
             }
-            // repetira el ciclo mientras no colisione con otro solido
-            while (colsionObject(pos, Solido.RADIO * 2.5f,
-                    Solido.class) != null);
-            // finalmente crea un arbol
-            newObjeto(Arbol.class, pos);
+            // repetira el ciclo mientras no colisione con otro elemento
+            while (colsionObject(pos, radioNew * propSeparacion,
+                    claseColi) != null);
+            // finalmente crea un elemento
+            newObjeto(claseNew, pos);
         }
     }
     
@@ -149,13 +163,14 @@ public class Mundo extends GUIs {
     }
     
     private void step(float delta) {
-        // ejecuta toda la logica del juego
-        
+        // ejecuta toda la logica del juego:
         // ejecuta todas las acciones de los objetos
         Objeto obj;
         for (int i = 0; i <= Objeto.OBJ_BASE; i++) {
-            // Tarea agregar aqui switch que evite objetos sin step 
-           for (int n = 0; n < pool.size(); n++) {
+            if (i == Objeto.OBJ_BALDOZA || i == Objeto.OBJ_ARBOL) {
+                continue;
+            }
+            for (int n = 0; n < pool.size(); n++) {
                 obj = (Objeto)pool.get(n);
                 if (obj.myTipo == i) {
                     obj.step(delta);
@@ -165,7 +180,7 @@ public class Mundo extends GUIs {
     }
     
     private void draw() {
-        // dibuja todo un frame del juego
+        // dibuja todo un frame del juego:
         // primero dibujara el fondo que ademas limpia el lienzo
         gc.drawImage(fondo, -camaraPos[0], -camaraPos[1]);
         

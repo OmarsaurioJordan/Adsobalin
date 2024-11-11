@@ -7,7 +7,7 @@ import logic.interfaz.Adsobalin;
 public abstract class Movil extends Objeto {
     
     // es la rapidez con que se mueven los entes
-    public static final float VELOCIDAD = 100f;
+    public static final float VELOCIDAD = 100f * (float)Adsobalin.ESCALA;
     
     // los moviles mueven su ubicacion y luego la posicion la sigue
     protected float[] ubicacion = {0f, 0f};

@@ -5,7 +5,10 @@ import logic.interfaz.Adsobalin;
 
 public abstract class Decorado extends Objeto {
     
+    // radio para todos los decorados aunque no son colisionables
+    public static float RADIO = 9f * (float)Adsobalin.ESCALA;
+    
     public Decorado(float[] posicion, int myTipo) {
-        super(posicion, myTipo, 10f * (float)Adsobalin.ESCALA);
+        super(posicion, myTipo, RADIO);
     }
 }
