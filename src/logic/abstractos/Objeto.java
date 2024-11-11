@@ -3,8 +3,8 @@ package logic.abstractos;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import javafx.scene.transform.Affine;
 import javafx.scene.transform.Rotate;
+import logic.interfaz.Mundo;
 
 public abstract class Objeto {
     
@@ -14,9 +14,6 @@ public abstract class Objeto {
     public float radio = 0f;
     // la direccion en la que apunta el sprite principal
     public float angulo = 0f;
-    
-    // al dibujar la imagen, define el desfase sprite vs posicion x,y
-    protected float[] desfase = {0f, 0f};
     
     // constantes para tipo de objeto y depth
     public static final int OBJ_BALDOZA = 0;
@@ -38,36 +35,34 @@ public abstract class Objeto {
         this.radio = radio;
     }
     
-    private static Affine getTrans(Image img,
-            float[] posicion, float angulo) {
-        Affine trans = new Affine();
-        // trasladar la imagen al punto central
-        trans.appendTranslation(posicion[0] + img.getWidth() / 2f,
-                posicion[1] + img.getHeight() / 2f);
-        // hacer la rotacion
-        trans.appendRotation(angulo * 57.2958f, 0f, 0f);
-        // centrar la imagen nuevamente
-        trans.appendTranslation(-img.getWidth() / 2f, -img.getHeight() / 2f);
-        return trans;
+    private static float[] realPos(float[] posicion) {
+        return Tools.vecResta(posicion, Mundo.camaraPos);
     }
     
-    private static void drawTrans(GraphicsContext gc,
-            Image img, float[] posicion, Affine trans) {
-        gc.save();
-        gc.setTransform(trans);
-        gc.drawImage(img, posicion[0], posicion[1]);
-        gc.restore();
+    private static void rotar(GraphicsContext gc, float angulo,
+            float[] pivote) {
+        Rotate r = new Rotate(angulo * 57.2958f, pivote[0], pivote[1]);
+        gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(),
+                r.getMyy(), r.getTx(), r.getTy());
     }
     
-    public static void drawImagenExt(GraphicsContext gc,
+    protected static void drawImagenRot(GraphicsContext gc,
             Image img, float[] posicion, float angulo) {
-        Affine trans = getTrans(img, posicion, angulo);
-        drawTrans(gc, img, posicion, trans);
+        gc.save();
+        float[] pos = realPos(posicion);
+        rotar(gc, angulo, pos);
+        gc.drawImage(img,
+                pos[0] - img.getWidth() / 2f,
+                pos[1] - img.getHeight() / 2f);
+        gc.restore();
     }
     
     public static void drawImagen(GraphicsContext gc,
             Image img, float[] posicion) {
-        gc.drawImage(img, posicion[0], posicion[1]);
+        float[] pos = realPos(posicion);
+        gc.drawImage(img,
+                pos[0] - img.getWidth() / 2f,
+                pos[1] - img.getHeight() / 2f);
     }
     
     public abstract void step(float delta);

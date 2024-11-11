@@ -4,7 +4,6 @@ package logic.interfaz;
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.abstractos.*;
 import logic.objetos.*;
@@ -53,8 +52,7 @@ public class Mundo extends GUIs {
         // ejecutar por primera vez el juego
         creaBases();
         if (Adsobalin.isServer) {
-            //creaArboles((float)obstaculos / (float)Lobby.DENSI_OBST_MAX);
-            newObjeto(Arbol.class, centroMundo);
+            creaArboles((float)obstaculos / (float)Lobby.DENSI_OBST_MAX);
             creaDecorados();
         }
         
@@ -87,7 +85,7 @@ public class Mundo extends GUIs {
         // halla el area del circulo de un solido, luego halla la relacion
         densiMundo /= (float)Math.PI * (float)Math.pow(Solido.RADIO, 2);
         // la relacion es el max de arboles que caben, una proporcion es total
-        int total = (int)(densiMundo * (densidad * 0.1f));
+        int total = (int)(densiMundo * (densidad * 0.01f));
         // punto en el centro del mundo
         float[] pos;
         // creara muchos arboles
@@ -184,11 +182,5 @@ public class Mundo extends GUIs {
         
         // dibujar la mira difuminada de la camara sobre todo
         gc.drawImage(difuminado, 0f, 0f);
-        
-        //Quitar
-        double raddd = 3d;
-        gc.setFill(Color.BLUE);
-        float[] posss = Tools.vecResta(centroMundo, camaraPos);
-        gc.fillOval(posss[0] - raddd, posss[1] - raddd, raddd * 2, raddd * 2);
     }
 }

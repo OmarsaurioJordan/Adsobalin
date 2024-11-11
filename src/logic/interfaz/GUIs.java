@@ -19,9 +19,7 @@ import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.paint.Color;
-import javafx.stage.Screen;
 
 public abstract class GUIs extends Scene {
     
@@ -30,32 +28,15 @@ public abstract class GUIs extends Scene {
     protected GraphicsContext gc;
     protected Group gui;
     
-    // para oscurecer lo que este fuera del area de dibujado
-    private Rectangle fondo = new Rectangle();
-    
     public GUIs(Stage raiz) {
-        super(new Group(), Adsobalin.WIDTH, Adsobalin.HEIGHT);
+        super(new Group(), Adsobalin.WIDTH, Adsobalin.HEIGHT, Color.BLACK);
         this.raiz = raiz;
         gui = (Group)getRoot();
-        
-        // poner un rectangulo negro al fondo
-        fondo.setFill(Color.BLACK);
-        gui.getChildren().add(fondo);
         
         // crea la clase que permite el dibujado de imagenes
         Canvas lienzo = new Canvas(Adsobalin.WIDTH, Adsobalin.HEIGHT);
         gui.getChildren().add(lienzo);
         gc = lienzo.getGraphicsContext2D();
-    }
-    
-    public void setFondo(double escala) {
-        // pone un fondo negro detras de toda el area de dibujado
-        double scW = Screen.getPrimary().getVisualBounds().getWidth();
-        double scH = Screen.getPrimary().getVisualBounds().getHeight();
-        fondo.setX(-scW / escala);
-        fondo.setY(-scH / escala);
-        fondo.setWidth((scW * 2d) / escala);
-        fondo.setHeight((scH * 2d) / escala);
     }
     
     protected Label setLabel(String texto, float posX, float posY) {

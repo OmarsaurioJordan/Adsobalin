@@ -6,8 +6,6 @@ import javafx.scene.image.Image;
 import logic.abstractos.Objeto;
 import logic.abstractos.Solido;
 import logic.interfaz.Adsobalin;
-import logic.abstractos.Tools;
-import logic.interfaz.Mundo;
 
 public class Arbol extends Solido {
     
@@ -18,24 +16,14 @@ public class Arbol extends Solido {
     
     public Arbol(float[] posicion) {
         super(posicion, Objeto.OBJ_ARBOL);
-        desfase[0] = (float)sprite.getWidth() / 2f;
-        desfase[1] = desfase[0];
         angulo = Adsobalin.DADO.nextFloat((float)Math.PI * 2f);
     }
     
     @Override
-    public void step(float delta) {
-        // Quitar
-        angulo += 0.01f;
-    }
+    public void step(float delta) {}
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawImagenExt(gc, sprite,
-                Tools.vecResta(posicion, Mundo.camaraPos),
-                angulo);
-        /*drawImagen(gc, sprite, Tools.vecResta(
-                Tools.vecResta(posicion, Mundo.camaraPos),
-                desfase));*/
+        drawImagenRot(gc, sprite, posicion, angulo);
     }
 }

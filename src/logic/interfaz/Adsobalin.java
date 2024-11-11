@@ -110,8 +110,6 @@ public class Adsobalin extends Application {
         Translate trans = new Translate(((raiz.getWidth() - newW) / 2d) / sc,
                 (((raiz.getHeight() - HEADER) - newH) / 2d) / sc);
         raiz.getScene().getRoot().getTransforms().setAll(esc, trans);
-        GUIs gui = (GUIs)raiz.getScene();
-        gui.setFondo(sc);
     }
     
     public static boolean userContNombre(String nombre) {
