@@ -24,7 +24,9 @@ public class Adsobalin extends Application {
     public static final double HEIGHT = 480d; // 480
     public static final double RATIOWH = WIDTH / HEIGHT;
     public static final double ESCALA = WIDTH / 720d; // no cambiar
-    private static final double HEADER = 40d;
+    public static final double HEADER = 40d;
+    // es true si llena el largo de la ventana principal, sino, llena el alto
+    public static boolean isWidth = true;
     
     // la fuente de texto usada en todo el software
     public static Font letras = new Font("Verdana", 18 * ESCALA);
@@ -94,7 +96,8 @@ public class Adsobalin extends Application {
     private void reEscalar(Stage raiz, double width, double height) {
         double idealW = height * RATIOWH;
         double sc, newW, newH;
-        if (idealW > raiz.getWidth()) {
+        isWidth = idealW > raiz.getWidth();
+        if (isWidth) {
             sc = width / this.WIDTH;
             newW = width;
             newH = width / RATIOWH;

@@ -3,7 +3,9 @@ package logic.interfaz;
 
 import java.util.ArrayList;
 import javafx.animation.AnimationTimer;
+import javafx.scene.robot.Robot;
 import javafx.scene.image.Image;
+import javafx.scene.Cursor;
 import javafx.stage.Stage;
 import logic.abstractos.*;
 import logic.objetos.*;
@@ -11,7 +13,7 @@ import logic.objetos.*;
 public class Mundo extends GUIs {
     
     // constantes globales de la simulacion
-    public static final int RADIO = 1024;
+    public static final int RADIO = 720;
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
     
@@ -25,6 +27,14 @@ public class Mundo extends GUIs {
     
     // posicion de la camara en el mundo
     public static float[] camaraPos = {0f, 0f};
+    // posicion del mouse
+    public static float[] mousePos = {0f, 0f};
+    // sistema para obtener coordenadas de mouse
+    private static Robot adquisidor = new Robot();
+    // imagen del mouse
+    private Image mouseImg = new Image("assets/entorno/mouse.png",
+        72f * 0.75f * Adsobalin.ESCALA,
+        72f * 0.75f * Adsobalin.ESCALA, false, false);
     // difuminado de la camara
     private Image difuminado = new Image("assets/entorno/camara.png",
         Adsobalin.WIDTH, Adsobalin.HEIGHT, false, false);
@@ -36,10 +46,11 @@ public class Mundo extends GUIs {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_JUEGO;
         radioMundo = (int)(((RADIO / 2) * (1 + talla)) * Adsobalin.ESCALA);
-        centroMundo[0] = radioMundo / 2f;
-        centroMundo[1] = radioMundo / 2f;
+        centroMundo[0] = radioMundo;
+        centroMundo[1] = radioMundo;
         tiempoRestante = tiempo * 60f;
         this.npcok = npcok;
+        setCursor(Cursor.NONE);
         
         // cargar el fondo
         fondo = new Image("assets/entorno/fondo.png",
@@ -53,13 +64,15 @@ public class Mundo extends GUIs {
         creaBases();
         if (Adsobalin.isServer) {
             // crea arboles
-            CreaElementosRandom((float)obstaculos /
-                    (float)Lobby.DENSI_OBST_MAX,
-                    Arbol.class, Solido.RADIO, 2.5f, Solido.class);
+            CreaElementosRandom((float)(obstaculos / Lobby.DENSI_OBST_MAX) *
+                    0.3f, Arbol.class, Solido.RADIO, 2.5f, Solido.class);
             // crea decorados
-            CreaElementosRandom(1f, Baldoza.class,
+            CreaElementosRandom(0.5f, Baldoza.class,
                     Decorado.RADIO, 2.5f, Baldoza.class);
         }
+        
+        //Quitar
+        Player ply = (Player)newObjeto(Player.class, centroMundo);
         
         // crear el loop principal de simulacion
         new AnimationTimer() {
@@ -78,18 +91,18 @@ public class Mundo extends GUIs {
     
     private void creaBases() {
         // dos bases azules a la izquierda
-        float[] pos0 = {radioMundo * 0.2f, radioMundo * 0.8f};
-        Base b0 = new Base(pos0);
+        float[] pos0 = {radioMundo * 0.3f, radioMundo * 0.8f};
+        Base b0 = (Base)newObjeto(Base.class, pos0);
         b0.setGrupo(true);
-        float[] pos1 = {radioMundo * 0.2f, radioMundo * 1.2f};
-        Base b1 = new Base(pos1);
+        float[] pos1 = {radioMundo * 0.3f, radioMundo * 1.2f};
+        Base b1 = (Base)newObjeto(Base.class, pos1);
         b1.setGrupo(true);
         // dos bases rojas a la derecha
-        float[] pos2 = {radioMundo * 1.8f, radioMundo * 0.8f};
-        Base b2 = new Base(pos2);
+        float[] pos2 = {radioMundo * 1.7f, radioMundo * 0.8f};
+        Base b2 = (Base)newObjeto(Base.class, pos2);
         b2.setGrupo(false);
-        float[] pos3 = {radioMundo * 1.8f, radioMundo * 1.2f};
-        Base b3 = new Base(pos3);
+        float[] pos3 = {radioMundo * 1.7f, radioMundo * 1.2f};
+        Base b3 = (Base)newObjeto(Base.class, pos3);
         b3.setGrupo(false);
     }
     
@@ -100,23 +113,24 @@ public class Mundo extends GUIs {
         // halla el area del circulo de un elemento, luego halla la relacion
         densiMundo /= (float)Math.PI * (float)Math.pow(radioNew, 2);
         // la relacion es el max de elementos que caben, tot una proposcion de
-        int total = (int)(densiMundo * (densidad * 0.01f));
+        int total = (int)(densiMundo * (densidad * 0.1f));
         // creara muchos elementos
         float[] pos;
         for (int i = 0; i < total; i++) {
+            pos = new float[2];
             do {
                 // primero elige un punto al azar en el cuadrado
-                pos = new float[2];
-                pos[0] = Adsobalin.DADO.nextFloat(radioMundo);
-                pos[1] = Adsobalin.DADO.nextFloat(radioMundo);
+                pos[0] = Adsobalin.DADO.nextFloat(radioMundo * 2f);
+                pos[1] = Adsobalin.DADO.nextFloat(radioMundo * 2f);
                 // verifica que el punto este dentro del circulo gigante
-                if (Tools.vecDistancia(centroMundo, pos) > radioMundo) {
-                    continue;
+                if (Tools.vecDistancia(centroMundo, pos) >
+                        radioMundo * 0.95f) {
+                    pos[0] = 0f;
                 }
             }
             // repetira el ciclo mientras no colisione con otro elemento
             while (colsionObject(pos, radioNew * propSeparacion,
-                    claseColi) != null);
+                    claseColi) != null || pos[0] == 0);
             // finalmente crea un elemento
             newObjeto(claseNew, pos);
         }
@@ -164,6 +178,9 @@ public class Mundo extends GUIs {
     
     private void step(float delta) {
         // ejecuta toda la logica del juego:
+        // obtener y procesar la posicion del mouse
+        getMouse();
+        
         // ejecuta todas las acciones de los objetos
         Objeto obj;
         for (int i = 0; i <= Objeto.OBJ_BASE; i++) {
@@ -177,6 +194,18 @@ public class Mundo extends GUIs {
                 }
             }
         }
+        
+        //Quitar
+        float[] r = {
+            (float)Adsobalin.WIDTH / 2f,
+            (float)Adsobalin.HEIGHT / 2f
+        };
+        float[] m = Tools.vecResta(mousePos, r);
+        camaraPos = Tools.vecInterpolar(camaraPos, m, 2f * delta, 10f);
+        camaraPos[0] = (float)Math.max(0f, Math.min(
+                2f * radioMundo - Adsobalin.WIDTH, camaraPos[0]));
+        camaraPos[1] = (float)Math.max(0f, Math.min(
+                2f * radioMundo - Adsobalin.HEIGHT, camaraPos[1]));
     }
     
     private void draw() {
@@ -197,5 +226,36 @@ public class Mundo extends GUIs {
         
         // dibujar la mira difuminada de la camara sobre todo
         gc.drawImage(difuminado, 0f, 0f);
+        // dibujar el mouse
+        float[] mPos = Tools.vecResta(mousePos, camaraPos);
+        gc.drawImage(mouseImg, mPos[0] - mouseImg.getWidth() / 2f,
+                mPos[1] - mouseImg.getHeight() / 2f);
+    }
+    
+    // obtiener y procesar la posicion del mouse
+    private void getMouse() {
+        float wReal = (float)raiz.getWidth();
+        float hReal = (float)(raiz.getHeight() - Adsobalin.HEADER);
+        float[] mouse = {
+            (float)(adquisidor.getMousePosition().getX() -
+                raiz.getX()) / wReal,
+            (float)(adquisidor.getMousePosition().getY() -
+                raiz.getY()) / hReal
+        };
+        if (Adsobalin.isWidth) { // vertical
+            mouse[0] *= Adsobalin.WIDTH;
+            float h = wReal / (float)Adsobalin.RATIOWH;
+            float desf = (hReal - h) / 2f;
+            float esc = (float)Adsobalin.HEIGHT / h;
+            mouse[1] = (mouse[1] * hReal - desf) * esc;
+        }
+        else { // horizontal
+            mouse[1] *= Adsobalin.HEIGHT;
+            float w = hReal * (float)Adsobalin.RATIOWH;
+            float desf = (wReal - w) / 2f;
+            float esc = (float)Adsobalin.WIDTH / w;
+            mouse[0] = (mouse[0] * wReal - desf) * esc;
+        }
+        mousePos = Tools.vecSuma(camaraPos, mouse);
     }
 }
