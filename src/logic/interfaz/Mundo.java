@@ -25,6 +25,13 @@ public class Mundo extends GUIs {
     // si deben invocarse NPCs
     private boolean[] npcok;
     
+    // guardar las teclas pulsadas
+    public static int KEY_UP = 0;
+    public static int KEY_DOWN = 1;
+    public static int KEY_LEFT = 2;
+    public static int KEY_RIGHT = 3;
+    public static boolean[] teclas = new boolean[KEY_RIGHT + 1];
+    
     // posicion de la camara en el mundo
     public static float[] camaraPos = {0f, 0f};
     // posicion del mouse
@@ -64,8 +71,9 @@ public class Mundo extends GUIs {
         creaBases();
         if (Adsobalin.isServer) {
             // crea arboles
-            CreaElementosRandom((float)(obstaculos / Lobby.DENSI_OBST_MAX) *
-                    0.3f, Arbol.class, Solido.RADIO, 2.5f, Solido.class);
+            CreaElementosRandom(((float)obstaculos /
+                    Lobby.DENSI_OBST_MAX) * 0.3f,
+                    Arbol.class, Solido.RADIO, 2.5f, Solido.class);
             // crea decorados
             CreaElementosRandom(0.5f, Baldoza.class,
                     Decorado.RADIO, 2.5f, Baldoza.class);
@@ -73,6 +81,25 @@ public class Mundo extends GUIs {
         
         //Quitar
         Player ply = (Player)newObjeto(Player.class, centroMundo);
+        ply.setAvatar();
+        
+        // leer la pulsacion de teclas
+        setOnKeyPressed(event -> {
+            switch (event.getCode()) {
+                case W -> teclas[KEY_UP] = true;
+                case S -> teclas[KEY_DOWN] = true;
+                case A -> teclas[KEY_LEFT] = true;
+                case D -> teclas[KEY_RIGHT] = true;
+            }
+        });
+        setOnKeyReleased(event -> {
+            switch (event.getCode()) {
+                case W -> teclas[KEY_UP] = false;
+                case S -> teclas[KEY_DOWN] = false;
+                case A -> teclas[KEY_LEFT] = false;
+                case D -> teclas[KEY_RIGHT] = false;
+            }
+        });
         
         // crear el loop principal de simulacion
         new AnimationTimer() {
@@ -194,18 +221,6 @@ public class Mundo extends GUIs {
                 }
             }
         }
-        
-        //Quitar
-        float[] r = {
-            (float)Adsobalin.WIDTH / 2f,
-            (float)Adsobalin.HEIGHT / 2f
-        };
-        float[] m = Tools.vecResta(mousePos, r);
-        camaraPos = Tools.vecInterpolar(camaraPos, m, 2f * delta, 10f);
-        camaraPos[0] = (float)Math.max(0f, Math.min(
-                2f * radioMundo - Adsobalin.WIDTH, camaraPos[0]));
-        camaraPos[1] = (float)Math.max(0f, Math.min(
-                2f * radioMundo - Adsobalin.HEIGHT, camaraPos[1]));
     }
     
     private void draw() {

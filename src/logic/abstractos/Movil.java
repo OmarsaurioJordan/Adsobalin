@@ -7,10 +7,14 @@ import logic.interfaz.Adsobalin;
 public abstract class Movil extends Objeto {
     
     // es la rapidez con que se mueven los entes
-    public static final float VELOCIDAD = 100f * (float)Adsobalin.ESCALA;
+    public static final float VELOCIDAD = 200f * (float)Adsobalin.ESCALA;
+    // es la rapidez con que la mira del avatar sigue al mouse
+    public static final float VELROT_MIRA = 6f;
     
     // los moviles mueven su ubicacion y luego la posicion la sigue
     protected float[] ubicacion = {0f, 0f};
+    // el angulo verdadero en que apunta, manejado por codigo, radianes
+    protected float anguMira = 0f;
     // identificador unico que se mantiene entre varias maquinas
     protected int indice = -1;
     // para mostrar el nickname del jugador propietario
@@ -42,7 +46,9 @@ public abstract class Movil extends Objeto {
     protected void moverSync(float delta) {
         // hace que la posicion se acerque a la ubicacion
         posicion = Tools.vecInterpolar(posicion, ubicacion,
-                2f * delta, 2f * VELOCIDAD * delta);
+                4f * delta, 4f * VELOCIDAD * delta);
+        // hace que el angulo se acerque a la mira
+        angulo = Tools.interpAngle(angulo, anguMira, VELROT_MIRA * delta);
     }
     
     protected void temporizar(float delta) {

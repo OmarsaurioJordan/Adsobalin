@@ -12,7 +12,7 @@ public abstract class Objeto {
     public float[] posicion = {0f, 0f};
     // define el circulo de colision, todas son circulares
     public float radio = 0f;
-    // la direccion en la que apunta el sprite principal
+    // la direccion en la que apunta el sprite principal, radianes
     public float angulo = 0f;
     
     // constantes para tipo de objeto y depth
@@ -25,7 +25,6 @@ public abstract class Objeto {
     public static final int OBJ_PLAYER = 6;
     public static final int OBJ_ARBOL = 7;
     public static final int OBJ_BASE = 8;
-    
     // especifica el orden de dibujado
     public int myTipo = -1;
     
@@ -41,7 +40,8 @@ public abstract class Objeto {
     
     private static void rotar(GraphicsContext gc, float angulo,
             float[] pivote) {
-        Rotate r = new Rotate(angulo * 57.2958f, pivote[0], pivote[1]);
+        Rotate r = new Rotate((angulo + Math.PI / 2f) * (180f / Math.PI),
+                pivote[0], pivote[1]);
         gc.setTransform(r.getMxx(), r.getMyx(), r.getMxy(),
                 r.getMyy(), r.getTx(), r.getTy());
     }

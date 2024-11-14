@@ -74,4 +74,27 @@ public abstract class Tools {
         float[] res = vecMover(vec1, dist, dir);
         return res;
     }
+    
+    public static float interpAngle(float actual, float deseado, float paso) {
+        // normalizar los angulos entre 0 y 2*pi
+        float maxAng = 2f * (float)Math.PI;
+        actual = (actual % maxAng + maxAng) % maxAng;
+        deseado = (deseado % maxAng + maxAng) % maxAng;
+        // Calcular la diferencia mínima
+        float delta = deseado - actual;
+        // ajustar delta para tomar camino mas corto
+        if (delta > Math.PI) {
+            delta -= maxAng;
+        }
+        else if (delta < -Math.PI) {
+            delta += maxAng;
+        }
+        // limitar para que no oscile
+        if (Math.abs(delta) <= paso) {
+            // alcanzo el valor final
+            return deseado;
+        }
+        // hacer el avance como tal, en la direccion mas corta
+        return actual + (float)Math.signum(delta) * paso;
+    }
 }
