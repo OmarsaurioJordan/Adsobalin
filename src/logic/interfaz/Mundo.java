@@ -30,7 +30,10 @@ public class Mundo extends GUIs {
     public static int KEY_DOWN = 1;
     public static int KEY_LEFT = 2;
     public static int KEY_RIGHT = 3;
-    public static boolean[] teclas = new boolean[KEY_RIGHT + 1];
+    public static int KEY_R = 4;
+    public static int KEY_CLICL = 5;
+    public static int KEY_CLICR = 6;
+    public static boolean[] teclas = new boolean[7];
     
     // posicion de la camara en el mundo
     public static float[] camaraPos = {0f, 0f};
@@ -90,6 +93,7 @@ public class Mundo extends GUIs {
                 case S -> teclas[KEY_DOWN] = true;
                 case A -> teclas[KEY_LEFT] = true;
                 case D -> teclas[KEY_RIGHT] = true;
+                case R -> teclas[KEY_R] = true;
             }
         });
         setOnKeyReleased(event -> {
@@ -98,6 +102,21 @@ public class Mundo extends GUIs {
                 case S -> teclas[KEY_DOWN] = false;
                 case A -> teclas[KEY_LEFT] = false;
                 case D -> teclas[KEY_RIGHT] = false;
+                case R -> teclas[KEY_R] = false;
+            }
+        });
+        
+        // leer las pulsaciones de mouse
+        setOnMousePressed(event -> {
+            switch (event.getButton()) {
+                case PRIMARY -> teclas[KEY_CLICL] = true;
+                case SECONDARY -> teclas[KEY_CLICR] = true;
+            }
+        });
+        setOnMouseReleased(event -> {
+            switch (event.getButton()) {
+                case PRIMARY -> teclas[KEY_CLICL] = false;
+                case SECONDARY -> teclas[KEY_CLICR] = false;
             }
         });
         
@@ -157,21 +176,48 @@ public class Mundo extends GUIs {
             }
             // repetira el ciclo mientras no colisione con otro elemento
             while (colsionObject(pos, radioNew * propSeparacion,
-                    claseColi) != null || pos[0] == 0);
+                    claseColi, null) != null || pos[0] == 0);
             // finalmente crea un elemento
             newObjeto(claseNew, pos);
         }
     }
     
     public static Object colsionObject(float[] posicion,
-            float radio, Class<?> claseMascara) {
+            float radio, Class<?> claseMascara, Object excepcion) {
         // retorna el objeto o null si no colisiono
         Object obj;
         Objeto aux;
         for (int n = 0; n < pool.size(); n++) {
             obj = pool.get(n);
+            if (obj == excepcion) {
+                continue;
+            }
             if (claseMascara.isInstance(obj)) {
                 aux = (Objeto)obj;
+                if (Tools.circleColision(posicion, radio,
+                        aux.posicion, aux.radio) != Tools.NO_COLI) {
+                    return obj;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static Object colsionGrupo(float[] posicion,
+            float radio, int grupoNoColi, Object excepcion) {
+        // retorna el objeto o null si no colisiono
+        Object obj;
+        Movil aux;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (obj == excepcion) {
+                continue;
+            }
+            if (Movil.class.isInstance(obj)) {
+                aux = (Movil)obj;
+                if (aux.grupo == grupoNoColi) {
+                    continue;
+                }
                 if (Tools.circleColision(posicion, radio,
                         aux.posicion, aux.radio) != Tools.NO_COLI) {
                     return obj;

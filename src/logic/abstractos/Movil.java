@@ -6,13 +6,31 @@ import logic.interfaz.Adsobalin;
 
 public abstract class Movil extends Objeto {
     
+    // radio para todos los moviles colisionables
+    public static float RADIO = 12f * (float)Adsobalin.ESCALA;
     // es la rapidez con que se mueven los entes
     public static final float VELOCIDAD = 200f * (float)Adsobalin.ESCALA;
     // es la rapidez con que la mira del avatar sigue al mouse
     public static final float VELROT_MIRA = 6f;
+    // los puntos de vida maximos
+    public static final int VIDA_MAX = 5;
+    // la municion maxima almacenada
+    public static final int MUNICION_MAX = 12;
+    // segundos que dura la cadencia entre disparos
+    public static final float TEMP_DISPARO_MAX = 0.5f;
+    // segundos que dura la recarga de 1 municion
+    public static final float TEMP_RECARGA_MAX = 0.5f;
+    // segundos que dura la iluminacion al ser golpeado
+    public static final float TEMP_GOLPE_MAX = 3f;
+    // segundos que dura la inmunidad inicial parpadeante
+    public static final float TEMP_INMUNE_MAX = 6f;
+    // segundos que dura la curacion de una sola vida
+    public static final float TEMP_CURACION_MAX = 3f;
+    // segundos que hay que esperar para poder curar vidas
+    public static final float TEMP_REGENERACION_MAX = 15f;
     
     // los moviles mueven su ubicacion y luego la posicion la sigue
-    protected float[] ubicacion = {0f, 0f};
+    public float[] ubicacion = {0f, 0f};
     // el angulo verdadero en que apunta, manejado por codigo, radianes
     protected float anguMira = 0f;
     // identificador unico que se mantiene entre varias maquinas
@@ -28,18 +46,20 @@ public abstract class Movil extends Objeto {
     protected float tempGolpe = 0f;
     // se activa al aparecer, para dar inmunidad
     protected float tempInmune = 0f;
-    // se activara cuando recive danno, para curarse
+    // se activara al curar una vida y continuar con las demas
     protected float tempCuracion = 0f;
+    // se activara cuando recive danno, para curarse
+    protected float tempRegeneracion = 0f;
     
     // son los puntos de impacto antes de morir
-    protected int vida = 5;
+    public int vida = VIDA_MAX;
     // es la cantidad de municion disponible
-    protected int municion = 12;
+    public int municion = MUNICION_MAX;
     // grupo al que pertenece
-    protected int grupo = Adsobalin.GRU_LIBRE;
+    public int grupo = Adsobalin.GRU_LIBRE;
     
     public Movil(float[] posicion, int myTipo) {
-        super(posicion, myTipo, 12f * (float)Adsobalin.ESCALA);
+        super(posicion, myTipo, RADIO);
         this.ubicacion = posicion;
     }
     
@@ -52,7 +72,45 @@ public abstract class Movil extends Objeto {
     }
     
     protected void temporizar(float delta) {
-        
+        // permite disparar de nuevo
+        if (tempDisparo != 0) {
+            tempDisparo = Math.max(0f, tempDisparo - delta);
+        }
+        // llena toda la municion de a pocos
+        if (tempRecarga != 0) {
+            tempRecarga = Math.max(0f, tempRecarga - delta);
+            if (tempRecarga == 0) {
+                municion = Math.min(municion + 1, MUNICION_MAX);
+                if (municion < MUNICION_MAX) {
+                    tempRecarga = TEMP_RECARGA_MAX;
+                }
+            }
+        }
+        // desactiva el efecto de golpe
+        if (tempGolpe != 0) {
+            tempGolpe = Math.max(0f, tempGolpe - delta);
+        }
+        // desactiva la inmunidad
+        if (tempInmune != 0) {
+            tempInmune = Math.max(0f, tempInmune - delta);
+        }
+        // curacion continua de vida, hasta llenarla
+        if (tempCuracion != 0) {
+            tempCuracion = Math.max(0f, tempCuracion - delta);
+            if (tempCuracion == 0) {
+                vida = Math.min(vida + 1, VIDA_MAX);
+                if (vida < VIDA_MAX) {
+                    tempCuracion = TEMP_CURACION_MAX;
+                }
+            }
+        }
+        // conteo largo que finalmente permitira la curacion de vida
+        if (tempRegeneracion != 0) {
+            tempRegeneracion = Math.max(0f, tempRegeneracion - delta);
+            if (tempRegeneracion == 0) {
+                tempCuracion = 0.1f;
+            }
+        }
     }
     
     protected boolean coliSolidos(float delta) {
@@ -67,9 +125,21 @@ public abstract class Movil extends Objeto {
         return false;
     }
     
-    protected Bala disparar(float direccion) {
-        Bala b = null;
-        return b;
+    protected Bala disparar(float angulo) {
+        if (tempDisparo == 0 && tempRecarga == 0 && municion > 0) {
+            Bala b = new Bala(Tools.vecMover(posicion,
+                    Movil.RADIO, this.angulo));
+            b.setProyectil(angulo, grupo, indice);
+            municion -= 1;
+            if (municion == 0) {
+                tempRecarga = TEMP_RECARGA_MAX;
+            }
+            else {
+                tempDisparo = TEMP_DISPARO_MAX;
+            }
+            return b;
+        }
+        return null;
     }
     
     public void golpear() {

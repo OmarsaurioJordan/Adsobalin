@@ -8,6 +8,7 @@ import logic.abstractos.Objeto;
 import logic.interfaz.Adsobalin;
 import logic.abstractos.Tools;
 import logic.interfaz.Mundo;
+import logic.abstractos.Solido;
 
 public class Player extends Movil {
     
@@ -82,7 +83,17 @@ public class Player extends Movil {
     }
     
     private void dispararComando(float delta) {
-        
+        if (Mundo.teclas[Mundo.KEY_CLICL]) {
+            disparar(angulo);
+        }
+        else if (Mundo.teclas[Mundo.KEY_CLICR] ||
+                Mundo.teclas[Mundo.KEY_R]) {
+            if (municion < MUNICION_MAX) {
+                if (tempRecarga == 0) {
+                    tempRecarga = TEMP_RECARGA_MAX;
+                }
+            }
+        }
     }
     
     private void moverCamara(float delta) {
@@ -105,13 +116,29 @@ public class Player extends Movil {
     @Override
     public void step(float delta) {
         // ejecutar los temporizadores
-        
+        temporizar(delta);
         // colisionar con los solidos
-        
+        Object otro = Mundo.colsionObject(ubicacion,
+                radio, Solido.class, this);
+        if (otro != null) {
+            Objeto otr = (Objeto)otro;
+            ubicacion = Tools.vecMover(ubicacion, VELOCIDAD * delta,
+                    Tools.vecDireccion(otr.posicion, ubicacion));
+        }
         // colisionar con otros moviles
-        
+        Object mov = Mundo.colsionObject(ubicacion,
+                radio, Movil.class, this);
+        if (mov != null) {
+            Movil m = (Movil)mov;
+            ubicacion = Tools.vecMover(ubicacion, VELOCIDAD * delta / 2f,
+                    Tools.vecDireccion(m.ubicacion, ubicacion));
+            m.ubicacion = Tools.vecMover(m.ubicacion, VELOCIDAD * delta / 2f,
+                    Tools.vecDireccion(ubicacion, m.ubicacion));
+        }
         // moverse por accion del jugador
-        moverComando(delta);
+        if (otro == null) {
+            moverComando(delta);
+        }
         // ajustar la direccion en que mira
         anguMira = Tools.vecDireccion(posicion, Mundo.mousePos);
         // disparar por accion del jugador
