@@ -32,6 +32,6 @@ public class Bala extends Proyectil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawImagen(gc, sprite, posicion);
+        drawImagenRot(gc, sprite, posicion, angulo);
     }
 }

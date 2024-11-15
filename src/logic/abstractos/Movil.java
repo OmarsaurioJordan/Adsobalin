@@ -3,6 +3,7 @@ package logic.abstractos;
 
 import logic.objetos.Bala;
 import logic.interfaz.Adsobalin;
+import logic.interfaz.Mundo;
 
 public abstract class Movil extends Objeto {
     
@@ -17,13 +18,13 @@ public abstract class Movil extends Objeto {
     // la municion maxima almacenada
     public static final int MUNICION_MAX = 12;
     // segundos que dura la cadencia entre disparos
-    public static final float TEMP_DISPARO_MAX = 0.5f;
+    public static final float TEMP_DISPARO_MAX = 0.2f;
     // segundos que dura la recarga de 1 municion
-    public static final float TEMP_RECARGA_MAX = 0.5f;
+    public static final float TEMP_RECARGA_MAX = 0.3f;
     // segundos que dura la iluminacion al ser golpeado
     public static final float TEMP_GOLPE_MAX = 3f;
     // segundos que dura la inmunidad inicial parpadeante
-    public static final float TEMP_INMUNE_MAX = 6f;
+    public static final float TEMP_INMUNE_MAX = 5f;
     // segundos que dura la curacion de una sola vida
     public static final float TEMP_CURACION_MAX = 3f;
     // segundos que hay que esperar para poder curar vidas
@@ -127,8 +128,8 @@ public abstract class Movil extends Objeto {
     
     protected Bala disparar(float angulo) {
         if (tempDisparo == 0 && tempRecarga == 0 && municion > 0) {
-            Bala b = new Bala(Tools.vecMover(posicion,
-                    Movil.RADIO, this.angulo));
+            Bala b = (Bala)Mundo.newObjeto(Bala.class,
+                    Tools.vecMover(posicion, Movil.RADIO * 2f, this.angulo));
             b.setProyectil(angulo, grupo, indice);
             municion -= 1;
             if (municion == 0) {

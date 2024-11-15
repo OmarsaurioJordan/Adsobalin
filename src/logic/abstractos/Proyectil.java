@@ -12,7 +12,7 @@ public abstract class Proyectil extends Objeto {
     // segundos que dura la existencia del proyectil
     public static final float TEMP_EXISTENCIA_MAX = 5f;
     // es la rapidez con que se mueven los proyectiles
-    public static final float VELOCIDAD = 400f * (float)Adsobalin.ESCALA;
+    public static final float VELOCIDAD = 600f * (float)Adsobalin.ESCALA;
     
     // segundos que dura la existencia del proyectil
     protected float tempExistencia = TEMP_EXISTENCIA_MAX;
