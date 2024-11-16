@@ -30,6 +30,7 @@ public class Adsobalin extends Application {
     
     // la fuente de texto usada en todo el software
     public static Font letras = new Font("Verdana", 18 * ESCALA);
+    public static Font letrotas = new Font("Verdana", 36 * ESCALA);
     
     // indices para grupos
     public static final int GRU_LIBRE = 0;

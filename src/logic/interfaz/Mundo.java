@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.robot.Robot;
 import javafx.scene.image.Image;
 import javafx.scene.Cursor;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.abstractos.*;
 import logic.objetos.*;
@@ -16,6 +17,8 @@ public class Mundo extends GUIs {
     public static final int RADIO = 720;
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
+    public static final float TEMP_RESPAWN_MAX = 12f;
+    public static final float RAD_RESPAWN = 300f * (float)Adsobalin.ESCALA;
     
     // guardara todos los objetos que existen instanciados en el juego
     public static ArrayList<Object> pool = new ArrayList<>();
@@ -26,6 +29,8 @@ public class Mundo extends GUIs {
     private static boolean[] npcok;
     // tiene el objeto jugador actual, o ninguno si ha muerto
     private static Player myPlayer = null;
+    // temporizador de respawn de player
+    private static float tempRespawnPlayer = TEMP_RESPAWN_MAX;
     
     // guardar las teclas pulsadas
     public static int KEY_UP = 0;
@@ -93,10 +98,6 @@ public class Mundo extends GUIs {
             CreaElementosRandom(0.5f, Baldoza.class,
                     Decorado.RADIO, 2.5f, Baldoza.class);
         }
-        
-        //Quitar
-        Player ply = (Player)newObjeto(Player.class, centroMundo);
-        ply.setAvatar();
         
         // leer la pulsacion de teclas
         setOnKeyPressed(event -> {
@@ -267,6 +268,27 @@ public class Mundo extends GUIs {
         return pool.contains(obj);
     }
     
+    public static float[] lugarRespawn(int grupo) {
+        ArrayList<float[]> points = new ArrayList<>();
+        Object obj;
+        Base aux;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Base.class.isInstance(obj)) {
+                aux = (Base)obj;
+                if (aux.grupo == grupo) {
+                    points.add(Tools.vecMover(aux.posicion,
+                            RAD_RESPAWN, Adsobalin.DADO.nextFloat() *
+                                    2f * (float)Math.PI));
+                }
+            }
+        }
+        if (points.size() == 0) {
+            points.add(centroMundo);
+        }
+        return points.get(Adsobalin.DADO.nextInt(points.size()));
+    }
+    
     private void step(float delta) {
         // ejecuta toda la logica del juego:
         // obtener y procesar la posicion del mouse
@@ -283,6 +305,16 @@ public class Mundo extends GUIs {
                 if (obj.myTipo == i) {
                     obj.step(delta);
                 }
+            }
+        }
+        
+        // mover el temporizador de respawn player
+        if (tempRespawnPlayer != 0) {
+            tempRespawnPlayer = Math.max(0f, tempRespawnPlayer - delta);
+            if (tempRespawnPlayer == 0) {
+                Player ply = (Player)newObjeto(Player.class,
+                        lugarRespawn(Adsobalin.grupo));
+                ply.setAvatar();
             }
         }
     }
@@ -330,7 +362,10 @@ public class Mundo extends GUIs {
         }
         // si no existe, poner el contador de respawn
         else {
-            
+            gc.setFont(Adsobalin.letrotas);
+            gc.setFill(Color.SILVER);
+            gc.fillText((int)tempRespawnPlayer + "s",
+                    width * 0.85f, height * 0.9f);
         }
         
         // dibujar el mouse

@@ -103,7 +103,7 @@ public class Player extends Movil {
                 Math.min(lejosMira * 0.5f, MIRA_MAX), anguMira);
         Mundo.camaraPos = Tools.vecInterpolar(Mundo.camaraPos,
                 Tools.vecResta(miraReal, DESF_MIRA),
-                4f * delta, 10f);
+                4f * delta, 100f);
         // poner limites en el cuadro del mundo
         Mundo.camaraPos[0] = (float)Math.max(0f, Math.min(
                 2f * Mundo.radioMundo - Adsobalin.WIDTH,

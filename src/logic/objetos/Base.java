@@ -15,7 +15,7 @@ public class Base extends Solido {
         false, false);
     
     // grupo al que pertenece
-    protected int grupo = Adsobalin.GRU_AZUL;
+    public int grupo = Adsobalin.GRU_AZUL;
     
     public Base(float[] posicion) {
         super(posicion, Objeto.OBJ_BASE);
