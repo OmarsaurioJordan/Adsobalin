@@ -159,8 +159,4 @@ public abstract class GUIs extends Scene {
         // iniciar la animacion
         fadeOut.play();
     }
-    
-    protected void volverAlMenu() {
-        raiz.setScene(new Menu(raiz));
-    }
 }

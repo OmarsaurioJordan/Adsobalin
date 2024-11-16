@@ -133,6 +133,8 @@ public class Menu extends GUIs {
         else {
             String ip = fieldIP.getText();
             if (ip.isEmpty()) {
+                // moverse al lobby para ser servidor
+                guardarDatos();
                 raiz.setScene(new Lobby(raiz, true));
             }
             else if (!isIPv4(ip)) {

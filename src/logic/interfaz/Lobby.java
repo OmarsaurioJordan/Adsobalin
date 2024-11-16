@@ -98,7 +98,10 @@ public class Lobby extends GUIs {
         setLabel("volver", ww * 0.03f, hh * 0.15f);
         Button volver = setButton("assets/interfaz/left",
                 ww * 0.05f, hh * 0.07f, 72f, false);
-        volver.setOnAction(event -> volverAlMenu());
+        volver.setOnAction(event -> {
+            guardarDatos();
+            raiz.setScene(new Menu(raiz));
+        });
         
         // fondos para caracteristicas de mapa
         BackgroundFill backcar = new BackgroundFill(
@@ -224,6 +227,7 @@ public class Lobby extends GUIs {
         for (int i = 0; i < 18; i++) {
             npcok[i] = activaNPCs.get(i).isSelected();
         }
+        guardarDatos();
         raiz.setScene(new Mundo(raiz, npcok,
                 Integer.parseInt(configMap.get(0).getText()),
                 Integer.parseInt(configMap.get(1).getText()),
@@ -248,6 +252,7 @@ public class Lobby extends GUIs {
         else {
             Envios.sendHola(Adsobalin.nombre, Conector.myServer,
                     Adsobalin.estilo, grupo);
+            guardarDatos();
             raiz.setScene(new Menu(raiz));
         }
     }

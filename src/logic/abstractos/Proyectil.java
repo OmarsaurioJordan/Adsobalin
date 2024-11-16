@@ -19,7 +19,7 @@ public abstract class Proyectil extends Objeto {
     // identificador unico del jugador o NPC que lo lanzo, Movil.indice
     protected int origen = -1;
     // grupo al que pertenece
-    protected int grupo = Adsobalin.GRU_LIBRE;
+    protected int grupo = Adsobalin.GRU_AZUL;
     
     public Proyectil(float[] posicion, int myTipo) {
         super(posicion, myTipo, RADIO);

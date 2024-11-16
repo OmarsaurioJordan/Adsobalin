@@ -57,7 +57,7 @@ public abstract class Movil extends Objeto {
     // es la cantidad de municion disponible
     public int municion = MUNICION_MAX;
     // grupo al que pertenece
-    public int grupo = Adsobalin.GRU_LIBRE;
+    public int grupo = Adsobalin.GRU_AZUL;
     
     public Movil(float[] posicion, int myTipo) {
         super(posicion, myTipo, RADIO);

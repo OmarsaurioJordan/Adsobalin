@@ -17,8 +17,8 @@ public class Mundo extends GUIs {
     public static final int RADIO = 720;
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
-    public static final float TEMP_RESPAWN_MAX = 12f;
-    public static final float RAD_RESPAWN = 300f * (float)Adsobalin.ESCALA;
+    public static final float TEMP_RESPAWN_MAX = 5f; // Tarea 12
+    public static final float RAD_RESPAWN = 100f * (float)Adsobalin.ESCALA;
     
     // guardara todos los objetos que existen instanciados en el juego
     public static ArrayList<Object> pool = new ArrayList<>();
@@ -152,17 +152,17 @@ public class Mundo extends GUIs {
         // dos bases azules a la izquierda
         float[] pos0 = {radioMundo * 0.3f, radioMundo * 0.8f};
         Base b0 = (Base)newObjeto(Base.class, pos0);
-        b0.setGrupo(true);
+        b0.setGrupo(Adsobalin.GRU_AZUL);
         float[] pos1 = {radioMundo * 0.3f, radioMundo * 1.2f};
         Base b1 = (Base)newObjeto(Base.class, pos1);
-        b1.setGrupo(true);
+        b1.setGrupo(Adsobalin.GRU_AZUL);
         // dos bases rojas a la derecha
         float[] pos2 = {radioMundo * 1.7f, radioMundo * 0.8f};
         Base b2 = (Base)newObjeto(Base.class, pos2);
-        b2.setGrupo(false);
+        b2.setGrupo(Adsobalin.GRU_ROJO);
         float[] pos3 = {radioMundo * 1.7f, radioMundo * 1.2f};
         Base b3 = (Base)newObjeto(Base.class, pos3);
-        b3.setGrupo(false);
+        b3.setGrupo(Adsobalin.GRU_ROJO);
     }
     
     private void CreaElementosRandom(float densidad, Class<?> claseNew,
@@ -283,8 +283,8 @@ public class Mundo extends GUIs {
                 }
             }
         }
-        if (points.size() == 0) {
-            points.add(centroMundo);
+        if (points.isEmpty()) {
+            points.add(centroMundo.clone());
         }
         return points.get(Adsobalin.DADO.nextInt(points.size()));
     }

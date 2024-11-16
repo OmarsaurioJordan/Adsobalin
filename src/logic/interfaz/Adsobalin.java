@@ -33,9 +33,8 @@ public class Adsobalin extends Application {
     public static Font letrotas = new Font("Verdana", 36 * ESCALA);
     
     // indices para grupos
-    public static final int GRU_LIBRE = 0;
-    public static final int GRU_AZUL = 1;
-    public static final int GRU_ROJO = 2;
+    public static final int GRU_AZUL = 0;
+    public static final int GRU_ROJO = 1;
     
     // indices para indicar estado del juego
     public static final int EST_MENU = 0;
@@ -57,7 +56,7 @@ public class Adsobalin extends Application {
     
     // configuracion elegida por el usuario
     public static String nombre = "";
-    public static int grupo = GRU_LIBRE;
+    public static int grupo = GRU_AZUL;
     public static int estilo = 0;
     public static int indice = -1;
     
@@ -150,10 +149,7 @@ public class Adsobalin extends Application {
     }
     
     public static int userGetGrupo(int ind) {
-        if (ind == -1) {
-            return GRU_LIBRE;
-        }
-        else if (ind < 9) {
+        if (ind < 9) {
             return GRU_AZUL;
         }
         return GRU_ROJO;
