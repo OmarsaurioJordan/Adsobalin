@@ -129,7 +129,8 @@ public abstract class Movil extends Objeto {
     protected Bala disparar(float angulo) {
         if (tempDisparo == 0 && tempRecarga == 0 && municion > 0) {
             Bala b = (Bala)Mundo.newObjeto(Bala.class,
-                    Tools.vecMover(posicion, Movil.RADIO * 2f, this.angulo));
+                    Tools.vecMover(posicion, Movil.RADIO * 2f,
+                            this.angulo + (float)Math.PI / 7f));
             b.setProyectil(angulo, grupo, indice);
             municion -= 1;
             if (municion == 0) {

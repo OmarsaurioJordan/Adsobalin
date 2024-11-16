@@ -23,7 +23,9 @@ public class Mundo extends GUIs {
     // duracion de la partida
     public static float tiempoRestante;
     // si deben invocarse NPCs
-    private boolean[] npcok;
+    private static boolean[] npcok;
+    // tiene el objeto jugador actual, o ninguno si ha muerto
+    private static Player myPlayer = null;
     
     // guardar las teclas pulsadas
     public static int KEY_UP = 0;
@@ -41,6 +43,7 @@ public class Mundo extends GUIs {
     public static float[] mousePos = {0f, 0f};
     // sistema para obtener coordenadas de mouse
     private static Robot adquisidor = new Robot();
+    
     // imagen del mouse
     private Image mouseImg = new Image("assets/entorno/mouse.png",
         72f * 0.75f * Adsobalin.ESCALA,
@@ -50,6 +53,15 @@ public class Mundo extends GUIs {
         Adsobalin.WIDTH, Adsobalin.HEIGHT, false, false);
     // fondo del mundo
     private Image fondo;
+    
+    // imagen de vida
+    private Image vidaImg = new Image("assets/entorno/vida.png",
+        72f * 0.4f * Adsobalin.ESCALA,
+        72f * 0.4f * Adsobalin.ESCALA, false, false);
+    // imagen de municion
+    private Image municionImg = new Image("assets/entorno/municion.png",
+        110f * 0.75f * Adsobalin.ESCALA,
+        110f * 0.75f * Adsobalin.ESCALA, false, false);
     
     public Mundo(Stage raiz, boolean[] npcok, int talla,
             int obstaculos, int tiempo) {
@@ -232,6 +244,9 @@ public class Mundo extends GUIs {
         try {
             obj = clase.getConstructor(float[].class).newInstance(posicion);
             pool.add(obj);
+            if (Player.class.isAssignableFrom(clase)) {
+                myPlayer = (Player)obj;
+            }
         }
         catch (Exception ex) {
             obj = null;
@@ -242,6 +257,9 @@ public class Mundo extends GUIs {
     public static void deleteObjeto(Object obj) {
         if (pool.contains(obj)) {
             pool.remove(obj);
+            if (Player.class.isInstance(obj)) {
+                myPlayer = null;
+            }
         }
     }
     
@@ -287,6 +305,34 @@ public class Mundo extends GUIs {
         
         // dibujar la mira difuminada de la camara sobre todo
         gc.drawImage(difuminado, 0f, 0f);
+        
+        // poner las vidas del avatar y la municion
+        float width = (float)Adsobalin.WIDTH;
+        float height = (float)Adsobalin.HEIGHT;
+        if (myPlayer != null) {
+            for (int i = 0; i < myPlayer.vida; i++) {
+                gc.drawImage(vidaImg,
+                        width * 0.95f - i * width * 0.03f,
+                        height * 0.85f
+                );
+            }
+            int i = 0;
+            for (int h = 1; h >= 0; h--) {
+                for (int w = 0; w < Movil.MUNICION_MAX / 2; w++) {
+                    if (i < myPlayer.municion) {
+                        gc.drawImage(municionImg,
+                                width * 0.92f - w * width * 0.03f,
+                                height * 0.85f + h * height * 0.04f);
+                        i++;
+                    }
+                }
+            }
+        }
+        // si no existe, poner el contador de respawn
+        else {
+            
+        }
+        
         // dibujar el mouse
         float[] mPos = Tools.vecResta(mousePos, camaraPos);
         gc.drawImage(mouseImg, mPos[0] - mouseImg.getWidth() / 2f,
