@@ -15,7 +15,7 @@ import logic.interfaz.Mundo;
 public class Automata extends Movil {
     
     // radio de alcance visual para detectar enemigos
-    public static final float VISION = 300f;
+    public static final float VISION = 320f;
     // tiempo medio de errar, el rando es hasta su doble
     public static final float TEMP_ERRAR = 1f;
     // angulo de cambio de direccion maximo, PI * 0.5 es 90°
@@ -141,6 +141,10 @@ public class Automata extends Movil {
             anguMira = Tools.vecDireccion(ubicacion, posInteres);
             ubicacion = Tools.vecMover(ubicacion,
                     VELOCIDAD * delta, anguMira + errarDesfDir);
+            if (Tools.vecDistancia(ubicacion, posInteres) < radio * 2f) {
+                posInteres[0] = 0f;
+                posInteres[1] = 0f;
+            }
         }
         // moverse al azar por el mundo
         else if (errarMove) {
