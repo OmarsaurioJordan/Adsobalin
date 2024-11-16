@@ -25,8 +25,8 @@ public class Mundo extends GUIs {
     
     // duracion de la partida
     public static float tiempoRestante;
-    // si deben invocarse NPCs
-    private static boolean[] npcok;
+    // si deben invocarse NPCs, -1 significa desactivado, 0 existe, >0 respawn
+    private static float[] npcRespawn = new float[18];
     // tiene el objeto jugador actual, o ninguno si ha muerto
     private static Player myPlayer = null;
     // temporizador de respawn de player
@@ -76,7 +76,19 @@ public class Mundo extends GUIs {
         centroMundo[0] = radioMundo;
         centroMundo[1] = radioMundo;
         tiempoRestante = tiempo * 60f;
-        this.npcok = npcok;
+        for (int i = 0; i < 18; i++) {
+            if (npcok[i]) {
+                if (Adsobalin.userIsNPC(i)) {
+                    npcRespawn[i] = TEMP_RESPAWN_MAX;
+                }
+                else {
+                    npcRespawn[i] = 0f;
+                }
+            }
+            else {
+                npcRespawn[i] = -1f;
+            }
+        }
         setCursor(Cursor.NONE);
         
         // cargar el fondo
@@ -240,6 +252,67 @@ public class Mundo extends GUIs {
         return null;
     }
     
+    public static boolean colsionLine(float[] inicio, float[] llegada,
+            float radio, Class<?> claseMascara) {
+        // preparar las variables que haran el movimiento del circulo a pasos
+        float tramo = Tools.vecDistancia(inicio, llegada);
+        float angulo = Tools.vecDireccion(inicio, llegada);
+        int pedazos = (int)Math.ceil(tramo / radio);
+        float paso = tramo / Math.max(1, pedazos);
+        float[] pos = inicio.clone();
+        for (int p = 0; p < pedazos; p++) {
+            // dar un pasito para verificar colisiones evitando traspasar cosas
+            pos = Tools.vecMover(pos, paso, angulo);
+            if (colsionObject(pos, radio, claseMascara, null) != null) {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public static Object getRandObject(Class<?> claseMascara,
+            Object excepcion) {
+        ArrayList<Object> candidatos = new ArrayList<>();
+        Object obj;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (obj == excepcion) {
+                continue;
+            }
+            if (claseMascara.isInstance(obj)) {
+                candidatos.add(obj);
+            }
+        }
+        if (!candidatos.isEmpty()) {
+            return candidatos.get(Adsobalin.DADO.nextInt(
+                candidatos.size()));
+        }
+        return null;
+    }
+    
+    public static ArrayList<Movil> getCercanos(float[] posicion,
+            float radio, Object excepcion, int grupoNoColi) {
+        ArrayList<Movil> candidatos = new ArrayList<>();
+        Object obj;
+        Movil aux;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (obj == excepcion) {
+                continue;
+            }
+            if (Movil.class.isInstance(obj)) {
+                aux = (Movil)obj;
+                if (aux.grupo == grupoNoColi) {
+                    continue;
+                }
+                if (Tools.vecDistancia(posicion, aux.posicion) < radio) {
+                    candidatos.add(aux);
+                }
+            }
+        }
+        return candidatos;
+    }
+    
     public static Object newObjeto(Class<?> clase, float[] posicion) {
         Object obj;
         try {
@@ -317,6 +390,20 @@ public class Mundo extends GUIs {
                 ply.setAvatar();
             }
         }
+        
+        // hacer respawn de NPCs, solo lo hace el servidor
+        if (Adsobalin.isServer) {
+            for (int i = 0; i < 18; i++) {
+                if (npcRespawn[i] > 0) {
+                    npcRespawn[i] = Math.max(0f, npcRespawn[i] - delta);
+                    if (npcRespawn[i] == 0) {
+                        Automata aut = (Automata)newObjeto(Automata.class,
+                                lugarRespawn(Adsobalin.userGetGrupo(i)));
+                        aut.setAvatar(Adsobalin.userGetGrupo(i));
+                    }
+                }
+            }
+        }
     }
     
     private void draw() {
@@ -364,7 +451,7 @@ public class Mundo extends GUIs {
         else {
             gc.setFont(Adsobalin.letrotas);
             gc.setFill(Color.SILVER);
-            gc.fillText((int)tempRespawnPlayer + "s",
+            gc.fillText((int)Math.ceil(tempRespawnPlayer) + "s",
                     width * 0.85f, height * 0.9f);
         }
         

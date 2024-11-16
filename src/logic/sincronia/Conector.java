@@ -23,6 +23,7 @@ public class Conector {
     // el ind de usuario es el indice en el arreglo
     // el grupo depende de si es ind < 9 o no
     // cuando el nombre es vacio, se supone es un bot
+    // las IP se conservan durante la partida para esperar reconexion
     public static String[] userIP = new String[18];
     public static String[] userName = new String[18];
     public static int[] userStyle = new int[18];

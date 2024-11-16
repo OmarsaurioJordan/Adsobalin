@@ -3,6 +3,7 @@ package logic.abstractos;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import logic.interfaz.Mundo;
 
@@ -63,6 +64,25 @@ public abstract class Objeto {
         gc.drawImage(img,
                 pos[0] - img.getWidth() / 2f,
                 pos[1] - img.getHeight() / 2f);
+    }
+    
+    public static void drawCirculo(GraphicsContext gc,
+            float[] posicion, float radio, boolean isFill, Color col) {
+        if (col == null) {
+            col = Color.BLACK;
+        }
+        float[] pos = realPos(posicion);
+        if (isFill) {
+            gc.setFill(col);
+            gc.fillOval(pos[0] - radio, pos[1] - radio,
+                    radio * 2f, radio * 2f);
+        }
+        else {
+            gc.setStroke(col);
+            gc.setLineWidth(2);
+            gc.strokeOval(pos[0] - radio, pos[1] - radio,
+                    radio * 2f, radio * 2f);
+        }
     }
     
     public abstract void step(float delta);

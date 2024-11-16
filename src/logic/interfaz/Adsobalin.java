@@ -143,6 +143,14 @@ public class Adsobalin extends Application {
         return -1;
     }
     
+    public static boolean userIsNPC(int ind) {
+        return Conector.userName[ind].isEmpty();
+    }
+    
+    public static boolean userSelf(int ind) {
+        return Conector.userName[ind].equals(nombre);
+    }
+    
     public static int userGetGrupo(String ip) {
         int ind = userGetInd(ip);
         return userGetGrupo(ind);

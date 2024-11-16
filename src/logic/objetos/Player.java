@@ -88,11 +88,7 @@ public class Player extends Movil {
         }
         else if (Mundo.teclas[Mundo.KEY_CLICR] ||
                 Mundo.teclas[Mundo.KEY_R]) {
-            if (municion < MUNICION_MAX) {
-                if (tempRecarga == 0) {
-                    tempRecarga = TEMP_RECARGA_MAX;
-                }
-            }
+            recargar();
         }
     }
     
@@ -130,13 +126,13 @@ public class Player extends Movil {
                 radio, Movil.class, this);
         if (mov != null) {
             Movil m = (Movil)mov;
-            ubicacion = Tools.vecMover(ubicacion, VELOCIDAD * delta / 2f,
+            ubicacion = Tools.vecMover(ubicacion, VELOCIDAD * delta,
                     Tools.vecDireccion(m.ubicacion, ubicacion));
-            m.ubicacion = Tools.vecMover(m.ubicacion, VELOCIDAD * delta / 2f,
+            m.ubicacion = Tools.vecMover(m.ubicacion, VELOCIDAD * delta,
                     Tools.vecDireccion(ubicacion, m.ubicacion));
         }
         // moverse por accion del jugador
-        if (otro == null) {
+        if (otro == null && mov == null) {
             moverComando(delta);
         }
         // ajustar la direccion en que mira

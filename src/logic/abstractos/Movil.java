@@ -67,7 +67,7 @@ public abstract class Movil extends Objeto {
     protected void moverSync(float delta) {
         // hace que la posicion se acerque a la ubicacion
         posicion = Tools.vecInterpolar(posicion, ubicacion,
-                4f * delta, 4f * VELOCIDAD * delta);
+                12f * delta, VELOCIDAD * delta);
         // hace que el angulo se acerque a la mira
         angulo = Tools.interpAngle(angulo, anguMira, VELROT_MIRA * delta);
     }
@@ -142,6 +142,14 @@ public abstract class Movil extends Objeto {
             return b;
         }
         return null;
+    }
+    
+    protected void recargar() {
+        if (municion < MUNICION_MAX) {
+            if (tempRecarga == 0) {
+                tempRecarga = TEMP_RECARGA_MAX;
+            }
+        }
     }
     
     public void golpear() {

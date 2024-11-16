@@ -75,13 +75,13 @@ public abstract class Tools {
         return res;
     }
     
-    public static float interpAngle(float actual, float deseado, float paso) {
+    public static float angDifference(float ang1, float ang2) {
         // normalizar los angulos entre 0 y 2*pi
         float maxAng = 2f * (float)Math.PI;
-        actual = (actual % maxAng + maxAng) % maxAng;
-        deseado = (deseado % maxAng + maxAng) % maxAng;
+        ang1 = (ang1 % maxAng + maxAng) % maxAng;
+        ang2 = (ang2 % maxAng + maxAng) % maxAng;
         // Calcular la diferencia mínima
-        float delta = deseado - actual;
+        float delta = ang2 - ang1;
         // ajustar delta para tomar camino mas corto
         if (delta > Math.PI) {
             delta -= maxAng;
@@ -89,6 +89,11 @@ public abstract class Tools {
         else if (delta < -Math.PI) {
             delta += maxAng;
         }
+        return delta;
+    }
+    
+    public static float interpAngle(float actual, float deseado, float paso) {
+        float delta = angDifference(actual, deseado);
         // limitar para que no oscile
         if (Math.abs(delta) <= paso) {
             // alcanzo el valor final

@@ -194,7 +194,7 @@ public class Lobby extends GUIs {
     
     public void reDibujar() {
         for (int i = 0; i < 18; i++) {
-            if (Conector.userName[i].isEmpty()) {
+            if (Adsobalin.userIsNPC(i)) {
                 if (!activaNPCs.get(i).isSelected()) {
                     nombres.get(i).setText("****");
                 }
@@ -205,7 +205,7 @@ public class Lobby extends GUIs {
                     nombres.get(i).setText("*B" + (i - 8) + "*");
                 }
             }
-            else if (Conector.userName[i].equals(Adsobalin.nombre)) {
+            else if (Adsobalin.userSelf(i)) {
                 nombres.get(i).setText("(" + Conector.userName[i] + ")");
             }
             else {

@@ -10,7 +10,7 @@ public abstract class Proyectil extends Objeto {
     // radio para todos los proyectiles colisionables
     public static float RADIO = 6f * (float)Adsobalin.ESCALA;
     // segundos que dura la existencia del proyectil
-    public static final float TEMP_EXISTENCIA_MAX = 5f;
+    public static final float TEMP_EXISTENCIA_MAX = 1f;
     // es la rapidez con que se mueven los proyectiles
     public static final float VELOCIDAD = 600f * (float)Adsobalin.ESCALA;
     
