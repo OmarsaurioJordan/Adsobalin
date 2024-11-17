@@ -28,9 +28,10 @@ public class Player extends Movil {
         super(posicion, Objeto.OBJ_PLAYER);
     }
     
-    public void setAvatar() {
+    public void setAvatar(int indice) {
         grupo = Adsobalin.grupo;
         nombre = Adsobalin.nombre;
+        this.indice = indice;
         String bcol = "rojos/rojo";
         if (grupo == Adsobalin.GRU_AZUL) {
             bcol = "azules/azul";
@@ -150,6 +151,6 @@ public class Player extends Movil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawImagenRot(gc, sprite, posicion, angulo);
+        drawMovil(gc, sprite);
     }
 }

@@ -46,8 +46,9 @@ public class Automata extends Movil {
         azarDireccion();
     }
     
-    public void setAvatar(int grupo) {
+    public void setAvatar(int grupo, int indice) {
         this.grupo = grupo;
+        this.indice = indice;
         String bcol = "rojos/rojo0.png";
         if (grupo == Adsobalin.GRU_AZUL) {
             bcol = "azules/azul0.png";
@@ -114,7 +115,23 @@ public class Automata extends Movil {
         }
         // moverse siguiendo al objetivo, manteniendose en un alcance medio
         if (existeObjetivo()) {
-            if (dist > VISION * 0.75f) {
+            if (tempRecarga != 0) {
+                // estara ocupado recargando
+                if (dist < VISION * 0.9f) {
+                    // huir
+                    float d = Tools.vecDireccion(
+                            objetivo.ubicacion, ubicacion);
+                    ubicacion = Tools.vecMover(ubicacion,
+                            VELOCIDAD * delta, d + errarDesfDir);
+                    azarDireccion();
+                }
+                else {
+                    // errar
+                    ubicacion = Tools.vecMover(ubicacion,
+                        VELOCIDAD * delta, errarDireccion);
+                }
+            }
+            else if (dist > VISION * 0.75f) {
                 // acercarce
                 float d = Tools.vecDireccion(ubicacion, objetivo.ubicacion);
                 ubicacion = Tools.vecMover(ubicacion,
@@ -233,6 +250,6 @@ public class Automata extends Movil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawImagenRot(gc, sprite, posicion, angulo);
+        drawMovil(gc, sprite);
     }
 }

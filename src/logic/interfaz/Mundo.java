@@ -30,7 +30,7 @@ public class Mundo extends GUIs {
     // tiene el objeto jugador actual, o ninguno si ha muerto
     private static Player myPlayer = null;
     // temporizador de respawn de player
-    private static float tempRespawnPlayer = TEMP_RESPAWN_MAX;
+    public static float tempRespawnPlayer = TEMP_RESPAWN_MAX;
     
     // guardar las teclas pulsadas
     public static int KEY_UP = 0;
@@ -362,6 +362,14 @@ public class Mundo extends GUIs {
         return points.get(Adsobalin.DADO.nextInt(points.size()));
     }
     
+    public static void setRespawnNPC(int indNPC) {
+        if (npcRespawn[indNPC] != -1) {
+            if (Adsobalin.userIsNPC(indNPC)) {
+                npcRespawn[indNPC] = TEMP_RESPAWN_MAX;
+            }
+        }
+    }
+    
     private void step(float delta) {
         // ejecuta toda la logica del juego:
         // obtener y procesar la posicion del mouse
@@ -387,7 +395,7 @@ public class Mundo extends GUIs {
             if (tempRespawnPlayer == 0) {
                 Player ply = (Player)newObjeto(Player.class,
                         lugarRespawn(Adsobalin.grupo));
-                ply.setAvatar();
+                ply.setAvatar(Adsobalin.userGetInd("127.0.0.1"));
             }
         }
         
@@ -399,7 +407,7 @@ public class Mundo extends GUIs {
                     if (npcRespawn[i] == 0) {
                         Automata aut = (Automata)newObjeto(Automata.class,
                                 lugarRespawn(Adsobalin.userGetGrupo(i)));
-                        aut.setAvatar(Adsobalin.userGetGrupo(i));
+                        aut.setAvatar(Adsobalin.userGetGrupo(i), i);
                     }
                 }
             }

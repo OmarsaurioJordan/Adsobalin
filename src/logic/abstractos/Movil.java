@@ -1,7 +1,13 @@
 package logic.abstractos;
 // clase base para player, automata y sombra, es un ente dinamico
 
+import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.image.Image;
+import javafx.scene.effect.ColorAdjust;
+import javafx.scene.effect.BlendMode;
 import logic.objetos.Bala;
+import logic.objetos.Player;
+import logic.objetos.Automata;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Mundo;
 
@@ -22,13 +28,15 @@ public abstract class Movil extends Objeto {
     // segundos que dura la recarga de 1 municion
     public static final float TEMP_RECARGA_MAX = 0.3f;
     // segundos que dura la iluminacion al ser golpeado
-    public static final float TEMP_GOLPE_MAX = 3f;
+    public static final float TEMP_GOLPE_MAX = 0.5f;
     // segundos que dura la inmunidad inicial parpadeante
     public static final float TEMP_INMUNE_MAX = 5f;
     // segundos que dura la curacion de una sola vida
-    public static final float TEMP_CURACION_MAX = 3f;
+    public static final float TEMP_CURACION_MAX = 1f;
     // segundos que hay que esperar para poder curar vidas
-    public static final float TEMP_REGENERACION_MAX = 15f;
+    public static final float TEMP_REGENERACION_MAX = 6f;
+    // segundos intermitencia
+    public static final float TEMP_INTERMIT_MAX = 0.25f;
     
     // los moviles mueven su ubicacion y luego la posicion la sigue
     public float[] ubicacion = {0f, 0f};
@@ -46,11 +54,16 @@ public abstract class Movil extends Objeto {
     // se activara para que el ente ilumine de rojo
     protected float tempGolpe = 0f;
     // se activa al aparecer, para dar inmunidad
-    protected float tempInmune = 0f;
+    protected float tempInmune = TEMP_INMUNE_MAX;
     // se activara al curar una vida y continuar con las demas
     protected float tempCuracion = 0f;
     // se activara cuando recive danno, para curarse
     protected float tempRegeneracion = 0f;
+    // para parpadear cuando hay inmunidad
+    protected float tempIntermit = 0f;
+    
+    // ajustes de color al ser golpeado
+    private ColorAdjust ajusteCol = new ColorAdjust();
     
     // son los puntos de impacto antes de morir
     public int vida = VIDA_MAX;
@@ -62,12 +75,13 @@ public abstract class Movil extends Objeto {
     public Movil(float[] posicion, int myTipo) {
         super(posicion, myTipo, RADIO);
         this.ubicacion = posicion;
+        ajusteCol.setBrightness(-0.5d);
     }
     
     protected void moverSync(float delta) {
         // hace que la posicion se acerque a la ubicacion
         posicion = Tools.vecInterpolar(posicion, ubicacion,
-                12f * delta, VELOCIDAD * delta);
+                12f * delta, VELOCIDAD * delta * 2f);
         // hace que el angulo se acerque a la mira
         angulo = Tools.interpAngle(angulo, anguMira, VELROT_MIRA * delta);
     }
@@ -112,6 +126,11 @@ public abstract class Movil extends Objeto {
                 tempCuracion = 0.1f;
             }
         }
+        // parpadear con inmunidad
+        tempIntermit -= delta;
+        if (tempIntermit <= 0) {
+            tempIntermit += TEMP_INTERMIT_MAX;
+        }
     }
     
     protected boolean coliSolidos(float delta) {
@@ -152,11 +171,45 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    public void golpear() {
-        
+    public void golpear(int indOrigenProy) {
+        if (tempInmune == 0) {
+            vida = Math.max(0, vida - 1);
+            if (vida == 0) {
+                morir(indOrigenProy);
+            }
+            else {
+                tempGolpe = TEMP_GOLPE_MAX;
+                tempRegeneracion = TEMP_REGENERACION_MAX;
+                tempCuracion = 0f;
+            }
+        }
     }
     
-    public void morir() {
+    public void morir(int indOrigenProy) {
+        Mundo.deleteObjeto(this);
+        // crear cadaver
         
+        // reiniciar contador de respawn
+        if (getClass() == Player.class) {
+            Mundo.tempRespawnPlayer = Mundo.TEMP_RESPAWN_MAX;
+        }
+        else if (getClass() == Automata.class) {
+            Mundo.setRespawnNPC(indice);
+        }
+    }
+    
+    protected void drawMovil(GraphicsContext gc, Image sprite) {
+        if (tempGolpe != 0) {
+            gc.save();
+            BlendMode blendMode = BlendMode.SRC_ATOP;
+            gc.setGlobalBlendMode(blendMode);
+            gc.setEffect(ajusteCol);
+        }
+        if (tempInmune == 0 || tempIntermit < TEMP_INTERMIT_MAX / 2f) {
+            drawImagenRot(gc, sprite, posicion, angulo);
+        }
+        if (tempGolpe != 0) {
+            gc.restore();
+        }
     }
 }

@@ -3,6 +3,7 @@ package logic.objetos;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import logic.abstractos.Movil;
 import logic.abstractos.Objeto;
 import logic.abstractos.Proyectil;
 import logic.interfaz.Adsobalin;
@@ -19,14 +20,25 @@ public class Bala extends Proyectil {
     }
     
     public void setProyectil(float angulo, int grupo, int origen) {
+        // el origen es el Movil.indice de quien lo lanzo
         sprite = setProyectilImg(angulo, grupo, origen);
     }
     
     @Override
     public void step(float delta) {
-        Object otro = avanzar(delta, true);
+        Object otro = avanzar(delta);
         if (otro != null) {
             // cuando el proyectil choca con un movil, debe golpearlo
+            if (otro.getClass() == Player.class ||
+                    otro.getClass() == Automata.class) {
+                // hacer damage directamente
+                Movil mov = (Movil)otro;
+                mov.golpear(origen);
+            }
+            else if (otro.getClass() == Sombra.class) {
+                // enviar solicitud de damage
+                
+            }
         }
     }
     

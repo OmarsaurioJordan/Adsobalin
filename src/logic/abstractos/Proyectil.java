@@ -42,7 +42,7 @@ public abstract class Proyectil extends Objeto {
         return sprite;
     }
     
-    protected Object avanzar(float delta, boolean isDestruMovil) {
+    protected Object avanzar(float delta) {
         // mueve el proyectil y retorna al movil con que choco o null
         // primero se observa si debe destruirse por tiempo limite
         tempExistencia -= delta;
@@ -69,9 +69,7 @@ public abstract class Proyectil extends Objeto {
             otro = Mundo.colsionGrupo(posicion,
                 radio, grupo, this);
             if (otro != null) {
-                if (isDestruMovil) {
-                    Mundo.deleteObjeto(this);
-                }
+                Mundo.deleteObjeto(this);
                 return otro;
             }
         }
