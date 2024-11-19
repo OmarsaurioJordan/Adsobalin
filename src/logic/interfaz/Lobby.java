@@ -30,10 +30,9 @@ public class Lobby extends GUIs {
     // objeto para guardar configuracion
     private SaveGame data = new SaveGame();
     
-    public Lobby(Stage raiz, boolean isServer) {
+    public Lobby(Stage raiz) {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_LOBBY;
-        Adsobalin.isServer = isServer;
         
         // permite guardar la informacion de la interfaz cuando esta cierra
         raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
@@ -142,7 +141,7 @@ public class Lobby extends GUIs {
         cmbGrupo.setOnAction(event -> cambioGrupo());
         
         // las cosas que solo el servidor vera
-        if (isServer) {
+        if (Adsobalin.isServer) {
             
             // colocar el gran boton de play abajo a la derecha
             Button play = setButton("assets/interfaz/play",

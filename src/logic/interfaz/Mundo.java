@@ -146,7 +146,7 @@ public class Mundo extends GUIs {
         });
         
         // crear el loop principal de simulacion
-        new AnimationTimer() {
+        AnimationTimer aniLoop = new AnimationTimer() {
             private long last = 0L;
             @Override
             public void handle(long now) {
@@ -157,7 +157,18 @@ public class Mundo extends GUIs {
                 }
                 last = now;
             }
-        }.start();
+        };
+        aniLoop.start();
+        
+        // detener el hilo del loop para evitar errores
+        raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
+            if (oldScn == this) {
+                aniLoop.stop();
+            }
+        });
+        raiz.setOnCloseRequest(event -> {
+            aniLoop.stop();
+        });
     }
     
     private void creaBases() {
@@ -412,6 +423,14 @@ public class Mundo extends GUIs {
                 }
             }
         }
+        
+        // finalizar la partida cuando acabe el tiempo
+        if (Adsobalin.isServer) {
+            tiempoRestante = Math.max(0f, tiempoRestante - delta);
+            if (tiempoRestante == 0) {
+                raiz.setScene(new Resultado(raiz));
+            }
+        }
     }
     
     private void draw() {
@@ -433,9 +452,26 @@ public class Mundo extends GUIs {
         // dibujar la mira difuminada de la camara sobre todo
         gc.drawImage(difuminado, 0f, 0f);
         
-        // poner las vidas del avatar y la municion
+        // variables cortas para dibujado de interfaz
         float width = (float)Adsobalin.WIDTH;
         float height = (float)Adsobalin.HEIGHT;
+        
+        // escribir el contador de final de partida
+        gc.setFont(Adsobalin.letrotas);
+        gc.setFill(Color.SILVER);
+        int min = (int)(tiempoRestante / 60f);
+        int seg = (int)(tiempoRestante - min * 60);
+        String time = min + ":";
+        if (min < 10) {
+            time = "0" + time;
+        }
+        if (seg < 10) {
+            time += "0";
+        }
+        time += seg;
+        gc.fillText(time, width * 0.8f, height * 0.1f);
+        
+        // poner las vidas del avatar y la municion
         if (myPlayer != null) {
             for (int i = 0; i < myPlayer.vida; i++) {
                 gc.drawImage(vidaImg,

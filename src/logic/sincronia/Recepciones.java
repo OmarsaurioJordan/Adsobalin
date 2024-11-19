@@ -124,7 +124,8 @@ public class Recepciones {
             Conector.myServer = emisor;
             // para evitar estar conectado y en el menu principal a la vez
             // pero luego puede que se cambie la interfaz con la sincronia
-            raiz.setScene(new Lobby(raiz, false));
+            Adsobalin.isServer = false;
+            raiz.setScene(new Lobby(raiz));
         }
     }
     

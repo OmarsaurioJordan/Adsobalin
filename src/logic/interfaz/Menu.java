@@ -135,7 +135,8 @@ public class Menu extends GUIs {
             if (ip.isEmpty()) {
                 // moverse al lobby para ser servidor
                 guardarDatos();
-                raiz.setScene(new Lobby(raiz, true));
+                Adsobalin.isServer = true;
+                raiz.setScene(new Lobby(raiz));
             }
             else if (!isIPv4(ip)) {
                 setMensaje("escriba una IP válida", false);
