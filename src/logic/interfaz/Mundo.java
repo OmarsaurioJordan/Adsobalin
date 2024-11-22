@@ -400,7 +400,7 @@ public class Mundo extends GUIs {
             }
         }
         
-        // mover el temporizador de respawn player
+        // hacer respawn del player
         if (tempRespawnPlayer != 0) {
             tempRespawnPlayer = Math.max(0f, tempRespawnPlayer - delta);
             if (tempRespawnPlayer == 0) {
@@ -410,26 +410,30 @@ public class Mundo extends GUIs {
             }
         }
         
-        // hacer respawn de NPCs, solo lo hace el servidor
+        // acciones que solo hara el servidor
         if (Adsobalin.isServer) {
-            for (int i = 0; i < 18; i++) {
-                if (npcRespawn[i] > 0) {
-                    npcRespawn[i] = Math.max(0f, npcRespawn[i] - delta);
-                    if (npcRespawn[i] == 0) {
-                        Automata aut = (Automata)newObjeto(Automata.class,
-                                lugarRespawn(Adsobalin.userGetGrupo(i)));
-                        aut.setAvatar(Adsobalin.userGetGrupo(i), i);
-                    }
+            reaparecerNPCs(delta);
+            finalizarPartida(delta);
+        }
+    }
+    
+    private void reaparecerNPCs(float delta) {
+        for (int i = 0; i < 18; i++) {
+            if (npcRespawn[i] > 0) {
+                npcRespawn[i] = Math.max(0f, npcRespawn[i] - delta);
+                if (npcRespawn[i] == 0) {
+                    Automata aut = (Automata)newObjeto(Automata.class,
+                            lugarRespawn(Adsobalin.userGetGrupo(i)));
+                    aut.setAvatar(Adsobalin.userGetGrupo(i), i);
                 }
             }
         }
-        
-        // finalizar la partida cuando acabe el tiempo
-        if (Adsobalin.isServer) {
-            tiempoRestante = Math.max(0f, tiempoRestante - delta);
-            if (tiempoRestante == 0) {
-                raiz.setScene(new Resultado(raiz));
-            }
+    }
+    
+    private void finalizarPartida(float delta) {
+        tiempoRestante = Math.max(0f, tiempoRestante - delta);
+        if (tiempoRestante == 0) {
+            raiz.setScene(new Resultado(raiz));
         }
     }
     
