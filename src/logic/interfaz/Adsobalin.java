@@ -10,6 +10,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javax.swing.JOptionPane;
 import java.util.Random;
+import logic.abstractos.Movil;
 
 public class Adsobalin extends Application {
     
@@ -127,6 +128,26 @@ public class Adsobalin extends Application {
         Translate trans = new Translate(((raiz.getWidth() - newW) / 2d) / sc,
                 (((raiz.getHeight() - HEADER) - newH) / 2d) / sc);
         raiz.getScene().getRoot().getTransforms().setAll(esc, trans);
+    }
+    
+    public static void addPoints(boolean isKill, int indWin, int indLos) {
+        int damage = 1;
+        if (isKill) {
+            damage = Movil.VIDA_MAX;
+            if (!userIsNPC(indLos)) {
+                damage = (int)(damage * 1.5f);
+            }
+        }
+        userPoints[indWin] += damage;
+        gruPoints[userGetGrupo(indWin)] += damage;
+    }
+    
+    public static int otroGrupo(int grupo) {
+        int otr = 0;
+        if (grupo == 0) {
+            otr = 1;
+        }
+        return otr;
     }
     
     public static boolean userContNombre(String nombre) {

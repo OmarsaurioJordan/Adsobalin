@@ -33,7 +33,10 @@ public class Bala extends Proyectil {
                     otro.getClass() == Automata.class) {
                 // hacer damage directamente
                 Movil mov = (Movil)otro;
-                mov.golpear(origen);
+                Adsobalin.addPoints(false, origen, mov.indice);
+                if (mov.golpear(origen)) {
+                    Adsobalin.addPoints(true, origen, mov.indice);
+                }
             }
             else if (otro.getClass() == Sombra.class) {
                 // enviar solicitud de damage

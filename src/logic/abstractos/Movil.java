@@ -43,7 +43,7 @@ public abstract class Movil extends Objeto {
     // el angulo verdadero en que apunta, manejado por codigo, radianes
     protected float anguMira = 0f;
     // identificador unico que se mantiene entre varias maquinas
-    protected int indice = -1;
+    public int indice = -1;
     // para mostrar el nickname del jugador propietario
     protected String nombre = "";
     
@@ -133,18 +133,6 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    protected boolean coliSolidos(float delta) {
-        return false;
-    }
-    
-    protected boolean coliMoviles(float delta) {
-        return false;
-    }
-    
-    protected boolean limitar() {
-        return false;
-    }
-    
     protected Bala disparar(float angulo) {
         if (tempDisparo == 0 && tempRecarga == 0 && municion > 0) {
             Bala b = (Bala)Mundo.newObjeto(Bala.class,
@@ -171,11 +159,13 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    public void golpear(int indOrigenProy) {
+    public boolean golpear(int indOrigenProy) {
+        // retorna verdadero si muere
         if (tempInmune == 0) {
             vida = Math.max(0, vida - 1);
             if (vida == 0) {
                 morir(indOrigenProy);
+                return true;
             }
             else {
                 tempGolpe = TEMP_GOLPE_MAX;
@@ -183,6 +173,7 @@ public abstract class Movil extends Objeto {
                 tempCuracion = 0f;
             }
         }
+        return false;
     }
     
     public void morir(int indOrigenProy) {

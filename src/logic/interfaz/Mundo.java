@@ -508,10 +508,7 @@ public class Mundo extends GUIs {
         
         // dibujar los puntajes de grupos
         int grp = Adsobalin.userGetGrupo(Adsobalin.indice);
-        int utr = 0;
-        if (grp == 0) {
-            utr = 1;
-        }
+        int utr = Adsobalin.otroGrupo(grp);
         gc.setFont(Adsobalin.letrimedias);
         if (Adsobalin.gruPoints[grp] > Adsobalin.gruPoints[utr]) {
             gc.setFill(Color.YELLOW);
