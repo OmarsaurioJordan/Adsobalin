@@ -68,6 +68,8 @@ public class Mundo extends GUIs {
         110f * 0.75f * Adsobalin.ESCALA,
         110f * 0.75f * Adsobalin.ESCALA, false, false);
     
+    private AnimationTimer aniLoop;
+    
     public Mundo(Stage raiz, boolean[] npcok, int talla,
             int obstaculos, int tiempo) {
         super(raiz);
@@ -146,7 +148,7 @@ public class Mundo extends GUIs {
         });
         
         // crear el loop principal de simulacion
-        AnimationTimer aniLoop = new AnimationTimer() {
+        aniLoop = new AnimationTimer() {
             private long last = 0L;
             @Override
             public void handle(long now) {
@@ -433,6 +435,7 @@ public class Mundo extends GUIs {
     private void finalizarPartida(float delta) {
         tiempoRestante = Math.max(0f, tiempoRestante - delta);
         if (tiempoRestante == 0) {
+            aniLoop.stop();
             raiz.setScene(new Resultado(raiz));
         }
     }
@@ -501,6 +504,50 @@ public class Mundo extends GUIs {
             gc.setFill(Color.SILVER);
             gc.fillText((int)Math.ceil(tempRespawnPlayer) + "s",
                     width * 0.85f, height * 0.9f);
+        }
+        
+        // dibujar los puntajes de grupos
+        int grp = Adsobalin.userGetGrupo(Adsobalin.indice);
+        int utr = 0;
+        if (grp == 0) {
+            utr = 1;
+        }
+        gc.setFont(Adsobalin.letrimedias);
+        if (Adsobalin.gruPoints[grp] > Adsobalin.gruPoints[utr]) {
+            gc.setFill(Color.YELLOW);
+        }
+        else {
+            gc.setFill(Color.SILVER);
+        }
+        gc.fillText("G: " + Adsobalin.gruPoints[grp],
+                width * 0.01f, height * 0.07f);
+        gc.setFont(Adsobalin.letras);
+        gc.setFill(Color.SILVER);
+        gc.fillText("G: " + Adsobalin.gruPoints[utr],
+                width * 0.02f, height * 0.12f);
+        
+        // dibujar los puntajes de jugadores
+        utr = Adsobalin.userBestPoints();
+        gc.setFont(Adsobalin.letrimedias);
+        if (utr == Adsobalin.indice) {
+            gc.setFill(Color.YELLOW);
+        }
+        else {
+            gc.setFill(Color.SILVER);
+        }
+        gc.fillText("P: " + Adsobalin.userPoints[Adsobalin.indice],
+                width * 0.01f, height * 0.20f);
+        gc.setFont(Adsobalin.letras);
+        gc.setFill(Color.SILVER);
+        if (utr == -1) {
+            gc.fillText("B: ???",
+                    width * 0.02f, height * 0.25f);
+        }
+        else {
+            gc.fillText("B: " + Adsobalin.userPoints[utr],
+                    width * 0.02f, height * 0.25f);
+            gc.fillText(Adsobalin.userName[utr],
+                    width * 0.02f, height * 0.3f);
         }
         
         // dibujar el mouse

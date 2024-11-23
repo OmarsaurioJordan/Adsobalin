@@ -19,16 +19,6 @@ public class Conector {
     // tiempo tras el cual desconectar usuarios inactivos
     public static final float PING = 5f;
     
-    // informacion de usuarios conectados si es servidor
-    // el ind de usuario es el indice en el arreglo
-    // el grupo depende de si es ind < 9 o no
-    // cuando el nombre es vacio, se supone es un bot
-    // las IP se conservan durante la partida para esperar reconexion
-    public static String[] userIP = new String[18];
-    public static String[] userName = new String[18];
-    public static int[] userStyle = new int[18];
-    public static float[] userPing = new float[18];
-    
     // nodo base de todo el software
     private Stage raiz;
     // conexion donde se envian y reciben datos

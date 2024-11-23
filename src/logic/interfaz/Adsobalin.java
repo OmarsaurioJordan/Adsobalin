@@ -30,6 +30,7 @@ public class Adsobalin extends Application {
     
     // la fuente de texto usada en todo el software
     public static Font letras = new Font("Verdana", 18 * ESCALA);
+    public static Font letrimedias = new Font("Verdana", 27 * ESCALA);
     public static Font letrotas = new Font("Verdana", 36 * ESCALA);
     
     // indices para grupos
@@ -46,6 +47,8 @@ public class Adsobalin extends Application {
     public static boolean isServer = false;
     // si permite que se conecten en pleno juego
     public static boolean isEncursable = true;
+    // puntos que ha ganado cada grupo
+    public static int[] gruPoints = {0, 0};
     
     // otras configuraciones
     public static final int NAME_LEN = 4;
@@ -59,6 +62,17 @@ public class Adsobalin extends Application {
     public static int grupo = GRU_AZUL;
     public static int estilo = 0;
     public static int indice = -1;
+    
+    // informacion de usuarios conectados si es servidor
+    // el ind de usuario es el indice en el arreglo
+    // el grupo depende de si es ind < 9 o no
+    // cuando el nombre es vacio, se supone es un bot
+    // las IP se conservan durante la partida para esperar reconexion
+    public static String[] userIP = new String[18];
+    public static String[] userName = new String[18];
+    public static int[] userStyle = new int[18];
+    public static float[] userPing = new float[18];
+    public static int [] userPoints = new int[18];
     
     // donde guarda el archivo de configuracion
     public static final String DATAPATH = "src/config/config.properties";
@@ -116,17 +130,33 @@ public class Adsobalin extends Application {
     }
     
     public static boolean userContNombre(String nombre) {
-        return Arrays.asList(Conector.userName).contains(nombre);
+        return Arrays.asList(userName).contains(nombre);
     }
     
     public static boolean userContEstilo(int estilo) {
-        return Arrays.stream(Conector.userStyle).anyMatch(n -> n == estilo);
+        return Arrays.stream(userStyle).anyMatch(n -> n == estilo);
+    }
+    
+    public static int userBestPoints() {
+        // retorna ind con usuario que tiene mejores puntos, o -1 si empate
+        int best = -1;
+        int pts = 0;
+        for (int i = 0; i < 18; i++) {
+            if (userPoints[i] > pts) {
+                pts = userPoints[i];
+                best = i;
+            }
+            else if (userPoints[i] == pts) {
+                best = -1;
+            }
+        }
+        return best;
     }
     
     public static int userHayCupo() {
         int ind = -1;
         for (int i = 0; i < 18; i++) {
-            if (Conector.userIP[i].isEmpty()) {
+            if (userIP[i].isEmpty()) {
                 ind = i;
                 break;
             }
@@ -136,7 +166,7 @@ public class Adsobalin extends Application {
     
     public static int userGetInd(String ip) {
         for (int i = 0; i < 18; i++) {
-            if (Conector.userIP[i].equals(ip)) {
+            if (userIP[i].equals(ip)) {
                 return i;
             }
         }
@@ -144,11 +174,11 @@ public class Adsobalin extends Application {
     }
     
     public static boolean userIsNPC(int ind) {
-        return Conector.userName[ind].isEmpty();
+        return userName[ind].isEmpty();
     }
     
     public static boolean userSelf(int ind) {
-        return Conector.userName[ind].equals(nombre);
+        return userName[ind].equals(nombre);
     }
     
     public static int userGetGrupo(String ip) {
@@ -167,7 +197,7 @@ public class Adsobalin extends Application {
         int ind = -1;
         if (indGrupo == GRU_AZUL) {
             for (int i = 0; i < 9; i++) {
-                if (Conector.userIP[i].isEmpty()) {
+                if (userIP[i].isEmpty()) {
                     ind = i;
                     break;
                 }
@@ -175,7 +205,7 @@ public class Adsobalin extends Application {
         }
         else if (indGrupo == GRU_ROJO) {
             for (int i = 9; i < 18; i++) {
-                if (Conector.userIP[i].isEmpty()) {
+                if (userIP[i].isEmpty()) {
                     ind = i;
                     break;
                 }
@@ -194,24 +224,33 @@ public class Adsobalin extends Application {
         }
         // en caso de hallarlo, ingresara los datos
         if (ind != -1) {
-            Conector.userIP[ind] = ip;
-            Conector.userName[ind] = nombre;
-            Conector.userStyle[ind] = estilo;
-            Conector.userPing[ind] = Conector.PING;
+            userIP[ind] = ip;
+            userName[ind] = nombre;
+            userStyle[ind] = estilo;
+            userPing[ind] = Conector.PING;
+            if (estado != EST_JUEGO) {
+                userPoints[ind] = 0;
+            }
         }
         return ind;
     }
     
     public static void userClean(int ind) {
-        Conector.userIP[ind] = "";
-        Conector.userName[ind] = "";
-        Conector.userStyle[ind] = 0;
-        Conector.userPing[ind] = 0f;
+        userIP[ind] = "";
+        userName[ind] = "";
+        userStyle[ind] = 0;
+        userPing[ind] = 0f;
+        if (estado != EST_JUEGO) {
+            userPoints[ind] = 0;
+        }
     }
     
     public static void userClean() {
+        gruPoints[0] = 0;
+        gruPoints[1] = 0;
         for (var i = 0; i < 18; i++) {
             userClean(i);
+            userPoints[i] = 0;
         }
     }
 }

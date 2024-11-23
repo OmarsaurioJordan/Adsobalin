@@ -205,10 +205,10 @@ public class Lobby extends GUIs {
                 }
             }
             else if (Adsobalin.userSelf(i)) {
-                nombres.get(i).setText("(" + Conector.userName[i] + ")");
+                nombres.get(i).setText("(" + Adsobalin.userName[i] + ")");
             }
             else {
-                nombres.get(i).setText(Conector.userName[i]);
+                nombres.get(i).setText(Adsobalin.userName[i]);
             }
         }
     }

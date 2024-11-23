@@ -66,8 +66,8 @@ public class Recepciones {
             int ind = Adsobalin.userGetInd(emisor);
             if (Adsobalin.estado == Adsobalin.EST_JUEGO) {
                 // no permitira actualizacion, solo le da permiso de ingreso
-                Envios.sendWelcome(Conector.userName[ind], emisor,
-                        Conector.userStyle[ind],
+                Envios.sendWelcome(Adsobalin.userName[ind], emisor,
+                        Adsobalin.userStyle[ind],
                         Adsobalin.userGetGrupo(ind), ind);
             }
             else {
