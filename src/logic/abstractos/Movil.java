@@ -10,6 +10,7 @@ import logic.objetos.Player;
 import logic.objetos.Automata;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Mundo;
+import logic.objetos.Cadaver;
 
 public abstract class Movil extends Objeto {
     
@@ -46,6 +47,8 @@ public abstract class Movil extends Objeto {
     public int indice = -1;
     // para mostrar el nickname del jugador propietario
     protected String nombre = "";
+    // direccion en que fue golpeado por ultima vez
+    public float angHit = 0f;
     
     // se activa para pausar entre disparos
     protected float tempDisparo = 0f;
@@ -179,7 +182,8 @@ public abstract class Movil extends Objeto {
     public void morir(int indOrigenProy) {
         Mundo.deleteObjeto(this);
         // crear cadaver
-        
+        Cadaver cdvr = (Cadaver)Mundo.newObjeto(Cadaver.class, posicion);
+        cdvr.setCadaver(grupo, nombre == "", angHit, false, 0f);
         // reiniciar contador de respawn
         if (getClass() == Player.class) {
             Mundo.tempRespawnPlayer = Mundo.TEMP_RESPAWN_MAX;

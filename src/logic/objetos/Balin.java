@@ -6,16 +6,12 @@ import javafx.scene.image.Image;
 import logic.abstractos.Objeto;
 import logic.abstractos.Proyectil;
 import logic.abstractos.Movil;
-import logic.interfaz.Adsobalin;
 
 public class Balin extends Proyectil {
     
     private boolean isFromNPC = false;
     
-    private Image sprite = new Image("assets/azules/azulproyectil.png",
-        110f * 0.75f * (float)Adsobalin.ESCALA,
-        110f * 0.75f * (float)Adsobalin.ESCALA,
-        false, false);
+    private Image sprite;
     
     public Balin(float[] posicion) {
         super(posicion, Objeto.OBJ_BALIN);
@@ -34,9 +30,14 @@ public class Balin extends Proyectil {
         if (otro != null) {
             // cuando el proyectil choca con un movil, debe golpearlo
             if (otro.getClass() == Player.class && isFromNPC) {
-                // hacer damage directamente
+                // hacer damage directamente y enviar solicitud para puntos
                 Movil mov = (Movil)otro;
-                mov.golpear(origen);
+                if (mov.golpear(origen)) {
+                    
+                }
+                else {
+                    
+                }
             }
         }
     }

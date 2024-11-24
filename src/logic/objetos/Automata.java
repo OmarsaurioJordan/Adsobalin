@@ -34,10 +34,7 @@ public class Automata extends Movil {
     // para hacer cambios aleatorios en la direccion de movimiento
     private float errarDesfDir = 0f;
     
-    private Image sprite = new Image("assets/azules/azul0.png",
-        120f * 0.75f * (float)Adsobalin.ESCALA,
-        120f * 0.75f * (float)Adsobalin.ESCALA,
-        false, false);
+    private Image sprite;
     
     public Automata(float[] posicion) {
         super(posicion, Objeto.OBJ_AUTOMATA);

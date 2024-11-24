@@ -9,10 +9,7 @@ import logic.interfaz.Adsobalin;
 
 public class Base extends Solido {
     
-    private Image sprite = new Image("assets/azules/azulbase.png",
-        170f * 0.75f * (float)Adsobalin.ESCALA,
-        170f * 0.75f * (float)Adsobalin.ESCALA,
-        false, false);
+    private Image sprite;
     
     // grupo al que pertenece
     public int grupo = Adsobalin.GRU_AZUL;

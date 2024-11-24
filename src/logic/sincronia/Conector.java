@@ -32,7 +32,6 @@ public class Conector {
     
     public Conector(int puerto) {
         this.puerto = puerto;
-        this.raiz = raiz;
         try {
             socket = new DatagramSocket(puerto);
         }

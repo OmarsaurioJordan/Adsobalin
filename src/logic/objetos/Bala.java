@@ -10,10 +10,7 @@ import logic.interfaz.Adsobalin;
 
 public class Bala extends Proyectil {
     
-    private Image sprite = new Image("assets/azules/azulproyectil.png",
-        110f * 0.75f * (float)Adsobalin.ESCALA,
-        110f * 0.75f * (float)Adsobalin.ESCALA,
-        false, false);
+    private Image sprite;
     
     public Bala(float[] posicion) {
         super(posicion, Objeto.OBJ_BALA);
@@ -34,6 +31,7 @@ public class Bala extends Proyectil {
                 // hacer damage directamente
                 Movil mov = (Movil)otro;
                 Adsobalin.addPoints(false, origen, mov.indice);
+                mov.angHit = angulo;
                 if (mov.golpear(origen)) {
                     Adsobalin.addPoints(true, origen, mov.indice);
                 }
