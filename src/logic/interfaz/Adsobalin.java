@@ -75,6 +75,9 @@ public class Adsobalin extends Application {
     public static float[] userPing = new float[18];
     public static int [] userPoints = new int[18];
     
+    // objeto que manejara todos los sonidos
+    public static Sonidos masterSound = new Sonidos();
+    
     // donde guarda el archivo de configuracion
     public static final String DATAPATH = "src/config/config.properties";
     

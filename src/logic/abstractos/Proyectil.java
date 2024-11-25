@@ -4,6 +4,7 @@ package logic.abstractos;
 import javafx.scene.image.Image;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Mundo;
+import logic.interfaz.Sonidos;
 
 public abstract class Proyectil extends Objeto {
     
@@ -23,6 +24,7 @@ public abstract class Proyectil extends Objeto {
     
     public Proyectil(float[] posicion, int myTipo) {
         super(posicion, myTipo, RADIO);
+        Sonidos.sonidoPos(Sonidos.SND_DISPARO, posicion);
     }
     
     protected Image setProyectilImg(float angulo, int grupo, int origen) {

@@ -17,7 +17,7 @@ public class Mundo extends GUIs {
     public static final int RADIO = 720;
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
-    public static final float TEMP_RESPAWN_MAX = 5f; // Tarea 12
+    public static final float TEMP_RESPAWN_MAX = 7f;
     public static final float RAD_RESPAWN = 100f * (float)Adsobalin.ESCALA;
     
     // guardara todos los objetos que existen instanciados en el juego
@@ -44,6 +44,8 @@ public class Mundo extends GUIs {
     
     // posicion de la camara en el mundo
     public static float[] camaraPos = {0f, 0f};
+    // centro de la camara en el mundo, para calcular sonidos
+    public static float[] camaraCen = {0f, 0f};
     // posicion del mouse
     public static float[] mousePos = {0f, 0f};
     // sistema para obtener coordenadas de mouse
@@ -68,6 +70,7 @@ public class Mundo extends GUIs {
         110f * 0.75f * Adsobalin.ESCALA,
         110f * 0.75f * Adsobalin.ESCALA, false, false);
     
+    // hilo para todo el main loop del juego
     private AnimationTimer aniLoop;
     
     public Mundo(Stage raiz, boolean[] npcok, int talla,
@@ -77,7 +80,7 @@ public class Mundo extends GUIs {
         radioMundo = (int)(((RADIO / 2) * (1 + talla)) * Adsobalin.ESCALA);
         centroMundo[0] = radioMundo;
         centroMundo[1] = radioMundo;
-        tiempoRestante = tiempo * 60f;
+        tiempoRestante = tiempo * 60f + TEMP_RESPAWN_MAX;
         for (int i = 0; i < 18; i++) {
             if (npcok[i]) {
                 if (Adsobalin.userIsNPC(i)) {
@@ -391,6 +394,9 @@ public class Mundo extends GUIs {
         // ejecuta toda la logica del juego:
         // obtener y procesar la posicion del mouse
         getMouse();
+        // obtener el centro de la camara
+        camaraCen[0] = camaraPos[0] + (float)Adsobalin.WIDTH / 2f;
+        camaraCen[1] = camaraPos[1] + (float)Adsobalin.HEIGHT / 2f;
         
         // ejecuta todas las acciones de los objetos
         Objeto obj;

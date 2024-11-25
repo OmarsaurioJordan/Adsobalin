@@ -79,6 +79,7 @@ public abstract class Movil extends Objeto {
         super(posicion, myTipo, RADIO);
         this.ubicacion = posicion;
         ajusteCol.setBrightness(-0.5d);
+        angHit = Adsobalin.DADO.nextFloat() * 2f * (float)Math.PI;
     }
     
     protected void moverSync(float delta) {

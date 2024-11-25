@@ -17,8 +17,7 @@ public abstract class Tools {
     
     public static float vecDistancia(float[] vec1, float[] vec2) {
         float[] dif = vecResta(vec1, vec2);
-        float res = (float)Math.sqrt(Math.pow(dif[0], 2f) +
-                Math.pow(dif[1], 2f));
+        float res = (float)Math.hypot(dif[0], dif[1]);
         return res;
     }
     
