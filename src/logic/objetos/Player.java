@@ -9,6 +9,7 @@ import logic.interfaz.Adsobalin;
 import logic.abstractos.Tools;
 import logic.interfaz.Mundo;
 import logic.abstractos.Solido;
+import logic.interfaz.Sonidos;
 
 public class Player extends Movil {
     
@@ -110,7 +111,23 @@ public class Player extends Movil {
     @Override
     public void step(float delta) {
         // ejecutar los temporizadores
+        int antVida = vida;
+        int antMunicion = municion;
+        float antInmune = tempInmune;
         temporizar(delta);
+        if (vida != antVida) {
+            if (vida == VIDA_MAX) {
+                Sonidos.sonidoPos(Sonidos.SND_CURACION, posicion);
+            }
+        }
+        if (municion != antMunicion) {
+            Sonidos.sonidoPos(Sonidos.SND_RECARGA, posicion);
+        }
+        if (tempInmune != antInmune) {
+            if (tempInmune == 0) {
+                bullaini();
+            }
+        }
         // colisionar con los solidos
         Object otro = Mundo.colsionObject(ubicacion,
                 radio, Solido.class, this);

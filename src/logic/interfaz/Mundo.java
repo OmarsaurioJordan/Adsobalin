@@ -446,6 +446,7 @@ public class Mundo extends GUIs {
         tiempoRestante = Math.max(0f, tiempoRestante - delta);
         if (tiempoRestante == 0) {
             aniLoop.stop();
+            pool.clear();
             raiz.setScene(new Resultado(raiz));
         }
     }

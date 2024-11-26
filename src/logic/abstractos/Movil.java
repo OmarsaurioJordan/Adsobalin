@@ -10,6 +10,7 @@ import logic.objetos.Player;
 import logic.objetos.Automata;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Mundo;
+import logic.interfaz.Sonidos;
 import logic.objetos.Cadaver;
 
 public abstract class Movil extends Objeto {
@@ -57,7 +58,7 @@ public abstract class Movil extends Objeto {
     // se activara para que el ente ilumine de rojo
     protected float tempGolpe = 0f;
     // se activa al aparecer, para dar inmunidad
-    protected float tempInmune = TEMP_INMUNE_MAX;
+    protected float tempInmune = TEMP_INMUNE_MAX + Adsobalin.DADO.nextFloat();
     // se activara al curar una vida y continuar con las demas
     protected float tempCuracion = 0f;
     // se activara cuando recive danno, para curarse
@@ -167,6 +168,7 @@ public abstract class Movil extends Objeto {
         // retorna verdadero si muere
         if (tempInmune == 0) {
             vida = Math.max(0, vida - 1);
+            chillar();
             if (vida == 0) {
                 morir(indOrigenProy);
                 return true;
@@ -178,6 +180,30 @@ public abstract class Movil extends Objeto {
             }
         }
         return false;
+    }
+    
+    public void chillar() {
+        if (getClass() == Player.class) {
+            Sonidos.sonidoPos(Sonidos.SND_HIT_PLAYER, posicion);
+        }
+        else if (grupo == Adsobalin.grupo) {
+            Sonidos.sonidoPos(Sonidos.SND_HIT_ALLY, posicion);
+        }
+        else {
+            Sonidos.sonidoPos(Sonidos.SND_HIT_ENEMY, posicion);
+        }
+    }
+    
+    public void bullaini() {
+        if (getClass() == Player.class) {
+            Sonidos.sonidoPos(Sonidos.SND_INI_PLAYER, posicion);
+        }
+        else if (grupo == Adsobalin.grupo) {
+            Sonidos.sonidoPos(Sonidos.SND_INI_ALLY, posicion);
+        }
+        else {
+            Sonidos.sonidoPos(Sonidos.SND_INI_ENEMY, posicion);
+        }
     }
     
     public void morir(int indOrigenProy) {

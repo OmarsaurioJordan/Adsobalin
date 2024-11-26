@@ -65,6 +65,7 @@ public abstract class Proyectil extends Objeto {
                 radio, Solido.class, this);
             if (otro != null) {
                 Mundo.deleteObjeto(this);
+                Sonidos.sonidoPos(Sonidos.SND_IMPACTO, posicion);
                 return null;
             }
             // verificar colision con moviles

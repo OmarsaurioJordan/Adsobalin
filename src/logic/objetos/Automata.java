@@ -207,8 +207,14 @@ public class Automata extends Movil {
     @Override
     public void step(float delta) {
         // ejecutar los temporizadores
+        float antInmune = tempInmune;
         temporizar(delta);
         temporiErrar(delta);
+        if (tempInmune != antInmune) {
+            if (tempInmune == 0) {
+                bullaini();
+            }
+        }
         // colisionar con los solidos
         Object otro = Mundo.colsionObject(ubicacion,
                 radio, Solido.class, this);

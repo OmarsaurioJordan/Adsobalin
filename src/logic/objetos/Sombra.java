@@ -9,6 +9,9 @@ import logic.interfaz.Adsobalin;
 
 public class Sombra extends Movil {
     
+    // para sonar una vez al iniciar
+    private boolean noHaSonadoIni = true;
+    
     private Image sprite;
     
     public Sombra(float[] posicion) {
@@ -31,6 +34,13 @@ public class Sombra extends Movil {
     
     @Override
     public void step(float delta) {
+        // verificar cambio en temporizadores para sonar
+        if (noHaSonadoIni) {
+            if (tempInmune == 0) {
+                noHaSonadoIni = false;
+                bullaini();
+            }
+        }
         // sincronizar el movimiento final
         moverSync(delta);
     }

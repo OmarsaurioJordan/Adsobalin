@@ -32,6 +32,7 @@ public class Balin extends Proyectil {
             if (otro.getClass() == Player.class && isFromNPC) {
                 // hacer damage directamente y enviar solicitud para puntos
                 Movil mov = (Movil)otro;
+                mov.angHit = angulo;
                 if (mov.golpear(origen)) {
                     
                 }
