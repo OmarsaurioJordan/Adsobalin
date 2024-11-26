@@ -4,13 +4,6 @@ package logic.interfaz;
 import javafx.scene.media.AudioClip;
 import logic.abstractos.Tools;
 
-/*
-dependencies {
-    implementation 'org.openjfx:javafx-controls:17'
-    implementation 'org.openjfx:javafx-media:17'
-}
-*/
-
 public class Sonidos {
     
     // constantes para alcance del sonido
@@ -22,15 +15,12 @@ public class Sonidos {
     private static final AudioClip[] SND = new AudioClip[1];
     
     public Sonidos() {
-        //String p = getClass().getResource("/assets/sonidos/disparo.wav").toString();
-        //System.out.println(p);
-        //AudioClip a = new AudioClip(p);
-        //AudioClip a = new AudioClip("file://D:/Documentos/SonidosEspeciales/sonidosplus/botavapor.wav");
-        //a.play();
+        SND[SND_DISPARO] = new AudioClip(getClass().getResource(
+                "/assets/sonidos/disparo.wav").toString());
     }
     
     public static void sonidoPos(int indSnd, float[] fuente) {
-        /*float dist = Tools.vecDistancia(fuente, Mundo.camaraCen);
+        float dist = Tools.vecDistancia(fuente, Mundo.camaraCen);
         float vol = Math.max(0f, 1f - (dist / DIST_OIDO));
         if (vol > 0) {
             float bal = Math.max(-1f, Math.min(1f,
@@ -38,6 +28,6 @@ public class Sonidos {
             SND[indSnd].setVolume(vol);
             SND[indSnd].setBalance(bal);
             SND[indSnd].play();
-        }*/
+        }
     }
 }
