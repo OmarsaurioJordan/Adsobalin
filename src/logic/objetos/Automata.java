@@ -153,11 +153,29 @@ public class Automata extends Movil {
         // ir al ultimo lugar de interes
         else if (posInteres[0] != 0 || posInteres[1] != 0) {
             anguMira = Tools.vecDireccion(ubicacion, posInteres);
-            ubicacion = Tools.vecMover(ubicacion,
-                    VELOCIDAD * delta, anguMira + errarDesfDir);
-            if (Tools.vecDistancia(ubicacion, posInteres) < radio * 2f) {
-                posInteres[0] = 0f;
-                posInteres[1] = 0f;
+            if (tempRecarga != 0) {
+                dist = Tools.vecDistancia(posInteres, ubicacion);
+                if (dist < VISION * 0.9f) {
+                    // huir
+                    float d = Tools.vecDireccion(
+                            posInteres, ubicacion);
+                    ubicacion = Tools.vecMover(ubicacion,
+                            VELOCIDAD * delta, d + errarDesfDir);
+                    azarDireccion();
+                }
+                else {
+                    // errar
+                    ubicacion = Tools.vecMover(ubicacion,
+                        VELOCIDAD * delta, errarDireccion);
+                }
+            }
+            else {
+                ubicacion = Tools.vecMover(ubicacion,
+                        VELOCIDAD * delta, anguMira + errarDesfDir);
+                if (Tools.vecDistancia(ubicacion, posInteres) < radio * 2f) {
+                    posInteres[0] = 0f;
+                    posInteres[1] = 0f;
+                }
             }
         }
         // moverse al azar por el mundo
@@ -168,7 +186,7 @@ public class Automata extends Movil {
         }
     }
     
-    private void dispararAuto(float delta) {
+    private void dispararAuto() {
         if (objetivo != null) {
             if (Math.abs(Tools.angDifference(anguMira, angulo)) <
                     (float)Math.PI * 0.2f) {
@@ -180,7 +198,7 @@ public class Automata extends Movil {
     
     private void hacerBusqueda(float delta) {
         float r = Adsobalin.DADO.nextFloat();
-        if ((objetivo == null && r < 0.5 * delta) || r < 0.05 * delta) {
+        if ((objetivo == null && r < 0.8 * delta) || r < 0.08 * delta) {
             ArrayList<Movil> candidatos = Mundo.getCercanos(
                     ubicacion, VISION, this, grupo);
             if (!candidatos.isEmpty()) {
@@ -201,6 +219,15 @@ public class Automata extends Movil {
                         candidatos.size()));
                 }
             }
+        }
+    }
+    
+    public void reaccionarHit() {
+        // se tendra en cuenta la direccion de colision
+        if (objetivo == null) {
+            posInteres = Tools.vecMover(ubicacion, VISION, angHit);
+            posInteres = Tools.circleLimitar(Mundo.centroMundo,
+                    Mundo.radioMundo * 0.95f, posInteres);
         }
     }
     
@@ -239,7 +266,7 @@ public class Automata extends Movil {
         }
         // buscar objetivos y tratar de disparar
         hacerBusqueda(delta);
-        dispararAuto(delta);
+        dispararAuto();
         // limites de mundo
         float[] ant = ubicacion.clone();
         ubicacion = Tools.circleLimitar(Mundo.centroMundo,

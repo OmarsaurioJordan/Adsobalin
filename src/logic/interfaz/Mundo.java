@@ -30,7 +30,8 @@ public class Mundo extends GUIs {
     // tiene el objeto jugador actual, o ninguno si ha muerto
     private static Player myPlayer = null;
     // temporizador de respawn de player
-    public static float tempRespawnPlayer = TEMP_RESPAWN_MAX;
+    public static float tempRespawnPlayer = TEMP_RESPAWN_MAX +
+            Adsobalin.DADO.nextFloat();;
     
     // guardar las teclas pulsadas
     public static int KEY_UP = 0;
@@ -84,7 +85,8 @@ public class Mundo extends GUIs {
         for (int i = 0; i < 18; i++) {
             if (npcok[i]) {
                 if (Adsobalin.userIsNPC(i)) {
-                    npcRespawn[i] = TEMP_RESPAWN_MAX;
+                    npcRespawn[i] = TEMP_RESPAWN_MAX +
+                            Adsobalin.DADO.nextFloat();;
                 }
                 else {
                     npcRespawn[i] = 0f;
@@ -447,6 +449,7 @@ public class Mundo extends GUIs {
         if (tiempoRestante == 0) {
             aniLoop.stop();
             pool.clear();
+            
             raiz.setScene(new Resultado(raiz));
         }
     }

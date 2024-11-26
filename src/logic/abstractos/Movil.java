@@ -58,7 +58,7 @@ public abstract class Movil extends Objeto {
     // se activara para que el ente ilumine de rojo
     protected float tempGolpe = 0f;
     // se activa al aparecer, para dar inmunidad
-    protected float tempInmune = TEMP_INMUNE_MAX + Adsobalin.DADO.nextFloat();
+    protected float tempInmune = TEMP_INMUNE_MAX;
     // se activara al curar una vida y continuar con las demas
     protected float tempCuracion = 0f;
     // se activara cuando recive danno, para curarse
@@ -177,6 +177,11 @@ public abstract class Movil extends Objeto {
                 tempGolpe = TEMP_GOLPE_MAX;
                 tempRegeneracion = TEMP_REGENERACION_MAX;
                 tempCuracion = 0f;
+                // hacer reaccion en caso de ser NPC
+                if (getClass() == Automata.class) {
+                    Automata a = (Automata)this;
+                    a.reaccionarHit();
+                }
             }
         }
         return false;
