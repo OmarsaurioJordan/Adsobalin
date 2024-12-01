@@ -12,8 +12,6 @@ public class Conector {
     
     // identificador unico del software para sus mensajes UDP
     public static final int SOFT_ID = 69750244;
-    // este debug es para enviar datos a puerto + 1
-    private static final boolean PORT_DEBUG = false;
     // talla del buffer de recepcion, ajustar al minimo necesario
     private static final int LIM_LEC_BUF = 2048;
     // tiempo tras el cual desconectar usuarios inactivos
@@ -61,14 +59,8 @@ public class Conector {
         try {
             InetAddress dir = InetAddress.getByName(destino);
             DatagramPacket pack;
-            if (PORT_DEBUG) {
-                pack = new DatagramPacket(
-                    data, data.length, dir, puerto + 1);
-            }
-            else {
-                pack = new DatagramPacket(
-                    data, data.length, dir, puerto);
-            }
+            pack = new DatagramPacket(
+                data, data.length, dir, puerto);
             socket.send(pack);
         }
         catch (Exception ex) {
@@ -85,7 +77,7 @@ public class Conector {
                 DatagramPacket pack = new DatagramPacket(
                         buff, LIM_LEC_BUF);
                 socket.receive(pack);
-                String ip = pack.getAddress().toString();
+                String ip = pack.getAddress().toString().replace("/", "");
                 recividor.depuraMsj(arr2buf(pack.getData()), ip);
             }
             catch (Exception ex) {}
