@@ -6,6 +6,7 @@ import javafx.stage.Stage;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.GUIs;
 import logic.interfaz.Lobby;
+import javafx.application.Platform;
 
 public class Recepciones {
     
@@ -108,7 +109,9 @@ public class Recepciones {
         // el servidor redibuja la lista de conectados
         if (Adsobalin.estado == Adsobalin.EST_LOBBY) {
             Lobby gui = (Lobby)raiz.getScene();
-            gui.reDibujar();
+            Platform.runLater(() -> {
+                gui.reDibujar();
+            });
         }
     }
     

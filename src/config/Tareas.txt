@@ -4,8 +4,8 @@ TAREAS ADSOBALIN:
 - evitar cambio de tamaño de pantalla al pasar de interfaz.
 1
 - hacer alertas que atraigan NPCs.
-- atraer NPC al ser golpeado (verificar...).
-- poner supervision de mira con producto punto.
+- atraer NPC al ser golpeado (verificar código...).
+- poner supervisión de mira con producto punto.
 3
 - X, notificaciones deslizantes.
 4
