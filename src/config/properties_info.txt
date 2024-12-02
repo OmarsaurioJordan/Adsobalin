@@ -1,0 +1,13 @@
+información sobre las variables de propiedades config
+
+lobini: será 1 cuando ya se ha guardado lobby una vez, sino dejará lobby al azar
+estilo: tipo de pelo del usuario
+talla: tamaño del mundo elegido por server o cliente
+obstaculos: densidad de árboles elegido por server o cliente
+tiempo: duración de partida elegida por server o cliente
+NPCs: número de flags, para checkear NPCs activos en lobby, server o client
+ip: dirección del servidor digitada en el menú
+grupo: grupo azul o rojo elegido por el usuario
+inicial: será 1 cuando ya se ha guardado menú una vez, sino dejará menú al azar
+nombre: del avatar del usuario
+encursable: booleano para decir si el servidor permite ingreso de jugadores ext

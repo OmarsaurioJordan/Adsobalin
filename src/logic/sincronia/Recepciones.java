@@ -6,12 +6,16 @@ import javafx.stage.Stage;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.GUIs;
 import logic.interfaz.Lobby;
+import logic.interfaz.Menu;
 import javafx.application.Platform;
 
 public class Recepciones {
     
     // nodo base de todo el software
     protected Stage raiz;
+    
+    // lectura de clientes al ping del servidor
+    private static byte server_orden = 0;
     
     public Recepciones(Stage raiz) {
         this.raiz = raiz;
@@ -20,10 +24,12 @@ public class Recepciones {
     public void depuraMsj(ByteBuffer data, String emisor) {
         try {
             if (data.getInt() == Conector.SOFT_ID) {
+                byte orden;
                 byte tipo = data.get();
                 switch (tipo) {
                     
                     case Envios.MSJ_HOLA:
+                        // solo el servidor recibe este tipo de mensaje
                         if (Adsobalin.isServer) {
                             recHola(
                                 data.getShort(), // version
@@ -36,6 +42,7 @@ public class Recepciones {
                         break;
                     
                     case Envios.MSJ_WELCOME:
+                        // es cliente y da igual en que estado este
                         if (!Adsobalin.isServer) {
                             recWelcome(
                                 data.get(), // ind
@@ -48,8 +55,32 @@ public class Recepciones {
                         break;
                     
                     case Envios.MSJ_MSJ:
+                        // es cliente y da igual en que estado este
                         if (!Adsobalin.isServer) {
                             recMsj(data.get());
+                        }
+                        break;
+                    
+                    case Envios.MSJ_LOBBY:
+                        // es cliente y tiene un servidor asociado
+                        if (!Adsobalin.isServer &&
+                                !Conector.myServer.isEmpty()) {
+                            Conector.serverPing = Conector.PING;
+                            if (apruebaServerPing(data.get())) {
+                                byte talla = data.get();
+                                byte obstaculos = data.get();
+                                byte tiempo = data.get();
+                                byte encursable = data.get();
+                                byte[] npcs = new byte[18];
+                                String[] nombres = new String[18];
+                                for (int i = 0; i < 18; i++) {
+                                    npcs[i] = data.get();
+                                    nombres[i] = Conector.buffGetString(data);
+                                }
+                                recLobby(
+                                        talla, obstaculos, tiempo,
+                                        encursable, npcs, nombres);
+                            }
                         }
                         break;
                 }
@@ -72,6 +103,13 @@ public class Recepciones {
                         Adsobalin.userGetGrupo(ind), ind);
             }
             else {
+                // evitar que se dupliquen estilos o nombres, no modificara
+                if (Adsobalin.userContEstilo(estilo)) {
+                    estilo = Adsobalin.userStyle[ind];
+                }
+                if (Adsobalin.userContNombre(nombre)) {
+                    nombre = Adsobalin.userName[ind];
+                }
                 // primero se eliminan los datos del usuario
                 Adsobalin.userClean(ind);
                 // se agrega el nuevo usuario para actualizarlo
@@ -128,7 +166,11 @@ public class Recepciones {
             // para evitar estar conectado y en el menu principal a la vez
             // pero luego puede que se cambie la interfaz con la sincronia
             Adsobalin.isServer = false;
-            raiz.setScene(new Lobby(raiz));
+            Menu gui = (Menu)raiz.getScene();
+            gui.guardarDatos();
+            Platform.runLater(() -> {
+                raiz.setScene(new Lobby(raiz));
+            });
         }
     }
     
@@ -136,23 +178,49 @@ public class Recepciones {
         if (Adsobalin.estado == Adsobalin.EST_MENU ||
                 Adsobalin.estado == Adsobalin.EST_LOBBY) {
             GUIs gui = (GUIs)raiz.getScene();
-            switch (submsj) {
-                case Envios.SUB_CUPO:
-                    gui.setMensaje("no hay cupo", false);
-                    break;
-                case Envios.SUB_ENCURSO:
-                    gui.setMensaje("partida en curso", false);
-                    break;
-                case Envios.SUB_ESTILO:
-                    gui.setMensaje("escoja otro estilo", false);
-                    break;
-                case Envios.SUB_NOMBRE:
-                    gui.setMensaje("escriba otro nombre", false);
-                    break;
-                case Envios.SUB_VERSION:
-                    gui.setMensaje("la versión es diferente", false);
-                    break;
-            }
+            Platform.runLater(() -> {
+                switch (submsj) {
+                    case Envios.SUB_CUPO:
+                        gui.setMensaje("no hay cupo", false);
+                        break;
+                    case Envios.SUB_ENCURSO:
+                        gui.setMensaje("partida en curso", false);
+                        break;
+                    case Envios.SUB_ESTILO:
+                        gui.setMensaje("escoja otro estilo", false);
+                        break;
+                    case Envios.SUB_NOMBRE:
+                        gui.setMensaje("escriba otro nombre", false);
+                        break;
+                    case Envios.SUB_VERSION:
+                        gui.setMensaje("la versión es diferente", false);
+                        break;
+                }
+            });
         }
+    }
+    
+    private void recLobby(byte talla, byte obstaculos, byte tiempo,
+            byte encursable, byte[] npcs, String[] nombres) {
+        if (Adsobalin.estado != Adsobalin.EST_LOBBY) {
+            Platform.runLater(() -> {
+                raiz.setScene(new Lobby(raiz));
+            });
+        }
+        else {
+            Platform.runLater(() -> {
+                Lobby lob = (Lobby)raiz.getScene();
+                lob.setDatos(talla, obstaculos, tiempo,
+                        encursable, npcs, nombres);
+            });
+        }
+    }
+    
+    private boolean apruebaServerPing(byte newOrden) {
+        if (newOrden > server_orden || (server_orden - newOrden) > 127) {
+            server_orden = newOrden;
+            return true;
+        }
+        return false;
     }
 }

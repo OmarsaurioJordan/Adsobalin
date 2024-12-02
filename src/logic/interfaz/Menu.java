@@ -31,14 +31,10 @@ public class Menu extends GUIs {
         Adsobalin.estado = Adsobalin.EST_MENU;
         Adsobalin.isServer = false;
         Conector.myServer = "";
+        Conector.serverPing = Conector.PING;
         Adsobalin.userClean();
         
         // permite guardar la informacion de la interfaz cuando esta cierra
-        raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
-            if (oldScn == this) {
-                guardarDatos();
-            }
-        });
         raiz.setOnCloseRequest(event -> {
             guardarDatos();
         });
@@ -249,7 +245,7 @@ public class Menu extends GUIs {
         }
     }
     
-    private void guardarDatos() {
+    public void guardarDatos() {
         data.setData("inicial", "1");
         data.setData("grupo", String.valueOf(Adsobalin.grupo));
         data.setData("estilo", String.valueOf(Adsobalin.estilo));

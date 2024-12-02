@@ -5,11 +5,15 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.nio.ByteBuffer;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 import logic.interfaz.Adsobalin;
+import logic.interfaz.Menu;
 
 public class Conector {
     
+    // periodo en milisegundos para mandar mensajes en rafaga
+    public static final int LAN_SPEED_MS = 100;
     // identificador unico del software para sus mensajes UDP
     public static final int SOFT_ID = 69750244;
     // talla del buffer de recepcion, ajustar al minimo necesario
@@ -27,6 +31,8 @@ public class Conector {
     // cuando es cliente guarda ip servidor
     //indica que esta a la escucha para por ejemplo cambiar de interfaz
     public static String myServer = "";
+    // cuando llega a 0 el cliente detecta que el servidor se desconecto
+    public static float serverPing = PING;
     
     public Conector(int puerto) {
         this.puerto = puerto;
@@ -38,6 +44,18 @@ public class Conector {
         }
         // inicializar los datos de conexiones a servidor
         Adsobalin.userClean();
+        
+        // crear hilo que envia las actualizaciones y ping principales
+        Thread hilo = new Thread(() -> {
+            while (true) {
+                try {
+                    infoPing();
+                    Thread.sleep(LAN_SPEED_MS);
+                }
+                catch (Exception e) {}
+            }
+        });
+        hilo.start();
     }
     
     public void setEscuchar(Stage raiz) {
@@ -53,6 +71,19 @@ public class Conector {
     
     public boolean isSocketOk() {
         return socket != null;
+    }
+    
+    public static void enviaAll(byte[] data, String exclusionIP) {
+        // exclusionIP puede ser vacio
+        String d;
+        for (int i = 0; i < 18; i++) {
+            if (i != Adsobalin.indice) {
+                d = Adsobalin.userIP[i];
+                if (!d.isEmpty() && !d.equals(exclusionIP)) {
+                    enviaMsj(data, d);
+                }
+            }
+        }
     }
     
     public static boolean enviaMsj(byte[] data, String destino) {
@@ -129,5 +160,43 @@ public class Conector {
         buff.putInt(SOFT_ID);
         buff.put(idMsj);
         return buff;
+    }
+    
+    private void infoPing() {
+        if (Adsobalin.isServer) {
+            switch (Adsobalin.estado) {
+                case Adsobalin.EST_LOBBY:
+                    Envios.sendLobby();
+                    break;
+                case Adsobalin.EST_JUEGO:
+                    Envios.sendNPC();
+                    break;
+                case Adsobalin.EST_FINAL:
+                    Envios.sendResult();
+                    break;
+            }
+            
+            // verificar si los clientes se han desconectado
+            // Tarea
+        }
+        else {
+            switch (Adsobalin.estado) {
+                case Adsobalin.EST_LOBBY:
+                case Adsobalin.EST_FINAL:
+                    
+                    break;
+                case Adsobalin.EST_JUEGO:
+                    
+                    break;
+            }
+            
+            // verificar si el servidor sigue conectado
+            serverPing -= LAN_SPEED_MS / 1000f;
+            if (serverPing <= 0) {
+                Platform.runLater(() -> {
+                    raiz.setScene(new Menu(raiz));
+                });
+            }
+        }
     }
 }

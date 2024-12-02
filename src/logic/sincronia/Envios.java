@@ -3,6 +3,7 @@ package logic.sincronia;
 
 import java.nio.ByteBuffer;
 import logic.interfaz.Adsobalin;
+import logic.interfaz.Lobby;
 
 public abstract class Envios {
     
@@ -25,6 +26,9 @@ public abstract class Envios {
     public static final byte SUB_ENCURSO = 2;
     public static final byte SUB_ESTILO = 3;
     public static final byte SUB_NOMBRE = 4;
+    
+    // incremento del servidor para su ping
+    private static byte server_orden = 0;
     
     public static boolean sendHola(String nombre, String destino,
             int estilo, int grupo) {
@@ -103,7 +107,7 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static boolean sendNPC(String destino) {
+    public static void sendNPC() {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             0);
@@ -111,21 +115,32 @@ public abstract class Envios {
         // ingresar los datos especificos
         
         // empaquetar el buffer y enviarlo
-        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+        Conector.enviaAll(Conector.buf2arr(buff), "");
     }
     
-    public static boolean sendLobby(String destino) {
+    public static void sendLobby() {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
-            0);
+            5 + 18 + 18 * (Adsobalin.NAME_LEN + 1));
         
         // ingresar los datos especificos
+        buff.put(putServerOrden());
+        Lobby lob = (Lobby)Adsobalin.raiz.getScene();
+        buff.put((byte)lob.getDatos("talla"));
+        buff.put((byte)lob.getDatos("obstaculos"));
+        buff.put((byte)lob.getDatos("tiempo"));
+        buff.put((byte)lob.getDatos("encursable"));
+        String[] n = lob.getNombres();
+        for (int i = 0; i < 18; i++) {
+            buff.put((byte)lob.getDatos("npc" + i));
+            Conector.buffPutString(buff, n[i]);
+        }
         
         // empaquetar el buffer y enviarlo
-        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+        Conector.enviaAll(Conector.buf2arr(buff), "");
     }
     
-    public static boolean sendResult(String destino) {
+    public static void sendResult() {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_RESULT,
             0);
@@ -133,7 +148,7 @@ public abstract class Envios {
         // ingresar los datos especificos
         
         // empaquetar el buffer y enviarlo
-        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+        Conector.enviaAll(Conector.buf2arr(buff), "");
     }
     
     public static boolean sendPlano(String destino) {
@@ -153,5 +168,16 @@ public abstract class Envios {
         
         // empaquetar el buffer y enviarlo
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+    }
+    
+    private static byte putServerOrden() {
+        byte b = server_orden;
+        if (server_orden == 255) {
+            server_orden = 0;
+        }
+        else {
+            server_orden++;
+        }
+        return b;
     }
 }

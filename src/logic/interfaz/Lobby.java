@@ -35,11 +35,6 @@ public class Lobby extends GUIs {
         Adsobalin.estado = Adsobalin.EST_LOBBY;
         
         // permite guardar la informacion de la interfaz cuando esta cierra
-        raiz.sceneProperty().addListener((obs, oldScn, newScn) -> {
-            if (oldScn == this) {
-                guardarDatos();
-            }
-        });
         raiz.setOnCloseRequest(event -> {
             guardarDatos();
         });
@@ -251,7 +246,6 @@ public class Lobby extends GUIs {
         else {
             Envios.sendHola(Adsobalin.nombre, Conector.myServer,
                     Adsobalin.estilo, grupo);
-            guardarDatos();
             raiz.setScene(new Menu(raiz));
         }
     }
@@ -311,5 +305,52 @@ public class Lobby extends GUIs {
         }
         data.setData("NPCs", String.valueOf(flag));
         data.guardarData(Adsobalin.DATAPATH);
+    }
+    
+    public int getDatos(String codigo) {
+        switch (codigo) {
+            case "talla":
+                return Integer.parseInt(configMap.get(0).getText());
+            case "obstaculos":
+                return Integer.parseInt(configMap.get(1).getText());
+            case "tiempo":
+                return Integer.parseInt(configMap.get(2).getText());
+            case "encursable":
+                if (chkConex.isSelected()) {
+                    return 1;
+                }
+                return 0;
+            default:
+                for (int i = 0; i < 18; i++) {
+                    if (codigo.equals("npc" + i)) {
+                        if (activaNPCs.get(i).isSelected()) {
+                            return 1;
+                        }
+                        return 0;
+                    }
+                }
+                break;
+        }
+        return 0;
+    }
+    
+    public String[] getNombres() {
+        String[] names = new String[18];
+        for (int i = 0; i < 18; i++) {
+            names[i] = nombres.get(i).getText();
+        }
+        return names;
+    }
+    
+    public void setDatos(byte talla, byte obstaculos, byte tiempo,
+            byte encursable, byte[] npcs, String[] names) {
+        configMap.get(0).setText("" + talla);
+        configMap.get(1).setText("" + obstaculos);
+        configMap.get(2).setText("" + tiempo);
+        chkConex.setSelected(encursable != 0);
+        for (int i = 0; i < 18; i++) {
+            activaNPCs.get(i).setSelected(npcs[i] != 0);
+            nombres.get(i).setText(names[i]);
+        }
     }
 }
