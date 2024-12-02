@@ -179,7 +179,7 @@ public class Conector {
             // verificar si los clientes se han desconectado
             // Tarea
         }
-        else {
+        else if (Adsobalin.estado != Adsobalin.EST_MENU) {
             switch (Adsobalin.estado) {
                 case Adsobalin.EST_LOBBY:
                 case Adsobalin.EST_FINAL:
