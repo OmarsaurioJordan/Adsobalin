@@ -2,6 +2,7 @@ TAREAS ADSOBALIN:
 0
 - poner en pantalla completa con F4.
 - evitar cambio de tamaño de pantalla al pasar de interfaz.
+- no se está guardando la información al salir estando en lobby.
 1
 - hacer alertas que atraigan NPCs.
 - atraer NPC al ser golpeado (verificar código...).
@@ -9,12 +10,11 @@ TAREAS ADSOBALIN:
 3
 - X, notificaciones deslizantes.
 4
-- X, lograr hacer conexión C/S.
 - X, envío y recepción del mapa.
 - X, envio de creación de proyectiles.
 - X, envío de solicitud de daño.
 - X, envío de player.
-- S, envío de servidor NPC, lobby, result.
+- S, envío de servidor NPC, result.
 5
 - sonidos de efectos 2D, falta kill.
 - sonidos efectos 1D.

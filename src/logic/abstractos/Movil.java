@@ -43,7 +43,7 @@ public abstract class Movil extends Objeto {
     // los moviles mueven su ubicacion y luego la posicion la sigue
     public float[] ubicacion = {0f, 0f};
     // el angulo verdadero en que apunta, manejado por codigo, radianes
-    protected float anguMira = 0f;
+    public float anguMira = 0f;
     // identificador unico que se mantiene entre varias maquinas
     public int indice = -1;
     // para mostrar el nickname del jugador propietario
@@ -89,6 +89,19 @@ public abstract class Movil extends Objeto {
                 12f * delta, VELOCIDAD * delta * 2f);
         // hace que el angulo se acerque a la mira
         angulo = Tools.interpAngle(angulo, anguMira, VELROT_MIRA * delta);
+    }
+    
+    public boolean isHit() {
+        return tempGolpe != 0;
+    }
+    
+    public boolean isInmune() {
+        return tempInmune != 0;
+    }
+    
+    public void setTemps(byte hit, byte inmune) {
+        tempGolpe = TEMP_GOLPE_MAX * hit;
+        tempInmune = TEMP_INMUNE_MAX * inmune;
     }
     
     protected void temporizar(float delta) {

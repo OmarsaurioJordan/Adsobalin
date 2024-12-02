@@ -78,22 +78,29 @@ public class Mundo extends GUIs {
             int obstaculos, int tiempo) {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_JUEGO;
-        radioMundo = (int)(((RADIO / 2) * (1 + talla)) * Adsobalin.ESCALA);
+        if (talla > 10) {
+            radioMundo = talla;
+        }
+        else {
+            radioMundo = (int)(((RADIO / 2) * (1 + talla)) * Adsobalin.ESCALA);
+        }
         centroMundo[0] = radioMundo;
         centroMundo[1] = radioMundo;
         tiempoRestante = tiempo * 60f + TEMP_RESPAWN_MAX;
-        for (int i = 0; i < 18; i++) {
-            if (npcok[i]) {
-                if (Adsobalin.userIsNPC(i)) {
-                    npcRespawn[i] = TEMP_RESPAWN_MAX +
-                            Adsobalin.DADO.nextFloat();;
+        if (Adsobalin.isServer) {
+            for (int i = 0; i < 18; i++) {
+                if (npcok[i]) {
+                    if (Adsobalin.userIsNPC(i)) {
+                        npcRespawn[i] = TEMP_RESPAWN_MAX +
+                                Adsobalin.DADO.nextFloat();
+                    }
+                    else {
+                        npcRespawn[i] = 0f;
+                    }
                 }
                 else {
-                    npcRespawn[i] = 0f;
+                    npcRespawn[i] = -1f;
                 }
-            }
-            else {
-                npcRespawn[i] = -1f;
             }
         }
         setCursor(Cursor.NONE);
@@ -389,6 +396,62 @@ public class Mundo extends GUIs {
             if (Adsobalin.userIsNPC(indNPC)) {
                 npcRespawn[indNPC] = TEMP_RESPAWN_MAX;
             }
+        }
+    }
+    
+    public float[] getNPC(int ind) {
+        float[] res = {0f, 0f, 0f, 0f, 0f};
+        Object obj;
+        Automata aut;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Automata.class.isInstance(obj)) {
+                aut = (Automata)obj;
+                if (aut.indice == ind) {
+                    res[0] = aut.ubicacion[0];
+                    res[1] = aut.ubicacion[1];
+                    res[2] = aut.anguMira;
+                    if (aut.isHit()) {
+                        res[3] = 1f;
+                    }
+                    if (aut.isInmune()) {
+                        res[4] = 1f;
+                    }
+                    break;
+                }
+            }
+        }
+        return res;
+    }
+    
+    public void setNPC(int ind, float[] pos, float ang,
+            byte hit, byte inmune) {
+        Object obj;
+        Sombra sss;
+        boolean okey = false;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Sombra.class.isInstance(obj)) {
+                sss = (Sombra)obj;
+                if (pos[0] == 0 && pos[1] == 0) {
+                    deleteObjeto(sss);
+                }
+                else {
+                    sss.ubicacion[0] = pos[0];
+                    sss.ubicacion[1] = pos[1];
+                    sss.anguMira = ang;
+                    sss.setTemps(hit, inmune);
+                }
+                okey = true;
+                break;
+            }
+        }
+        if (!okey && pos[0] != 0 && pos[1] != 0) {
+            obj = newObjeto(Sombra.class, pos);
+            sss = (Sombra)obj;
+            sss.setAvatar(Adsobalin.userGetGrupo(ind), ind, 0, "");
+            sss.anguMira = ang;
+            sss.setTemps(hit, inmune);
         }
     }
     

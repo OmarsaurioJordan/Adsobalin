@@ -4,6 +4,7 @@ package logic.sincronia;
 import java.nio.ByteBuffer;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Lobby;
+import logic.interfaz.Mundo;
 
 public abstract class Envios {
     
@@ -110,9 +111,37 @@ public abstract class Envios {
     public static void sendNPC() {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
-            0);
+            2 + Float.BYTES + Integer.BYTES * 21 + (Adsobalin.NAME_LEN + 1) +
+                    Float.BYTES * 3 * 18 + 2 * 18);
         
         // ingresar los datos especificos
+        buff.put(putServerOrden());
+        Mundo mun = (Mundo)Adsobalin.raiz.getScene();
+        buff.putFloat(mun.tiempoRestante);
+        buff.putInt(Mundo.radioMundo);
+        buff.putInt(Adsobalin.gruPoints[0]);
+        buff.putInt(Adsobalin.gruPoints[1]);
+        for (int i = 0; i < 18; i++) {
+            buff.putInt(Adsobalin.userPoints[i]);
+        }
+        int utr = Adsobalin.userBestPoints();
+        if (utr == -1) {
+            buff.put((byte)0);
+            Conector.buffPutString(buff, "");
+        }
+        else {
+            buff.put((byte)Adsobalin.userPoints[utr]);
+            Conector.buffPutString(buff, Adsobalin.userName[utr]);
+        }
+        float[] npc;
+        for (int i = 0; i < 18; i++) {
+            npc = mun.getNPC(i);
+            buff.putFloat(npc[0]); // x
+            buff.putFloat(npc[1]); // y
+            buff.putFloat(npc[2]); // ang
+            buff.put((byte)npc[3]); // hit
+            buff.put((byte)npc[4]); // inmune
+        }
         
         // empaquetar el buffer y enviarlo
         Conector.enviaAll(Conector.buf2arr(buff), "");

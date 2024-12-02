@@ -55,6 +55,7 @@ public class Conector {
                 catch (Exception e) {}
             }
         });
+        hilo.setDaemon(true);
         hilo.start();
     }
     

@@ -8,6 +8,7 @@ import logic.interfaz.GUIs;
 import logic.interfaz.Lobby;
 import logic.interfaz.Menu;
 import javafx.application.Platform;
+import logic.interfaz.Mundo;
 
 public class Recepciones {
     
@@ -80,6 +81,40 @@ public class Recepciones {
                                 recLobby(
                                         talla, obstaculos, tiempo,
                                         encursable, npcs, nombres);
+                            }
+                        }
+                        break;
+                    
+                    case Envios.MSJ_NPC:
+                        // es cliente y tiene un servidor asociado
+                        if (!Adsobalin.isServer &&
+                                !Conector.myServer.isEmpty()) {
+                            Conector.serverPing = Conector.PING;
+                            if (apruebaServerPing(data.get())) {
+                                float tiempo = data.getFloat();
+                                int radioMundial = data.getInt();
+                                Adsobalin.gruPoints[0] = data.getInt();
+                                Adsobalin.gruPoints[1] = data.getInt();
+                                for (int i = 0; i < 18; i++) {
+                                    Adsobalin.userPoints[i] = data.getInt();
+                                }
+                                byte bestInd = data.get();
+                                String bestName = Conector.buffGetString(data);
+                                Adsobalin.userName[bestInd] = bestName;
+                                if (recNPC(tiempo, radioMundial)) {
+                                    Mundo mun = (Mundo)raiz.getScene();
+                                    float[] pos = {0f, 0f};
+                                    float ang;
+                                    byte hit, inmune;
+                                    for (int i = 0; i < 18; i++) {
+                                        pos[0] = data.getFloat();
+                                        pos[1] = data.getFloat();
+                                        ang = data.getFloat();
+                                        hit = data.get();
+                                        inmune = data.get();
+                                        mun.setNPC(i, pos, ang, hit, inmune);
+                                    }
+                                }
                             }
                         }
                         break;
@@ -214,6 +249,19 @@ public class Recepciones {
                         encursable, npcs, nombres);
             });
         }
+    }
+    
+    private boolean recNPC(float tiempo, int radioMundial) {
+        if (Adsobalin.estado != Adsobalin.EST_JUEGO) {
+            Platform.runLater(() -> {
+                raiz.setScene(new Mundo(raiz, null, radioMundial, 0, 1));
+            });
+            return false;
+        }
+        else {
+            Mundo.tiempoRestante = tiempo;
+        }
+        return true;
     }
     
     private boolean apruebaServerPing(byte newOrden) {
