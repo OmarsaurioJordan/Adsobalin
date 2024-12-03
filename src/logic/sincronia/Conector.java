@@ -13,7 +13,7 @@ import logic.interfaz.Menu;
 public class Conector {
     
     // periodo en milisegundos para mandar mensajes en rafaga
-    public static final int LAN_SPEED_MS = 1000;
+    public static final int LAN_SPEED_MS = 100;
     // identificador unico del software para sus mensajes UDP
     public static final int SOFT_ID = 69750244;
     // talla del buffer de recepcion, ajustar al minimo necesario
@@ -53,7 +53,9 @@ public class Conector {
                     infoPing();
                     Thread.sleep(LAN_SPEED_MS);
                 }
-                catch (Exception e) {}
+                catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         hilo.setDaemon(true);
@@ -97,6 +99,7 @@ public class Conector {
             socket.send(pack);
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
         return true;
@@ -113,7 +116,9 @@ public class Conector {
                 String ip = pack.getAddress().toString().replace("/", "");
                 recividor.depuraMsj(arr2buf(pack.getData()), ip);
             }
-            catch (Exception ex) {}
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
         }
     }
     

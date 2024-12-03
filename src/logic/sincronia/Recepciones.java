@@ -100,7 +100,9 @@ public class Recepciones {
                                 }
                                 byte bestInd = data.get();
                                 String bestName = Conector.buffGetString(data);
-                                Adsobalin.userName[bestInd] = bestName;
+                                if (bestInd != -1) {
+                                    Adsobalin.userName[bestInd] = bestName;
+                                }
                                 if (recNPC(tiempo, radioMundial)) {
                                     Mundo mun = (Mundo)raiz.getScene();
                                     float[] pos = {0f, 0f};
@@ -121,7 +123,9 @@ public class Recepciones {
                 }
             }
         }
-        catch (Exception ex) {}
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     private void recHola(int version, int estilo, int grupo,

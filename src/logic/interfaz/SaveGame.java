@@ -17,6 +17,7 @@ public class SaveGame {
             return true;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
     }
@@ -36,6 +37,7 @@ public class SaveGame {
             return true;
         }
         catch (Exception ex) {
+            ex.printStackTrace();
             return false;
         }
     }

@@ -126,12 +126,11 @@ public abstract class Envios {
             buff.putInt(Adsobalin.userPoints[i]);
         }
         int utr = Adsobalin.userBestPoints();
+        buff.put((byte)utr);
         if (utr == -1) {
-            buff.put((byte)0);
             Conector.buffPutString(buff, "");
         }
         else {
-            buff.put((byte)Adsobalin.userPoints[utr]);
             Conector.buffPutString(buff, Adsobalin.userName[utr]);
         }
         float[] npc;
