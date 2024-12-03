@@ -48,7 +48,6 @@ public class Sombra extends Movil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawCirculo(gc, posicion, radio, true, Color.BLACK);
-        //drawMovil(gc, sprite);
+        drawMovil(gc, sprite);
     }
 }

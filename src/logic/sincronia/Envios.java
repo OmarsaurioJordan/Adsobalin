@@ -118,7 +118,7 @@ public abstract class Envios {
         // ingresar los datos especificos
         buff.put(putServerOrden());
         Mundo mun = (Mundo)Adsobalin.raiz.getScene();
-        buff.putFloat(mun.tiempoRestante);
+        buff.putFloat(Mundo.tiempoRestante);
         buff.putInt(Mundo.radioMundo);
         buff.putInt(Adsobalin.gruPoints[0]);
         buff.putInt(Adsobalin.gruPoints[1]);
@@ -202,12 +202,7 @@ public abstract class Envios {
     
     private static byte putServerOrden() {
         byte b = server_orden;
-        if (server_orden == 255) {
-            server_orden = 0;
-        }
-        else {
-            server_orden++;
-        }
+        server_orden++;
         return b;
     }
 }

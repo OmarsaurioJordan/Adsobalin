@@ -427,21 +427,21 @@ public class Mundo extends GUIs {
     public void setNPC(int ind, float[] pos, float ang,
             byte hit, byte inmune) {
         Object obj;
-        Sombra sss;
+        Sombra aut;
         boolean okey = false;
         for (int n = 0; n < pool.size(); n++) {
             obj = pool.get(n);
             if (Sombra.class.isInstance(obj)) {
-                sss = (Sombra)obj;
-                if (sss.indice == ind) {
+                aut = (Sombra)obj;
+                if (aut.indice == ind) {
                     if (pos[0] == 0 && pos[1] == 0) {
-                        deleteObjeto(sss);
+                        deleteObjeto(aut);
                     }
                     else {
-                        sss.ubicacion[0] = pos[0];
-                        sss.ubicacion[1] = pos[1];
-                        sss.anguMira = ang;
-                        sss.setTemps(hit, inmune);
+                        aut.ubicacion[0] = pos[0];
+                        aut.ubicacion[1] = pos[1];
+                        aut.anguMira = ang;
+                        aut.setTemps(hit, inmune);
                     }
                     okey = true;
                     break;
@@ -449,11 +449,10 @@ public class Mundo extends GUIs {
             }
         }
         if (!okey && pos[0] != 0 && pos[1] != 0) {
-            obj = newObjeto(Sombra.class, pos);
-            sss = (Sombra)obj;
-            sss.setAvatar(Adsobalin.userGetGrupo(ind), ind, 0, "");
-            sss.anguMira = ang;
-            sss.setTemps(hit, inmune);
+            aut = (Sombra)newObjeto(Sombra.class, pos);
+            aut.setAvatar(Adsobalin.userGetGrupo(ind), ind, 0, "");
+            aut.anguMira = ang;
+            aut.setTemps(hit, inmune);
         }
     }
     
