@@ -433,17 +433,19 @@ public class Mundo extends GUIs {
             obj = pool.get(n);
             if (Sombra.class.isInstance(obj)) {
                 sss = (Sombra)obj;
-                if (pos[0] == 0 && pos[1] == 0) {
-                    deleteObjeto(sss);
+                if (sss.indice == ind) {
+                    if (pos[0] == 0 && pos[1] == 0) {
+                        deleteObjeto(sss);
+                    }
+                    else {
+                        sss.ubicacion[0] = pos[0];
+                        sss.ubicacion[1] = pos[1];
+                        sss.anguMira = ang;
+                        sss.setTemps(hit, inmune);
+                    }
+                    okey = true;
+                    break;
                 }
-                else {
-                    sss.ubicacion[0] = pos[0];
-                    sss.ubicacion[1] = pos[1];
-                    sss.anguMira = ang;
-                    sss.setTemps(hit, inmune);
-                }
-                okey = true;
-                break;
             }
         }
         if (!okey && pos[0] != 0 && pos[1] != 0) {

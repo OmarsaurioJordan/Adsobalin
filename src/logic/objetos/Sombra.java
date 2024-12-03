@@ -3,6 +3,7 @@ package logic.objetos;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Color;
 import logic.abstractos.Movil;
 import logic.abstractos.Objeto;
 import logic.interfaz.Adsobalin;
@@ -47,6 +48,7 @@ public class Sombra extends Movil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawMovil(gc, sprite);
+        drawCirculo(gc, posicion, radio, true, Color.BLACK);
+        //drawMovil(gc, sprite);
     }
 }

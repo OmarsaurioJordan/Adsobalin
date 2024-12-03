@@ -111,8 +111,9 @@ public abstract class Envios {
     public static void sendNPC() {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
-            2 + Float.BYTES + Integer.BYTES * 21 + (Adsobalin.NAME_LEN + 1) +
-                    Float.BYTES * 3 * 18 + 2 * 18);
+            1 + Float.BYTES + Integer.BYTES * 3 +
+            Integer.BYTES * 18 + 1 + (Adsobalin.NAME_LEN + 1) +
+            18 * (Float.BYTES * 3 + 2));
         
         // ingresar los datos especificos
         buff.put(putServerOrden());
