@@ -120,10 +120,10 @@ public class Mundo extends GUIs {
             CreaElementosRandom(((float)obstaculos /
                     Lobby.DENSI_OBST_MAX) * 0.3f,
                     Arbol.class, Solido.RADIO, 2.5f, Solido.class);
-            // crea decorados
-            CreaElementosRandom(0.5f, Baldoza.class,
-                    Decorado.RADIO, 2.5f, Baldoza.class);
         }
+        // crea decorados
+        CreaElementosRandom(0.5f, Baldoza.class,
+                Decorado.RADIO, 2.5f, Baldoza.class);
         
         // leer la pulsacion de teclas
         setOnKeyPressed(event -> {

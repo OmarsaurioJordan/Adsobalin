@@ -150,7 +150,7 @@ public abstract class Envios {
     public static void sendLobby() {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
-            5 + 18 + 18 * (Adsobalin.NAME_LEN + 1));
+            1 + 4 + 18 * (1 + (Adsobalin.NAME_LEN + 3)));
         
         // ingresar los datos especificos
         buff.put(putServerOrden());

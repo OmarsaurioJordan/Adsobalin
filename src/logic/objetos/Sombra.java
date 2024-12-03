@@ -48,12 +48,12 @@ public class Sombra extends Movil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        if (grupo == Adsobalin.GRU_AZUL) {
+        /*if (grupo == Adsobalin.GRU_AZUL) {
             drawCirculo(gc, posicion, radio, true, Color.BLUE);
         }
         else {
             drawCirculo(gc, posicion, radio, true, Color.RED);
-        }
-        //drawMovil(gc, sprite);
+        }*/
+        drawMovil(gc, sprite);
     }
 }
