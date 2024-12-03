@@ -84,11 +84,18 @@ public abstract class Movil extends Objeto {
     }
     
     protected void moverSync(float delta) {
-        // hace que la posicion se acerque a la ubicacion
-        posicion = Tools.vecInterpolar(posicion, ubicacion,
-                12f * delta, VELOCIDAD * delta * 2f);
-        // hace que el angulo se acerque a la mira
-        angulo = Tools.interpAngle(angulo, anguMira, VELROT_MIRA * delta);
+        // si la distancia es muy grande, teletransporta inmediatamente
+        if (Tools.vecDistancia(posicion, ubicacion) > Automata.VISION / 2f) {
+            posicion = ubicacion.clone();
+            angulo = anguMira;
+        }
+        else {
+            // hace que la posicion se acerque a la ubicacion
+            posicion = Tools.vecInterpolar(posicion, ubicacion,
+                    12f * delta, VELOCIDAD * delta * 2f);
+            // hace que el angulo se acerque a la mira
+            angulo = Tools.interpAngle(angulo, anguMira, VELROT_MIRA * delta);
+        }
     }
     
     public boolean isHit() {

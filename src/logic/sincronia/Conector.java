@@ -17,7 +17,7 @@ public class Conector {
     // identificador unico del software para sus mensajes UDP
     public static final int SOFT_ID = 69750244;
     // talla del buffer de recepcion, ajustar al minimo necesario
-    private static final int LIM_LEC_BUF = 2048;
+    private static final int LIM_LEC_BUF = 8192;
     // tiempo tras el cual desconectar usuarios inactivos
     public static final float PING = 5f;
     
@@ -38,6 +38,7 @@ public class Conector {
         this.puerto = puerto;
         try {
             socket = new DatagramSocket(puerto);
+            socket.setReceiveBufferSize(65536);
         }
         catch (Exception ex) {
             socket = null;
@@ -112,7 +113,7 @@ public class Conector {
                 String ip = pack.getAddress().toString().replace("/", "");
                 recividor.depuraMsj(arr2buf(pack.getData()), ip);
             }
-            catch (Exception ex) {}
+            catch (Exception ex) {ex.printStackTrace();}
         }
     }
     
