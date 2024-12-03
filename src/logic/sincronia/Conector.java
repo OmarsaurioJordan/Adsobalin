@@ -13,7 +13,7 @@ import logic.interfaz.Menu;
 public class Conector {
     
     // periodo en milisegundos para mandar mensajes en rafaga
-    public static final int LAN_SPEED_MS = 100;
+    public static final int LAN_SPEED_MS = 1000;
     // identificador unico del software para sus mensajes UDP
     public static final int SOFT_ID = 69750244;
     // talla del buffer de recepcion, ajustar al minimo necesario
@@ -113,7 +113,7 @@ public class Conector {
                 String ip = pack.getAddress().toString().replace("/", "");
                 recividor.depuraMsj(arr2buf(pack.getData()), ip);
             }
-            catch (Exception ex) {ex.printStackTrace();}
+            catch (Exception ex) {}
         }
     }
     

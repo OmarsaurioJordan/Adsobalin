@@ -22,13 +22,13 @@ public class Cadaver extends Objeto {
     }
     
     public void setCadaver(int grupo, boolean isNPC, float angulo,
-            boolean isPodrido, float tiempoRestante) {
+            boolean isPodrido, float tiempoRest) {
         // si tiempo restante es 0, no habra cambios
         this.grupo = grupo;
         this.isNPC = isNPC;
         this.angulo = angulo;
-        if (tiempoRestante > 0) {
-            tempPudrirse = tiempoRestante;
+        if (tiempoRest > 0) {
+            tempPudrirse = tiempoRest;
         }
         setImagen();
     }
