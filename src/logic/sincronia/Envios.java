@@ -2,6 +2,7 @@ package logic.sincronia;
 // tiene los metodos para comunicacion saliente
 
 import java.nio.ByteBuffer;
+import javafx.stage.Stage;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Lobby;
 import logic.interfaz.Mundo;
@@ -108,7 +109,7 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static boolean sendNPC() {
+    public static boolean sendNPC(Stage raiz) {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             1 + Float.BYTES + Integer.BYTES * 3 +
@@ -119,7 +120,7 @@ public abstract class Envios {
         buff.put(putServerOrden());
         Mundo mun;
         try {
-            mun = (Mundo)Adsobalin.raiz.getScene();
+            mun = (Mundo)raiz.getScene();
         }
         catch (Exception e) {
             return false;
@@ -154,7 +155,7 @@ public abstract class Envios {
         return true;
     }
     
-    public static boolean sendLobby() {
+    public static boolean sendLobby(Stage raiz) {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
             1 + 4 + 18 * (1 + (Adsobalin.NAME_LEN + 3)));
@@ -163,7 +164,7 @@ public abstract class Envios {
         buff.put(putServerOrden());
         Lobby lob;
         try {
-            lob = (Lobby)Adsobalin.raiz.getScene();
+            lob = (Lobby)raiz.getScene();
         }
         catch (Exception e) {
             return false;
@@ -183,7 +184,7 @@ public abstract class Envios {
         return true;
     }
     
-    public static void sendResult() {
+    public static void sendResult(Stage raiz) {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_RESULT,
             0);

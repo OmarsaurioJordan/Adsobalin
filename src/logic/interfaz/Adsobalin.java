@@ -81,9 +81,6 @@ public class Adsobalin extends Application {
     // donde guarda el archivo de configuracion
     public static final String DATAPATH = "src/config/config.properties";
     
-    // guarda el stage para uso global
-    public static Stage raiz = null;
-    
     public static void main(String[] args) {
         conector = new Conector(PUERTO);
         if (conector.isSocketOk()) {
@@ -112,7 +109,6 @@ public class Adsobalin extends Application {
         
         //raiz.setMaximized(true);
         raiz.show();
-        this.raiz = raiz;
     }
     
     private void reEscalar(Stage raiz, double width, double height) {

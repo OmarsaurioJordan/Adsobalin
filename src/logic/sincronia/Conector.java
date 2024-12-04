@@ -173,13 +173,13 @@ public class Conector {
         if (Adsobalin.isServer) {
             switch (Adsobalin.estado) {
                 case Adsobalin.EST_LOBBY:
-                    Envios.sendLobby();
+                    Envios.sendLobby(raiz);
                     break;
                 case Adsobalin.EST_JUEGO:
-                    Envios.sendNPC();
+                    Envios.sendNPC(raiz);
                     break;
                 case Adsobalin.EST_FINAL:
-                    Envios.sendResult();
+                    Envios.sendResult(raiz);
                     break;
             }
             
