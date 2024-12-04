@@ -108,7 +108,10 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static void sendNPC() {
+    public static boolean sendNPC() {
+        if (!(Adsobalin.raiz.getScene() instanceof Mundo)) {
+            return false;
+        }
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             1 + Float.BYTES + Integer.BYTES * 3 +
@@ -145,9 +148,13 @@ public abstract class Envios {
         
         // empaquetar el buffer y enviarlo
         Conector.enviaAll(Conector.buf2arr(buff), "");
+        return true;
     }
     
-    public static void sendLobby() {
+    public static boolean sendLobby() {
+        if (!(Adsobalin.raiz.getScene() instanceof Lobby)) {
+            return false;
+        }
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
             1 + 4 + 18 * (1 + (Adsobalin.NAME_LEN + 3)));
@@ -167,6 +174,7 @@ public abstract class Envios {
         
         // empaquetar el buffer y enviarlo
         Conector.enviaAll(Conector.buf2arr(buff), "");
+        return true;
     }
     
     public static void sendResult() {
