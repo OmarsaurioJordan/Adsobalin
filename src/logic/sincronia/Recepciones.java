@@ -104,18 +104,22 @@ public class Recepciones {
                                     Adsobalin.userName[bestInd] = bestName;
                                 }
                                 if (recNPC(tiempo, radioMundial)) {
-                                    Mundo mun = (Mundo)raiz.getScene();
-                                    float[] pos = {0f, 0f};
-                                    float ang;
-                                    byte hit, inmune;
-                                    for (int i = 0; i < 18; i++) {
-                                        pos[0] = data.getFloat();
-                                        pos[1] = data.getFloat();
-                                        ang = data.getFloat();
-                                        hit = data.get();
-                                        inmune = data.get();
-                                        mun.setNPC(i, pos, ang, hit, inmune);
+                                    try {
+                                        Mundo mun = (Mundo)raiz.getScene();
+                                        float[] pos = {0f, 0f};
+                                        float ang;
+                                        byte hit, inmune;
+                                        for (int i = 0; i < 18; i++) {
+                                            pos[0] = data.getFloat();
+                                            pos[1] = data.getFloat();
+                                            ang = data.getFloat();
+                                            hit = data.get();
+                                            inmune = data.get();
+                                            mun.setNPC(i, pos, ang,
+                                                    hit, inmune);
+                                        }
                                     }
+                                    catch (Exception e) {}
                                 }
                             }
                         }
