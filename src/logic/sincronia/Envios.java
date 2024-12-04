@@ -109,7 +109,7 @@ public abstract class Envios {
     }
     
     public static boolean sendNPC() {
-        if (!(Adsobalin.raiz.getScene() instanceof Mundo)) {
+        if (!Adsobalin.raiz.getScene().getClass().getName().equals("Mundo")) {
             return false;
         }
         // crear un buffer para armar el mensaje
@@ -152,7 +152,7 @@ public abstract class Envios {
     }
     
     public static boolean sendLobby() {
-        if (!(Adsobalin.raiz.getScene() instanceof Lobby)) {
+        if (!Adsobalin.raiz.getScene().getClass().getName().equals("Lobby")) {
             return false;
         }
         // crear un buffer para armar el mensaje
@@ -162,6 +162,9 @@ public abstract class Envios {
         // ingresar los datos especificos
         buff.put(putServerOrden());
         Lobby lob = (Lobby)Adsobalin.raiz.getScene();
+        
+        System.out.println("Lobby: " + Adsobalin.raiz.getScene());
+        
         buff.put((byte)lob.getDatos("talla"));
         buff.put((byte)lob.getDatos("obstaculos"));
         buff.put((byte)lob.getDatos("tiempo"));
