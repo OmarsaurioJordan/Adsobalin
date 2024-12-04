@@ -109,9 +109,6 @@ public abstract class Envios {
     }
     
     public static boolean sendNPC() {
-        if (!Adsobalin.raiz.getScene().getClass().getName().equals("Mundo")) {
-            return false;
-        }
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             1 + Float.BYTES + Integer.BYTES * 3 +
@@ -120,7 +117,13 @@ public abstract class Envios {
         
         // ingresar los datos especificos
         buff.put(putServerOrden());
-        Mundo mun = (Mundo)Adsobalin.raiz.getScene();
+        Mundo mun;
+        try {
+            mun = (Mundo)Adsobalin.raiz.getScene();
+        }
+        catch (Exception e) {
+            return false;
+        }
         buff.putFloat(Mundo.tiempoRestante);
         buff.putInt(Mundo.radioMundo);
         buff.putInt(Adsobalin.gruPoints[0]);
@@ -152,19 +155,19 @@ public abstract class Envios {
     }
     
     public static boolean sendLobby() {
-        if (!Adsobalin.raiz.getScene().getClass().getName().equals("Lobby")) {
-            return false;
-        }
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
             1 + 4 + 18 * (1 + (Adsobalin.NAME_LEN + 3)));
         
         // ingresar los datos especificos
         buff.put(putServerOrden());
-        Lobby lob = (Lobby)Adsobalin.raiz.getScene();
-        
-        System.out.println("Lobby: " + Adsobalin.raiz.getScene());
-        
+        Lobby lob;
+        try {
+            lob = (Lobby)Adsobalin.raiz.getScene();
+        }
+        catch (Exception e) {
+            return false;
+        }
         buff.put((byte)lob.getDatos("talla"));
         buff.put((byte)lob.getDatos("obstaculos"));
         buff.put((byte)lob.getDatos("tiempo"));
