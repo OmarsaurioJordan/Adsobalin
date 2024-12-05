@@ -29,7 +29,7 @@ public abstract class Movil extends Objeto {
     // segundos que dura la cadencia entre disparos
     public static final float TEMP_DISPARO_MAX = 0.2f;
     // segundos que dura la recarga de 1 municion
-    public static final float TEMP_RECARGA_MAX = 0.3f;
+    public static final float TEMP_RECARGA_MAX = 0.2f;
     // segundos que dura la iluminacion al ser golpeado
     public static final float TEMP_GOLPE_MAX = 0.5f;
     // segundos que dura la inmunidad inicial parpadeante
@@ -263,6 +263,15 @@ public abstract class Movil extends Objeto {
         }
     }
     
+    public void drawName(GraphicsContext gc) {
+        if (!nombre.isEmpty()) {
+            gc.save();
+            gc.setFill(Color.WHITE);
+            drawText(gc, nombre, posicion);
+            gc.restore();
+        }
+    }
+    
     protected void drawMask(GraphicsContext gc) {
         gc.save();
         if (grupo == Adsobalin.GRU_AZUL) {
@@ -271,8 +280,7 @@ public abstract class Movil extends Objeto {
         else {
             gc.setFill(Color.RED);
         }
-        gc.fillOval(posicion[0] - radio, posicion[1] - radio,
-                2f * radio, 2f * radio);
+        drawCircle(gc, posicion, radio);
         gc.restore();
     }
 }

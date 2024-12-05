@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
+import logic.interfaz.Adsobalin;
 import logic.interfaz.Mundo;
 
 public abstract class Objeto {
@@ -64,6 +65,19 @@ public abstract class Objeto {
         gc.drawImage(img,
                 pos[0] - img.getWidth() / 2f,
                 pos[1] - img.getHeight() / 2f);
+    }
+    
+    public static void drawText(GraphicsContext gc,
+            String txt, float[] posicion) {
+        float[] pos = realPos(posicion);
+        float desf = 10f * (float)Adsobalin.ESCALA;
+        gc.fillText(txt, pos[0] - desf, pos[1] - desf * 2f);
+    }
+    
+    public static void drawCircle(GraphicsContext gc,
+            float[] posicion, float radio) {
+        float[] pos = realPos(posicion);
+        gc.fillOval(pos[0] - radio, pos[1] - radio, 2f * radio, 2f * radio);
     }
     
     public static void drawCirculo(GraphicsContext gc,

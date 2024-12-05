@@ -631,6 +631,16 @@ public class Mundo extends GUIs {
             }
         }
         
+        // dibujar los nombres de los players
+        Movil mvl;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = (Objeto)pool.get(n);
+            if (Movil.class.isInstance(obj)) {
+                mvl = (Movil)obj;
+                mvl.drawName(gc);
+            }
+        }
+        
         // dibujar la mira difuminada de la camara sobre todo
         gc.drawImage(difuminado, 0f, 0f);
         
