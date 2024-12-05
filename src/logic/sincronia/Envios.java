@@ -127,13 +127,7 @@ public abstract class Envios {
         buff.put((byte)ply[3]); // hit
         buff.put((byte)ply[4]); // inmune
         buff.put((byte)ply[5]); // estilo
-        // el nombre se colocara de vez en cuando para optimizacion
-        if (Adsobalin.DADO.nextFloat() < Conector.LAN_SPEED_MS / 1000f) {
-            Conector.buffPutString(buff, mun.getNamePlayer());
-        }
-        else {
-            Conector.buffPutString(buff, "");
-        }
+        Conector.buffPutString(buff, Adsobalin.nombre);
         
         // empaquetar el buffer y enviarlo
         if (Adsobalin.isServer) {
@@ -158,8 +152,8 @@ public abstract class Envios {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             1 + Float.BYTES + Integer.BYTES * 3 +
-            Integer.BYTES * 18 + 1 + (Adsobalin.NAME_LEN + 1) +
-            18 * (Float.BYTES * 3 + 2));
+            Integer.BYTES * 18 + 2 + 2 * (Adsobalin.NAME_LEN + 1) +
+            18 * (Float.BYTES * 3 + 3));
         
         // ingresar los datos especificos
         buff.put(putServerOrden());
@@ -178,14 +172,22 @@ public abstract class Envios {
         else {
             Conector.buffPutString(buff, Adsobalin.userName[utr]);
         }
+        buff.put((byte)Adsobalin.indice);
+        Conector.buffPutString(buff, Adsobalin.nombre);
         float[] npc;
         for (int i = 0; i < 18; i++) {
-            npc = mun.getNPC(i);
+            if (Adsobalin.indice == i) {
+                npc = mun.getPlayer();
+            }
+            else {
+                npc = mun.getNPC(i);
+            }
             buff.putFloat(npc[0]); // x
             buff.putFloat(npc[1]); // y
             buff.putFloat(npc[2]); // ang
             buff.put((byte)npc[3]); // hit
             buff.put((byte)npc[4]); // inmune
+            buff.put((byte)npc[5]); // estilo
         }
         
         // empaquetar el buffer y enviarlo

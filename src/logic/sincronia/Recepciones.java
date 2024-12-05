@@ -86,41 +86,58 @@ public class Recepciones {
                     
                     case Envios.MSJ_NPC:
                         // es cliente y tiene un servidor asociado
+                        boolean ukey = false;
                         if (!Adsobalin.isServer &&
                                 !Conector.myServer.isEmpty()) {
                             Envios.setServerPing();
                             if (Envios.apruebaServerOrden(data.get())) {
-                                float tiempo = data.getFloat();
-                                int radioMundial = data.getInt();
-                                Adsobalin.gruPoints[0] = data.getInt();
-                                Adsobalin.gruPoints[1] = data.getInt();
+                                ukey = true;
+                            }
+                        }
+                        if (!ukey) {
+                            break;
+                        }
+                        float tiempo = data.getFloat();
+                        int radioMundial = data.getInt();
+                        Adsobalin.gruPoints[0] = data.getInt();
+                        Adsobalin.gruPoints[1] = data.getInt();
+                        for (int i = 0; i < 18; i++) {
+                            Adsobalin.userPoints[i] = data.getInt();
+                        }
+                        byte bestInd = data.get();
+                        String bestName = Conector.buffGetString(data);
+                        if (bestInd != -1) {
+                            Adsobalin.userName[bestInd] = bestName;
+                        }
+                        if (recNPC(tiempo, radioMundial)) {
+                            try {
+                                Mundo mun = (Mundo)raiz.getScene();
+                                int ind = data.get();
+                                String servName = Conector.buffGetString(data);
+                                float[] pos = {0f, 0f};
+                                float ang;
+                                byte hit, inmune, estilo;
                                 for (int i = 0; i < 18; i++) {
-                                    Adsobalin.userPoints[i] = data.getInt();
-                                }
-                                byte bestInd = data.get();
-                                String bestName = Conector.buffGetString(data);
-                                if (bestInd != -1) {
-                                    Adsobalin.userName[bestInd] = bestName;
-                                }
-                                if (recNPC(tiempo, radioMundial)) {
-                                    try {
-                                        Mundo mun = (Mundo)raiz.getScene();
-                                        float[] pos = {0f, 0f};
-                                        float ang;
-                                        byte hit, inmune;
-                                        for (int i = 0; i < 18; i++) {
-                                            pos[0] = data.getFloat();
-                                            pos[1] = data.getFloat();
-                                            ang = data.getFloat();
-                                            hit = data.get();
-                                            inmune = data.get();
-                                            mun.setNPC(i, pos, ang,
-                                                    hit, inmune, (byte)0, "");
-                                        }
+                                    pos[0] = data.getFloat();
+                                    pos[1] = data.getFloat();
+                                    ang = data.getFloat();
+                                    hit = data.get();
+                                    inmune = data.get();
+                                    estilo = data.get();
+                                    if (pos[0] == -1) {
+                                        continue;
                                     }
-                                    catch (Exception e) {}
+                                    if (i == ind) {
+                                        mun.setNPC(i, pos, ang,
+                                                hit, inmune, estilo, servName);
+                                    }
+                                    else {
+                                        mun.setNPC(i, pos, ang,
+                                                hit, inmune, estilo, "");
+                                    }
                                 }
                             }
+                            catch (Exception e) {}
                         }
                         break;
                     
@@ -197,6 +214,21 @@ public class Recepciones {
                         catch (Exception e) {
                             mun = null;
                         }
+                        // abortar si es un cliente
+                        if (!Adsobalin.isServer && mun == null) {
+                            break;
+                        }
+                        // obtener todos los datos, para poder reenviarlo
+                        byte ord = data.get();
+                        int ind = (int)data.get();
+                        float[] pos = {0f, 0f};
+                        pos[0] = data.getFloat();
+                        pos[1] = data.getFloat();
+                        float ang = data.getFloat();
+                        byte hit = data.get();
+                        byte inmune = data.get();
+                        byte estilo = data.get();
+                        String name = Conector.buffGetString(data);
                         // hacer todo lo necesario para sincronizar player
                         if (mun != null) {
                             // establece el ping tal como MSJ_PING
@@ -204,18 +236,8 @@ public class Recepciones {
                                 Envios.incrementaPing(emisor);
                             }
                             // luego verifica el orden del mensaje
-                            byte ord = data.get();
-                            int ind = (int)data.get();
                             if (Envios.apruebaPlayerOrden(ind, ord)) {
                                 // y coloca los datos en el player
-                                float[] pos = {0f, 0f};
-                                pos[0] = data.getFloat();
-                                pos[1] = data.getFloat();
-                                float ang = data.getFloat();
-                                byte hit = data.get();
-                                byte inmune = data.get();
-                                byte estilo = data.get();
-                                String name = Conector.buffGetString(data);
                                 mun.setNPC(ind, pos, ang,
                                         hit, inmune, estilo, name);
                             }

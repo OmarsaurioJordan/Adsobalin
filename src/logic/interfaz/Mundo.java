@@ -440,40 +440,31 @@ public class Mundo extends GUIs {
         return res;
     }
     
-    public String getNamePlayer() {
-        String res = "";
-        Object obj;
-        Player ply;
-        for (int n = 0; n < pool.size(); n++) {
-            obj = pool.get(n);
-            if (Player.class.isInstance(obj)) {
-                ply = (Player)obj;
-                res = ply.nombre;
-                break;
-            }
-        }
-        return res;
-    }
-    
     public float[] getNPC(int ind) {
-        float[] res = new float[5];
-        Object obj;
-        Automata aut;
-        for (int n = 0; n < pool.size(); n++) {
-            obj = pool.get(n);
-            if (Automata.class.isInstance(obj)) {
-                aut = (Automata)obj;
-                if (aut.indice == ind) {
-                    res[0] = aut.ubicacion[0];
-                    res[1] = aut.ubicacion[1];
-                    res[2] = aut.anguMira;
-                    if (aut.isHit()) {
-                        res[3] = 1f;
+        float[] res = new float[6];
+        if (!isNPCinGame(ind)) {
+            res[0] = -1f;
+        }
+        else {
+            Object obj;
+            Automata aut;
+            for (int n = 0; n < pool.size(); n++) {
+                obj = pool.get(n);
+                if (Automata.class.isInstance(obj)) {
+                    aut = (Automata)obj;
+                    if (aut.indice == ind) {
+                        res[0] = aut.ubicacion[0];
+                        res[1] = aut.ubicacion[1];
+                        res[2] = aut.anguMira;
+                        if (aut.isHit()) {
+                            res[3] = 1f;
+                        }
+                        if (aut.isInmune()) {
+                            res[4] = 1f;
+                        }
+                        res[5] = (float)aut.estilo;
+                        break;
                     }
-                    if (aut.isInmune()) {
-                        res[4] = 1f;
-                    }
-                    break;
                 }
             }
         }
