@@ -193,7 +193,7 @@ public class Conector {
                     Envios.sendPing(myServer);
                     break;
                 case Adsobalin.EST_JUEGO:
-                    Envios.sendPlayer(raiz);
+                    Envios.sendPlayer(raiz, myServer);
                     break;
             }
             

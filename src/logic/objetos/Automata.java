@@ -191,7 +191,7 @@ public class Automata extends Movil {
             if (Math.abs(Tools.angDifference(anguMira, angulo)) <
                     (float)Math.PI * 0.2f) {
                 disparar(angulo + (-1f + Adsobalin.DADO.nextFloat() * 2f) *
-                        (float)Math.PI * 0.05f);
+                        (float)Math.PI * 0.05f, true);
             }
         }
     }

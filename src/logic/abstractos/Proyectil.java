@@ -17,10 +17,12 @@ public abstract class Proyectil extends Objeto {
     
     // segundos que dura la existencia del proyectil
     protected float tempExistencia = TEMP_EXISTENCIA_MAX;
-    // identificador unico del jugador o NPC que lo lanzo, Movil.indice
+    // identificador unico del jugador o NPC que lo lanzo
     protected int origen = -1;
     // grupo al que pertenece
     protected int grupo = Adsobalin.GRU_AZUL;
+    // identificador unico al azar: 00 + xxxxxxx (indice + azar)
+    protected int llave = 0;
     
     public Proyectil(float[] posicion, int myTipo) {
         super(posicion, myTipo, RADIO);

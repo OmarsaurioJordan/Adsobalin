@@ -36,6 +36,8 @@ public abstract class Envios {
     public static byte server_orden = 0;
     // incremento de los players para su ping
     public static byte[] players_orden = new byte[18];
+    // historial reciente de proyectiles
+    public static ArrayList<Integer> histoProy = new ArrayList<>();
     
     public static boolean sendHola(String nombre, String destino,
             int estilo, int grupo) {
@@ -92,18 +94,35 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static boolean sendDisparo(String destino) {
+    public static void sendDisparo(int ind, int llave,
+            float[] posicion, float direccion, boolean isFromNPC) {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_DISPARO,
-            0);
+            2 + Integer.BYTES + Float.BYTES * 3);
         
         // ingresar los datos especificos
+        buff.putInt(llave);
+        buff.put((byte)ind);
+        buff.putFloat(posicion[0]);
+        buff.putFloat(posicion[1]);
+        buff.putFloat(direccion);
+        if (isFromNPC) {
+            buff.put((byte)1);
+        }
+        else {
+            buff.put((byte)0);
+        }
         
         // empaquetar el buffer y enviarlo
-        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+        if (Adsobalin.isServer) {
+            Conector.enviaAll(Conector.buf2arr(buff), "");
+        }
+        else {
+            Conector.enviaMsj(Conector.buf2arr(buff), Conector.myServer);
+        }
     }
     
-    public static boolean sendPlayer(Stage raiz) {
+    public static boolean sendPlayer(Stage raiz, String destino) {
         // verificar la informacionn a enviar
         Mundo mun;
         try {
@@ -130,12 +149,7 @@ public abstract class Envios {
         Conector.buffPutString(buff, Adsobalin.nombre);
         
         // empaquetar el buffer y enviarlo
-        if (Adsobalin.isServer) {
-            Conector.enviaAll(Conector.buf2arr(buff), "");
-        }
-        else {
-            Conector.enviaMsj(Conector.buf2arr(buff), Conector.myServer);
-        }
+        Conector.enviaMsj(Conector.buf2arr(buff), destino);
         return true;
     }
     
@@ -335,5 +349,17 @@ public abstract class Envios {
     
     public static void setServerPing() {
         Conector.serverPing = Conector.PING;
+    }
+    
+    public static boolean verifyProy(int llave) {
+        if (!histoProy.contains(llave)) {
+            histoProy.add(llave);
+            // cuando se superen las 100 entradas, borrara las 50 mas antiguas
+            if (histoProy.size() > 100) {
+                histoProy.subList(0, 50).clear();
+            }
+            return true;
+        }
+        return false;
     }
 }

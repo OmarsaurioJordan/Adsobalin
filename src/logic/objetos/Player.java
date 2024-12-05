@@ -84,7 +84,7 @@ public class Player extends Movil {
     
     private void dispararComando(float delta) {
         if (Mundo.teclas[Mundo.KEY_CLICL]) {
-            disparar(angulo);
+            disparar(angulo, false);
         }
         else if (Mundo.teclas[Mundo.KEY_CLICR] ||
                 Mundo.teclas[Mundo.KEY_R]) {

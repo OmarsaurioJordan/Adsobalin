@@ -161,12 +161,12 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    protected Bala disparar(float angulo) {
+    protected Bala disparar(float angulo, boolean isFromNPC) {
         if (tempDisparo == 0 && tempRecarga == 0 && municion > 0) {
             Bala b = (Bala)Mundo.newObjeto(Bala.class,
                     Tools.vecMover(posicion, Movil.RADIO * 2f,
                             this.angulo + (float)Math.PI / 7f));
-            b.setProyectil(angulo, grupo, indice);
+            b.setProyectil(angulo, grupo, indice, isFromNPC);
             municion -= 1;
             if (municion == 0) {
                 tempRecarga = TEMP_RECARGA_MAX;

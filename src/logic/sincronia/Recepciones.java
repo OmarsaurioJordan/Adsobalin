@@ -11,6 +11,7 @@ import javafx.application.Platform;
 import logic.interfaz.Mundo;
 import logic.interfaz.Resultado;
 import logic.objetos.Arbol;
+import logic.objetos.Balin;
 import logic.objetos.Cadaver;
 
 public class Recepciones {
@@ -241,6 +242,40 @@ public class Recepciones {
                                 mun.setNPC(ind, pos, ang,
                                         hit, inmune, estilo, name);
                             }
+                        }
+                        // el servidor debe rebotar el mensaje
+                        if (Adsobalin.isServer) {
+                            Conector.enviaAll(Conector.buf2arr(data), emisor);
+                        }
+                        break;
+                    
+                    case Envios.MSJ_DISPARO:
+                        // verificar que esta en modo juego
+                        Mundo mud = null;
+                        try {
+                            mud = (Mundo)raiz.getScene();
+                        }
+                        catch (Exception e) {
+                            mud = null;
+                        }
+                        // abortar si es un cliente
+                        if (!Adsobalin.isServer && mud == null) {
+                            break;
+                        }
+                        // obtener todos los datos, para poder reenviarlo
+                        int llave = data.getInt();
+                        int origen = data.get();
+                        float[] posd = {0f, 0f};
+                        posd[0] = data.getFloat();
+                        posd[1] = data.getFloat();
+                        float angd = data.getFloat();
+                        boolean isFromNPC = data.get() == 1;
+                        // crear el proyectil
+                        if (mud != null && Envios.verifyProy(llave)) {
+                            Balin b = (Balin)mud.newObjeto(Balin.class, posd);
+                            b.setProyectil(angd,
+                                    Adsobalin.userGetGrupo(origen),
+                                    origen, isFromNPC, llave);
                         }
                         // el servidor debe rebotar el mensaje
                         if (Adsobalin.isServer) {

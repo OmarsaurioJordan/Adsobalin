@@ -7,6 +7,7 @@ import logic.abstractos.Movil;
 import logic.abstractos.Objeto;
 import logic.abstractos.Proyectil;
 import logic.interfaz.Adsobalin;
+import logic.sincronia.Envios;
 
 public class Bala extends Proyectil {
     
@@ -16,9 +17,15 @@ public class Bala extends Proyectil {
         super(posicion, Objeto.OBJ_BALA);
     }
     
-    public void setProyectil(float angulo, int grupo, int origen) {
-        // el origen es el Movil.indice de quien lo lanzo
+    public void setProyectil(float angulo, int grupo, int origen,
+            boolean isFromNPC) {
+        // el origen es el indice de quien lo lanzo
         sprite = setProyectilImg(angulo, grupo, origen);
+        // generar la llave al azar, que contiene el indice
+        llave = (int)(Adsobalin.DADO.nextFloat() * 9999999f);
+        llave = Integer.parseInt((Adsobalin.indice + 1) + "" + llave);
+        // enviar la bala por UDP a otro usuario
+        Envios.sendDisparo(origen, llave, posicion, angulo, isFromNPC);
     }
     
     @Override

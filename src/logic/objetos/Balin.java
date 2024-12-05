@@ -18,10 +18,11 @@ public class Balin extends Proyectil {
     }
     
     public void setProyectil(float angulo, int grupo,
-            int origen, boolean isFromNPC) {
+            int origen, boolean isFromNPC, int llave) {
         // el origen es el Movil.indice de quien lo lanzo
         sprite = setProyectilImg(angulo, grupo, origen);
         this.isFromNPC = isFromNPC;
+        this.llave = llave;
     }
     
     @Override
