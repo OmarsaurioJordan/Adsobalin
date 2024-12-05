@@ -48,6 +48,11 @@ public class Sombra extends Movil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawMovil(gc, sprite);
+        if (sprite == null) {
+            drawMask(gc);
+        }
+        else {
+            drawMovil(gc, sprite);
+        }
     }
 }

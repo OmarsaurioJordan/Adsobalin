@@ -5,6 +5,7 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import javafx.scene.effect.ColorAdjust;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.paint.Color;
 import logic.objetos.Bala;
 import logic.objetos.Player;
 import logic.objetos.Automata;
@@ -260,5 +261,18 @@ public abstract class Movil extends Objeto {
         if (tempGolpe != 0) {
             gc.restore();
         }
+    }
+    
+    protected void drawMask(GraphicsContext gc) {
+        gc.save();
+        if (grupo == Adsobalin.GRU_AZUL) {
+            gc.setFill(Color.BLUE);
+        }
+        else {
+            gc.setFill(Color.RED);
+        }
+        gc.fillOval(posicion[0] - radio, posicion[1] - radio,
+                2f * radio, 2f * radio);
+        gc.restore();
     }
 }

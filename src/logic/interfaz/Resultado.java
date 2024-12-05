@@ -168,11 +168,12 @@ public class Resultado extends GUIs {
         int n = 2;
         for (int i = 0; i < 18; i++) {
             nombres[i].setText(data[n]);
+            if (nombres[i].getText().equals(Adsobalin.nombre)) {
+                nombres[i].setText("(" + nombres[i].getText() + ")");
+            }
             puntos[i].setText(data[n + 1]);
             n += 2;
         }
-        nombres[Adsobalin.indice].setText("(" +
-                nombres[Adsobalin.indice].getText() + ")");
     }
     
     private void ejecutar() {

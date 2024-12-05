@@ -20,5 +20,4 @@ TAREAS ADSOBALIN:
 - disminuir ping clientes para desconectarlos.
 - reiniciar lobby desde resultados, borrar cliente sin IP.
 - al conexión o desconexión, activar o desactivar NPC.
-- en lobby no está apareciendo los paréntesis en cliente.
 .
