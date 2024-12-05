@@ -50,7 +50,7 @@ public class Sombra extends Movil {
     public void draw(GraphicsContext gc) {
         if (sprite == null) {
             // esto es para pruebas, pero nunca deberia verse
-            drawMask(gc);
+            drawMask(gc, grupo);
         }
         else {
             drawMovil(gc, sprite);

@@ -46,6 +46,12 @@ public class Balin extends Proyectil {
     
     @Override
     public void draw(GraphicsContext gc) {
-        drawImagenRot(gc, sprite, posicion, angulo);
+        if (sprite == null) {
+            // esto es para pruebas, pero nunca deberia verse
+            drawMask(gc, grupo);
+        }
+        else {
+            drawImagenRot(gc, sprite, posicion, angulo);
+        }
     }
 }

@@ -74,12 +74,6 @@ public abstract class Objeto {
         gc.fillText(txt, pos[0] - desf, pos[1] - desf * 2f);
     }
     
-    public static void drawCircle(GraphicsContext gc,
-            float[] posicion, float radio) {
-        float[] pos = realPos(posicion);
-        gc.fillOval(pos[0] - radio, pos[1] - radio, 2f * radio, 2f * radio);
-    }
-    
     public static void drawCirculo(GraphicsContext gc,
             float[] posicion, float radio, boolean isFill, Color col) {
         if (col == null) {
@@ -97,6 +91,17 @@ public abstract class Objeto {
             gc.strokeOval(pos[0] - radio, pos[1] - radio,
                     radio * 2f, radio * 2f);
         }
+    }
+    
+    protected void drawMask(GraphicsContext gc, int grupo) {
+        Color c = Color.GREEN;
+        if (grupo == Adsobalin.GRU_AZUL) {
+            c = Color.BLUE;
+        }
+        else if (grupo == Adsobalin.GRU_ROJO) {
+            c = Color.RED;
+        }
+        drawCirculo(gc, posicion, radio, true, c);
     }
     
     public abstract void step(float delta);

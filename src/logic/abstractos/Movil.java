@@ -271,16 +271,4 @@ public abstract class Movil extends Objeto {
             gc.restore();
         }
     }
-    
-    protected void drawMask(GraphicsContext gc) {
-        gc.save();
-        if (grupo == Adsobalin.GRU_AZUL) {
-            gc.setFill(Color.BLUE);
-        }
-        else {
-            gc.setFill(Color.RED);
-        }
-        drawCircle(gc, posicion, radio);
-        gc.restore();
-    }
 }
