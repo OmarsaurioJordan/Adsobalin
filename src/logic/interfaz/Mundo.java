@@ -32,7 +32,7 @@ public class Mundo extends GUIs {
     private static Player myPlayer = null;
     // temporizador de respawn de player
     public static float tempRespawnPlayer = TEMP_RESPAWN_MAX +
-            Adsobalin.DADO.nextFloat();;
+            Adsobalin.DADO.nextFloat();
     
     // guardar las teclas pulsadas
     public static int KEY_UP = 0;
@@ -82,6 +82,7 @@ public class Mundo extends GUIs {
             int obstaculos, int tiempo) {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_JUEGO;
+        limpiarAll();
         if (talla > 10) {
             radioMundo = talla;
         }
@@ -187,6 +188,12 @@ public class Mundo extends GUIs {
         raiz.setOnCloseRequest(event -> {
             aniLoop.stop();
         });
+    }
+    
+    public void limpiarAll() {
+        myPlayer = null;
+        pool.clear();
+        tempRespawnPlayer = TEMP_RESPAWN_MAX + Adsobalin.DADO.nextFloat();
     }
     
     private void creaBases() {

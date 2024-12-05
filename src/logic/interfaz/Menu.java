@@ -25,14 +25,10 @@ public class Menu extends GUIs {
     // objeto para guardar configuracion
     private SaveGame data = new SaveGame();
     
-    
     public Menu(Stage raiz) {
         super(raiz);
         Adsobalin.estado = Adsobalin.EST_MENU;
-        Adsobalin.isServer = false;
-        Conector.myServer = "";
-        Conector.serverPing = Conector.PING;
-        Adsobalin.userClean();
+        reiniciarAll();
         
         // permite guardar la informacion de la interfaz cuando esta cierra
         raiz.setOnCloseRequest(event -> {
@@ -113,6 +109,14 @@ public class Menu extends GUIs {
         // colocar el boton con la forma del avatar
         Button avatar = setAvatar(ww / 2f, hh * 0.75f);
         avatar.setOnAction(event -> cambiarGrupo());
+    }
+    
+    private void reiniciarAll() {
+        Adsobalin.isServer = false;
+        Conector.myServer = "";
+        Conector.serverPing = Conector.PING;
+        Adsobalin.userClean();
+        Adsobalin.indice = -1;
     }
     
     private void ejecutar() {
