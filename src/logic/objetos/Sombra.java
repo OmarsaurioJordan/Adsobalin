@@ -49,6 +49,7 @@ public class Sombra extends Movil {
     @Override
     public void draw(GraphicsContext gc) {
         if (sprite == null) {
+            // esto es para pruebas, pero nunca deberia verse
             drawMask(gc);
         }
         else {

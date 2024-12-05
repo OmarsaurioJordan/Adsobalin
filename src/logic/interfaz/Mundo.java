@@ -15,6 +15,7 @@ import logic.sincronia.*;
 public class Mundo extends GUIs {
     
     // constantes globales de la simulacion
+    public static final double FPS = 60d;
     public static final int RADIO = 720;
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
@@ -167,12 +168,17 @@ public class Mundo extends GUIs {
         // crear el loop principal de simulacion
         aniLoop = new AnimationTimer() {
             private long last = 0L;
+            private double delta = 0d;
             @Override
             public void handle(long now) {
-                double delta = (now - last) / 1000000000.0d;
-                if (delta < 1d && delta > 0.01d) {
-                    step((float)delta);
-                    draw();
+                double dlt = (now - last) / 1000000000.0d;
+                delta = Math.min(1d, delta + dlt);
+                if (delta > 1d / FPS) {
+                    if (Adsobalin.indice != -1) {
+                        step((float)delta);
+                        draw();
+                    }
+                    delta = 0d;
                 }
                 last = now;
             }
