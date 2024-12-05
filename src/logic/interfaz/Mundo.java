@@ -410,8 +410,47 @@ public class Mundo extends GUIs {
         }
     }
     
+    public float[] getPlayer() {
+        float[] res = new float[6];
+        Object obj;
+        Player ply;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Player.class.isInstance(obj)) {
+                ply = (Player)obj;
+                res[0] = ply.ubicacion[0];
+                res[1] = ply.ubicacion[1];
+                res[2] = ply.anguMira;
+                if (ply.isHit()) {
+                    res[3] = 1f;
+                }
+                if (ply.isInmune()) {
+                    res[4] = 1f;
+                }
+                res[5] = (float)ply.estilo;
+                break;
+            }
+        }
+        return res;
+    }
+    
+    public String getNamePlayer() {
+        String res = "";
+        Object obj;
+        Player ply;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Player.class.isInstance(obj)) {
+                ply = (Player)obj;
+                res = ply.nombre;
+                break;
+            }
+        }
+        return res;
+    }
+    
     public float[] getNPC(int ind) {
-        float[] res = {0f, 0f, 0f, 0f, 0f};
+        float[] res = new float[5];
         Object obj;
         Automata aut;
         for (int n = 0; n < pool.size(); n++) {
@@ -436,7 +475,7 @@ public class Mundo extends GUIs {
     }
     
     public void setNPC(int ind, float[] pos, float ang,
-            byte hit, byte inmune) {
+            byte hit, byte inmune, byte estilo, String name) {
         Object obj;
         Sombra aut;
         boolean okey = false;
@@ -448,11 +487,18 @@ public class Mundo extends GUIs {
                     if (pos[0] == 0 && pos[1] == 0) {
                         deleteObjeto(aut);
                     }
+                    else if (aut.estilo != estilo) {
+                        deleteObjeto(aut);
+                        break;
+                    }
                     else {
                         aut.ubicacion[0] = pos[0];
                         aut.ubicacion[1] = pos[1];
                         aut.anguMira = ang;
                         aut.setTemps(hit, inmune);
+                        if (!name.isEmpty()) {
+                            aut.nombre = name;
+                        }
                     }
                     okey = true;
                     break;
@@ -461,7 +507,7 @@ public class Mundo extends GUIs {
         }
         if (!okey && pos[0] != 0 && pos[1] != 0) {
             aut = (Sombra)newObjeto(Sombra.class, pos);
-            aut.setAvatar(Adsobalin.userGetGrupo(ind), ind, 0, "");
+            aut.setAvatar(Adsobalin.userGetGrupo(ind), ind, estilo, name);
             aut.anguMira = ang;
             aut.setTemps(hit, inmune);
         }

@@ -18,7 +18,7 @@ TAREAS ADSOBALIN:
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
 6
-- desconexión de clientes con ping.
+- desconexión de clientes con ping, requiere envío player.
 - reiniciar lobby desde resultados, borrar cliente no IP.
 - al conexión o desconexión, activar o desactivar NPC.
 .

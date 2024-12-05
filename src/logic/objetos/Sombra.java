@@ -22,6 +22,7 @@ public class Sombra extends Movil {
         this.grupo = grupo;
         this.indice = indice;
         this.nombre = nombre;
+        this.estilo = estilo;
         String bcol = "rojos/rojo";
         if (grupo == Adsobalin.GRU_AZUL) {
             bcol = "azules/azul";

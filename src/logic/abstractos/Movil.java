@@ -47,7 +47,9 @@ public abstract class Movil extends Objeto {
     // identificador unico que se mantiene entre varias maquinas
     public int indice = -1;
     // para mostrar el nickname del jugador propietario
-    protected String nombre = "";
+    public String nombre = "";
+    // el conjunto visual del personaje, por defecto NPC
+    public int estilo = 0;
     // direccion en que fue golpeado por ultima vez
     public float angHit = 0f;
     

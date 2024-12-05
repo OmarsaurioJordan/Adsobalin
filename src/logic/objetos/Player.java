@@ -29,12 +29,13 @@ public class Player extends Movil {
     public void setAvatar(int indice) {
         grupo = Adsobalin.grupo;
         nombre = Adsobalin.nombre;
+        estilo = Adsobalin.estilo;
         this.indice = indice;
         String bcol = "rojos/rojo";
         if (grupo == Adsobalin.GRU_AZUL) {
             bcol = "azules/azul";
         }
-        sprite = new Image("assets/" + bcol + Adsobalin.estilo + ".png",
+        sprite = new Image("assets/" + bcol + estilo + ".png",
             120f * 0.75f * (float)Adsobalin.ESCALA,
             120f * 0.75f * (float)Adsobalin.ESCALA,
             false, false);

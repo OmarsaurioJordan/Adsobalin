@@ -18,9 +18,6 @@ public class Recepciones {
     // nodo base de todo el software
     protected Stage raiz;
     
-    // lectura de clientes al ping del servidor
-    private static byte server_orden = 0;
-    
     public Recepciones(Stage raiz) {
         this.raiz = raiz;
     }
@@ -28,7 +25,6 @@ public class Recepciones {
     public void depuraMsj(ByteBuffer data, String emisor) {
         try {
             if (data.getInt() == Conector.SOFT_ID) {
-                byte orden;
                 byte tipo = data.get();
                 switch (tipo) {
                     
@@ -69,8 +65,8 @@ public class Recepciones {
                         // es cliente y tiene un servidor asociado
                         if (!Adsobalin.isServer &&
                                 !Conector.myServer.isEmpty()) {
-                            Conector.serverPing = Conector.PING;
-                            if (apruebaServerPing(data.get())) {
+                            Envios.setServerPing();
+                            if (Envios.apruebaServerOrden(data.get())) {
                                 byte talla = data.get();
                                 byte obstaculos = data.get();
                                 byte tiempo = data.get();
@@ -92,8 +88,8 @@ public class Recepciones {
                         // es cliente y tiene un servidor asociado
                         if (!Adsobalin.isServer &&
                                 !Conector.myServer.isEmpty()) {
-                            Conector.serverPing = Conector.PING;
-                            if (apruebaServerPing(data.get())) {
+                            Envios.setServerPing();
+                            if (Envios.apruebaServerOrden(data.get())) {
                                 float tiempo = data.getFloat();
                                 int radioMundial = data.getInt();
                                 Adsobalin.gruPoints[0] = data.getInt();
@@ -119,7 +115,7 @@ public class Recepciones {
                                             hit = data.get();
                                             inmune = data.get();
                                             mun.setNPC(i, pos, ang,
-                                                    hit, inmune);
+                                                    hit, inmune, (byte)0, "");
                                         }
                                     }
                                     catch (Exception e) {}
@@ -178,11 +174,55 @@ public class Recepciones {
                         // es cliente y tiene un servidor asociado
                         if (!Adsobalin.isServer &&
                                 !Conector.myServer.isEmpty()) {
-                            Conector.serverPing = Conector.PING;
-                            if (apruebaServerPing(data.get())) {
+                            Envios.setServerPing();
+                            if (Envios.apruebaServerOrden(data.get())) {
                                 String txt = Conector.buffGetString(data);
                                 recResultado(txt);
                             }
+                        }
+                        break;
+                    
+                    case Envios.MSJ_PING:
+                        if (Adsobalin.isServer) {
+                            Envios.incrementaPing(emisor);
+                        }
+                        break;
+                    
+                    case Envios.MSJ_PLAYER:
+                        // verificar que esta en modo juego
+                        Mundo mun = null;
+                        try {
+                            mun = (Mundo)raiz.getScene();
+                        }
+                        catch (Exception e) {
+                            mun = null;
+                        }
+                        // hacer todo lo necesario para sincronizar player
+                        if (mun != null) {
+                            // establece el ping tal como MSJ_PING
+                            if (Adsobalin.isServer) {
+                                Envios.incrementaPing(emisor);
+                            }
+                            // luego verifica el orden del mensaje
+                            byte ord = data.get();
+                            int ind = (int)data.get();
+                            if (Envios.apruebaPlayerOrden(ind, ord)) {
+                                // y coloca los datos en el player
+                                float[] pos = {0f, 0f};
+                                pos[0] = data.getFloat();
+                                pos[1] = data.getFloat();
+                                float ang = data.getFloat();
+                                byte hit = data.get();
+                                byte inmune = data.get();
+                                byte estilo = data.get();
+                                String name = Conector.buffGetString(data);
+                                mun.setNPC(ind, pos, ang,
+                                        hit, inmune, estilo, name);
+                            }
+                        }
+                        // el servidor debe rebotar el mensaje
+                        if (Adsobalin.isServer) {
+                            Conector.enviaAll(Conector.buf2arr(data), emisor);
                         }
                         break;
                 }
@@ -345,13 +385,5 @@ public class Recepciones {
             Mundo.tiempoRestante = tiempo;
         }
         return true;
-    }
-    
-    private boolean apruebaServerPing(byte newOrden) {
-        if (newOrden > server_orden || (server_orden - newOrden) > 127) {
-            server_orden = newOrden;
-            return true;
-        }
-        return false;
     }
 }

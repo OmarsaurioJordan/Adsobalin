@@ -23,6 +23,7 @@ public abstract class Envios {
     public static final byte MSJ_LOBBY = 8; // S
     public static final byte MSJ_RESULT = 9; // S
     public static final byte MSJ_PLANO = 10; // C
+    public static final byte MSJ_PING = 11; // C
     
     // listado de tipos de submensajes
     public static final byte SUB_VERSION = 0;
@@ -32,7 +33,9 @@ public abstract class Envios {
     public static final byte SUB_NOMBRE = 4;
     
     // incremento del servidor para su ping
-    private static byte server_orden = 0;
+    public static byte server_orden = 0;
+    // incremento de los players para su ping
+    public static byte[] players_orden = new byte[18];
     
     public static boolean sendHola(String nombre, String destino,
             int estilo, int grupo) {
@@ -100,15 +103,46 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static boolean sendPlayer(String destino) {
+    public static boolean sendPlayer(Stage raiz) {
+        // verificar la informacionn a enviar
+        Mundo mun;
+        try {
+            mun = (Mundo)raiz.getScene();
+        }
+        catch (Exception e) {
+            return false;
+        }
+        
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_PLAYER,
-            0);
+            5 + Float.BYTES * 3 + (Adsobalin.NAME_LEN + 1));
         
         // ingresar los datos especificos
+        buff.put(putPlayerOrden());
+        buff.put((byte)Adsobalin.indice);
+        float[] ply = mun.getPlayer();
+        buff.putFloat(ply[0]); // x
+        buff.putFloat(ply[1]); // y
+        buff.putFloat(ply[2]); // ang
+        buff.put((byte)ply[3]); // hit
+        buff.put((byte)ply[4]); // inmune
+        buff.put((byte)ply[5]); // estilo
+        // el nombre se colocara de vez en cuando para optimizacion
+        if (Adsobalin.DADO.nextFloat() < Conector.LAN_SPEED_MS / 1000f) {
+            Conector.buffPutString(buff, mun.getNamePlayer());
+        }
+        else {
+            Conector.buffPutString(buff, "");
+        }
         
         // empaquetar el buffer y enviarlo
-        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+        if (Adsobalin.isServer) {
+            Conector.enviaAll(Conector.buf2arr(buff), "");
+        }
+        else {
+            Conector.enviaMsj(Conector.buf2arr(buff), Conector.myServer);
+        }
+        return true;
     }
     
     public static boolean sendNPC(Stage raiz) {
@@ -222,6 +256,14 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
+    public static boolean sendPing(String destino) {
+        // crear un buffer para armar el mensaje
+        ByteBuffer buff = Conector.newBuffer(MSJ_PING, 0);
+        
+        // empaquetar el buffer y enviarlo
+        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+    }
+    
     public static boolean sendMundo(Stage raiz, String destino) {
         // verificar y obtener la informacion a enviar
         Mundo mun;
@@ -257,5 +299,39 @@ public abstract class Envios {
         byte b = server_orden;
         server_orden++;
         return b;
+    }
+    
+    public static boolean apruebaServerOrden(byte newOrden) {
+        if (newOrden > server_orden || (server_orden - newOrden) > 127) {
+            server_orden = newOrden;
+            return true;
+        }
+        return false;
+    }
+    
+    private static byte putPlayerOrden() {
+        byte b = players_orden[Adsobalin.indice];
+        players_orden[Adsobalin.indice]++;
+        return b;
+    }
+    
+    public static boolean apruebaPlayerOrden(int indice, byte newOrden) {
+        byte actual = players_orden[indice];
+        if (newOrden > actual || (actual - newOrden) > 127) {
+            players_orden[indice] = newOrden;
+            return true;
+        }
+        return false;
+    }
+    
+    public static void incrementaPing(String ip) {
+        int ind = Adsobalin.userGetInd(ip);
+        if (ind != -1) {
+            Adsobalin.userPing[ind] = Conector.PING;
+        }
+    }
+    
+    public static void setServerPing() {
+        Conector.serverPing = Conector.PING;
     }
 }

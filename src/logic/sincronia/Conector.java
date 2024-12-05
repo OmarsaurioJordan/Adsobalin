@@ -177,6 +177,7 @@ public class Conector {
                     break;
                 case Adsobalin.EST_JUEGO:
                     Envios.sendNPC(raiz);
+                    Envios.sendPlayer(raiz);
                     break;
                 case Adsobalin.EST_FINAL:
                     Envios.sendResult(raiz);
@@ -190,10 +191,10 @@ public class Conector {
             switch (Adsobalin.estado) {
                 case Adsobalin.EST_LOBBY:
                 case Adsobalin.EST_FINAL:
-                    
+                    Envios.sendPing(myServer);
                     break;
                 case Adsobalin.EST_JUEGO:
-                    
+                    Envios.sendPlayer(raiz);
                     break;
             }
             
