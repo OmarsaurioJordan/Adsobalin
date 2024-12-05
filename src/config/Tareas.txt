@@ -12,13 +12,13 @@ TAREAS ADSOBALIN:
 4
 - X, envio de creación de proyectiles.
 - X, envío de solicitud de daño.
-- X, envío de player.
 5
 - sonidos de efectos 2D, falta kill.
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
 6
-- desconexión de clientes con ping, requiere envío player.
-- reiniciar lobby desde resultados, borrar cliente no IP.
+- disminuir ping clientes para desconectarlos.
+- reiniciar lobby desde resultados, borrar cliente sin IP.
 - al conexión o desconexión, activar o desactivar NPC.
+- en lobby no está apareciendo los paréntesis en cliente.
 .

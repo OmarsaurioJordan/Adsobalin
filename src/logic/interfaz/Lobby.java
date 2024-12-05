@@ -199,7 +199,7 @@ public class Lobby extends GUIs {
                     nombres.get(i).setText("*B" + (i - 8) + "*");
                 }
             }
-            else if (Adsobalin.userSelf(i)) {
+            else if (Adsobalin.indice == i) {
                 nombres.get(i).setText("(" + Adsobalin.userName[i] + ")");
             }
             else {
@@ -351,7 +351,7 @@ public class Lobby extends GUIs {
         chkConex.setSelected(encursable != 0);
         for (int i = 0; i < 18; i++) {
             activaNPCs.get(i).setSelected(npcs[i] != 0);
-            if (Adsobalin.userSelf(i)) {
+            if (Adsobalin.indice == i) {
                 nombres.get(i).setText("(" + names[i] + ")");
             }
             else {

@@ -704,7 +704,7 @@ public class Mundo extends GUIs {
         // dibujar los puntajes de jugadores
         utr = Adsobalin.userBestPoints();
         gc.setFont(Adsobalin.letrimedias);
-        if (Adsobalin.userSelf(utr)) {
+        if (Adsobalin.indice == utr) {
             gc.setFill(Color.YELLOW);
         }
         else {

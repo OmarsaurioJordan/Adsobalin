@@ -146,7 +146,7 @@ public class Resultado extends GUIs {
                         Adsobalin.userPoints[indMovil]);
             }
         }
-        else if (Adsobalin.userSelf(indMovil)) {
+        else if (Adsobalin.indice == indMovil) {
             return Map.entry("(" + Adsobalin.userName[indMovil] + ")",
                     Adsobalin.userPoints[indMovil]);
         }
