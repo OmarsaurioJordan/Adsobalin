@@ -20,3 +20,4 @@ TAREAS ADSOBALIN:
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
 .
+quede en Recepciones y etc, creando el mundo recibido, arboles + cadaveres.

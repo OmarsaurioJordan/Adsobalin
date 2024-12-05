@@ -27,10 +27,24 @@ public class Cadaver extends Objeto {
         this.grupo = grupo;
         this.isNPC = isNPC;
         this.angulo = angulo;
-        if (tiempoRest > 0) {
+        if (isPodrido) {
+            tempPudrirse = 0f;
+        }
+        else if (tiempoRest > 0) {
             tempPudrirse = tiempoRest;
         }
         setImagen();
+    }
+    
+    public float getInfo() {
+        if (isNPC) {
+            return (float)grupo + 0.1f;
+        }
+        return (float)grupo;
+    }
+    
+    public void setInfo(float inf, float angulo, boolean isPodrido) {
+        setCadaver((int)inf, (inf - (int)inf) != 0, angulo, isPodrido, 0f);
     }
     
     public void setImagen() {

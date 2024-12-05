@@ -9,6 +9,8 @@ import logic.interfaz.Lobby;
 import logic.interfaz.Menu;
 import javafx.application.Platform;
 import logic.interfaz.Mundo;
+import logic.objetos.Arbol;
+import logic.objetos.Cadaver;
 
 public class Recepciones {
     
@@ -120,6 +122,52 @@ public class Recepciones {
                                         }
                                     }
                                     catch (Exception e) {}
+                                }
+                            }
+                        }
+                        break;
+                    
+                    case Envios.MSJ_PLANO:
+                        if (Adsobalin.isServer) {
+                            Envios.sendMundo(raiz, emisor);
+                        }
+                        break;
+                    
+                    case Envios.MSJ_MUNDO:
+                        // es cliente y tiene un servidor asociado
+                        if (!Adsobalin.isServer &&
+                                !Conector.myServer.isEmpty()) {
+                            Mundo mun = null;
+                            try {
+                                mun = (Mundo)raiz.getScene();
+                            }
+                            catch (Exception e) {
+                                mun = null;
+                            }
+                            if (mun != null) {
+                                if (mun.temp_get_mapa != -1) {
+                                    mun.temp_get_mapa = -1f;
+                                    // poner arboles obtenidos
+                                    int tot = data.getInt();
+                                    float[] posss = {0f, 0f};
+                                    for (int i = 0; i < tot; i++) {
+                                        posss[0] = data.getFloat();
+                                        posss[1] = data.getFloat();
+                                        mun.newObjeto(Arbol.class,
+                                                posss.clone());
+                                    }
+                                    // poner cadaveres obtenidos
+                                    tot = data.getInt();
+                                    Cadaver cdv;
+                                    for (int i = 0; i < tot; i++) {
+                                        posss[0] = data.getFloat();
+                                        posss[1] = data.getFloat();
+                                        cdv = (Cadaver)mun.newObjeto(
+                                                Cadaver.class, posss.clone());
+                                        posss[0] = data.getFloat(); // angulo
+                                        posss[1] = data.getFloat(); // info
+                                        cdv.setInfo(posss[1], posss[0], true);
+                                    }
                                 }
                             }
                         }

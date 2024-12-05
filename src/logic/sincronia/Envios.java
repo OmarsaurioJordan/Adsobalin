@@ -2,6 +2,7 @@ package logic.sincronia;
 // tiene los metodos para comunicacion saliente
 
 import java.nio.ByteBuffer;
+import java.util.ArrayList;
 import javafx.stage.Stage;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Lobby;
@@ -110,6 +111,15 @@ public abstract class Envios {
     }
     
     public static boolean sendNPC(Stage raiz) {
+        // verificar la informacionn a enviar
+        Mundo mun;
+        try {
+            mun = (Mundo)raiz.getScene();
+        }
+        catch (Exception e) {
+            return false;
+        }
+        
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             1 + Float.BYTES + Integer.BYTES * 3 +
@@ -118,13 +128,6 @@ public abstract class Envios {
         
         // ingresar los datos especificos
         buff.put(putServerOrden());
-        Mundo mun;
-        try {
-            mun = (Mundo)raiz.getScene();
-        }
-        catch (Exception e) {
-            return false;
-        }
         buff.putFloat(Mundo.tiempoRestante);
         buff.putInt(Mundo.radioMundo);
         buff.putInt(Adsobalin.gruPoints[0]);
@@ -156,12 +159,7 @@ public abstract class Envios {
     }
     
     public static boolean sendLobby(Stage raiz) {
-        // crear un buffer para armar el mensaje
-        ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
-            1 + 4 + 18 * (1 + (Adsobalin.NAME_LEN + 3)));
-        
-        // ingresar los datos especificos
-        buff.put(putServerOrden());
+        // verificar la informacionn a enviar
         Lobby lob;
         try {
             lob = (Lobby)raiz.getScene();
@@ -169,6 +167,13 @@ public abstract class Envios {
         catch (Exception e) {
             return false;
         }
+        
+        // crear un buffer para armar el mensaje
+        ByteBuffer buff = Conector.newBuffer(MSJ_LOBBY,
+            1 + 4 + 18 * (1 + (Adsobalin.NAME_LEN + 1)));
+        
+        // ingresar los datos especificos
+        buff.put(putServerOrden());
         buff.put((byte)lob.getDatos("talla"));
         buff.put((byte)lob.getDatos("obstaculos"));
         buff.put((byte)lob.getDatos("tiempo"));
@@ -203,12 +208,32 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static boolean sendMundo(String destino) {
+    public static boolean sendMundo(Stage raiz, String destino) {
+        // verificar y obtener la informacion a enviar
+        Mundo mun;
+        try {
+            mun = (Mundo)raiz.getScene();
+        }
+        catch (Exception e) {
+            return false;
+        }
+        ArrayList<Float> arboles = mun.getArboles();
+        ArrayList<Float> cdvrs = mun.getCadaveres();
+        
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_MUNDO,
-            0);
+                Integer.BYTES * 2 +
+                (arboles.size() + cdvrs.size()) * Float.BYTES);
         
         // ingresar los datos especificos
+        buff.putInt(arboles.size() / 2);
+        for (int i = 0; i < arboles.size(); i++) {
+            buff.putFloat(arboles.get(i));
+        }
+        buff.putInt(cdvrs.size() / 4);
+        for (int i = 0; i < cdvrs.size(); i++) {
+            buff.putFloat(cdvrs.get(i));
+        }
         
         // empaquetar el buffer y enviarlo
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);

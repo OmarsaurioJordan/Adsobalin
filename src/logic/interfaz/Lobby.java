@@ -337,7 +337,8 @@ public class Lobby extends GUIs {
     public String[] getNombres() {
         String[] names = new String[18];
         for (int i = 0; i < 18; i++) {
-            names[i] = nombres.get(i).getText();
+            names[i] = nombres.get(i).getText().replace(
+                    "(", "").replace(")", "");
         }
         return names;
     }
@@ -350,7 +351,12 @@ public class Lobby extends GUIs {
         chkConex.setSelected(encursable != 0);
         for (int i = 0; i < 18; i++) {
             activaNPCs.get(i).setSelected(npcs[i] != 0);
-            nombres.get(i).setText(names[i]);
+            if (i == Adsobalin.indice) {
+                nombres.get(i).setText("(" + names[i] + ")");
+            }
+            else {
+                nombres.get(i).setText(names[i]);
+            }
         }
     }
 }

@@ -10,6 +10,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.abstractos.*;
 import logic.objetos.*;
+import logic.sincronia.*;
 
 public class Mundo extends GUIs {
     
@@ -51,6 +52,9 @@ public class Mundo extends GUIs {
     public static float[] mousePos = {0f, 0f};
     // sistema para obtener coordenadas de mouse
     private static Robot adquisidor = new Robot();
+    
+    // temporizador para obtener la informacion del mapa del servidor
+    public float temp_get_mapa = 1f;
     
     // imagen del mouse
     private Image mouseImg = new Image("assets/entorno/mouse.png",
@@ -456,6 +460,38 @@ public class Mundo extends GUIs {
         }
     }
     
+    public ArrayList<Float> getArboles() {
+        ArrayList<Float> arboles = new ArrayList<>();
+        Object obj;
+        Arbol arb;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Arbol.class.isInstance(obj)) {
+                arb = (Arbol)obj;
+                arboles.add(arb.posicion[0]);
+                arboles.add(arb.posicion[1]);
+            }
+        }
+        return arboles;
+    }
+    
+    public ArrayList<Float> getCadaveres() {
+        ArrayList<Float> cdvrs = new ArrayList<>();
+        Object obj;
+        Cadaver cdv;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Cadaver.class.isInstance(obj)) {
+                cdv = (Cadaver)obj;
+                cdvrs.add(cdv.posicion[0]);
+                cdvrs.add(cdv.posicion[1]);
+                cdvrs.add(cdv.angulo);
+                cdvrs.add(cdv.getInfo());
+            }
+        }
+        return cdvrs;
+    }
+    
     private void step(float delta) {
         // ejecuta toda la logica del juego:
         // obtener y procesar la posicion del mouse
@@ -492,6 +528,17 @@ public class Mundo extends GUIs {
         if (Adsobalin.isServer) {
             reaparecerNPCs(delta);
             finalizarPartida(delta);
+        }
+        // acciones que solo hara el cliente
+        else {
+            // obtener informacion del mapa
+            if (temp_get_mapa != -1) {
+                temp_get_mapa -= delta;
+                if (temp_get_mapa <= 0) {
+                    temp_get_mapa = 1f + Adsobalin.DADO.nextFloat();
+                    Envios.sendPlano(Conector.myServer);
+                }
+            }
         }
     }
     
