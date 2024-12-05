@@ -351,7 +351,7 @@ public class Lobby extends GUIs {
         chkConex.setSelected(encursable != 0);
         for (int i = 0; i < 18; i++) {
             activaNPCs.get(i).setSelected(npcs[i] != 0);
-            if (i == Adsobalin.indice) {
+            if (Adsobalin.userSelf(i)) {
                 nombres.get(i).setText("(" + names[i] + ")");
             }
             else {

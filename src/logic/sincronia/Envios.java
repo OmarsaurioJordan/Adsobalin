@@ -7,6 +7,7 @@ import javafx.stage.Stage;
 import logic.interfaz.Adsobalin;
 import logic.interfaz.Lobby;
 import logic.interfaz.Mundo;
+import logic.interfaz.Resultado;
 
 public abstract class Envios {
     
@@ -189,15 +190,28 @@ public abstract class Envios {
         return true;
     }
     
-    public static void sendResult(Stage raiz) {
+    public static boolean sendResult(Stage raiz) {
+        // verificar la informacionn a enviar
+        Resultado res;
+        try {
+            res = (Resultado)raiz.getScene();
+        }
+        catch (Exception e) {
+            return false;
+        }
+        String txt = res.getAllData();
+        
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_RESULT,
-            0);
+            1 + (txt.length() + 1));
         
         // ingresar los datos especificos
+        buff.put(putServerOrden());
+        Conector.buffPutString(buff, txt);
         
         // empaquetar el buffer y enviarlo
         Conector.enviaAll(Conector.buf2arr(buff), "");
+        return true;
     }
     
     public static boolean sendPlano(String destino) {

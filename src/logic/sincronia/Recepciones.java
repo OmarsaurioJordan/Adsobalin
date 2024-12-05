@@ -9,6 +9,7 @@ import logic.interfaz.Lobby;
 import logic.interfaz.Menu;
 import javafx.application.Platform;
 import logic.interfaz.Mundo;
+import logic.interfaz.Resultado;
 import logic.objetos.Arbol;
 import logic.objetos.Cadaver;
 
@@ -172,6 +173,18 @@ public class Recepciones {
                             }
                         }
                         break;
+                    
+                    case Envios.MSJ_RESULT:
+                        // es cliente y tiene un servidor asociado
+                        if (!Adsobalin.isServer &&
+                                !Conector.myServer.isEmpty()) {
+                            Conector.serverPing = Conector.PING;
+                            if (apruebaServerPing(data.get())) {
+                                String txt = Conector.buffGetString(data);
+                                recResultado(txt);
+                            }
+                        }
+                        break;
                 }
             }
         }
@@ -303,6 +316,20 @@ public class Recepciones {
                 Lobby lob = (Lobby)raiz.getScene();
                 lob.setDatos(talla, obstaculos, tiempo,
                         encursable, npcs, nombres);
+            });
+        }
+    }
+    
+    private void recResultado(String txt) {
+        if (Adsobalin.estado != Adsobalin.EST_FINAL) {
+            Platform.runLater(() -> {
+                raiz.setScene(new Resultado(raiz));
+            });
+        }
+        else {
+            Platform.runLater(() -> {
+                Resultado res = (Resultado)raiz.getScene();
+                res.setAllData(txt);
             });
         }
     }

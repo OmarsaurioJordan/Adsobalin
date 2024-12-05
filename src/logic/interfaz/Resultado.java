@@ -128,7 +128,8 @@ public class Resultado extends GUIs {
             // guardar todos los datos para posterior envio
             allData = punGrupos[0].getText() + "|" + punGrupos[1].getText();
             for (int i = 0; i < 18; i++) {
-                allData += "|" + nombres[i].getText() +
+                allData += "|" + nombres[i].getText().replace(
+                        "(", "").replace(")", "") +
                         "|" + puntos[i].getText();
             }
         }
@@ -153,6 +154,25 @@ public class Resultado extends GUIs {
             return Map.entry(Adsobalin.userName[indMovil],
                     Adsobalin.userPoints[indMovil]);
         }
+    }
+    
+    public String getAllData() {
+        return allData;
+    }
+    
+    public void setAllData(String txt) {
+        allData = txt;
+        String[] data = txt.split("\\|");
+        punGrupos[0].setText(data[0]);
+        punGrupos[1].setText(data[1]);
+        int n = 2;
+        for (int i = 0; i < 18; i++) {
+            nombres[i].setText(data[n]);
+            puntos[i].setText(data[n + 1]);
+            n += 2;
+        }
+        nombres[Adsobalin.indice].setText("(" +
+                nombres[Adsobalin.indice].getText() + ")");
     }
     
     private void ejecutar() {
