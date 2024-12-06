@@ -345,7 +345,7 @@ public class Recepciones {
                     nombre = Adsobalin.userName[ind];
                 }
                 // primero se eliminan los datos del usuario
-                Adsobalin.userClean(ind);
+                Adsobalin.userClean(ind, false, true);
                 // se agrega el nuevo usuario para actualizarlo
                 newUser(estilo, grupo, nombre, emisor);
             }

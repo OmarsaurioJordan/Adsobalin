@@ -519,8 +519,8 @@ public class Mundo extends GUIs {
                         break;
                     }
                     else {
-                        aut.ubicacion[0] = pos[0];
-                        aut.ubicacion[1] = pos[1];
+                        aut.myPing = Conector.PING;
+                        aut.ubicacion = pos.clone();
                         aut.anguMira = ang;
                         aut.setTemps(hit, inmune);
                         if (!name.isEmpty()) {

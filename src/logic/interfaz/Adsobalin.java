@@ -261,13 +261,15 @@ public class Adsobalin extends Application {
         return ind;
     }
     
-    public static void userClean(int ind) {
-        userIP[ind] = "";
+    public static void userClean(int ind, boolean forcePts, boolean forceIP) {
         userName[ind] = "";
         userStyle[ind] = 0;
         userPing[ind] = 0f;
-        if (estado != EST_JUEGO) {
+        if (estado != EST_JUEGO || forcePts) {
             userPoints[ind] = 0;
+        }
+        if (estado != EST_JUEGO || forceIP) {
+            userIP[ind] = "";
         }
     }
     
@@ -275,8 +277,33 @@ public class Adsobalin extends Application {
         gruPoints[0] = 0;
         gruPoints[1] = 0;
         for (var i = 0; i < 18; i++) {
-            userClean(i);
-            userPoints[i] = 0;
+            userClean(i, true, true);
+        }
+    }
+    
+    public static void userReLobby() {
+        gruPoints[0] = 0;
+        gruPoints[1] = 0;
+        for (var i = 0; i < 18; i++) {
+            if (userName[i].isEmpty()) {
+                userClean(i, true, true);
+            }
+            else {
+                userPoints[i] = 0;
+            }
+        }
+    }
+    
+    public static void userPingStep(float delta) {
+        for (int i = 0; i < 18; i++) {
+            if (!userName[i].isEmpty()) {
+                userPing[i] -= delta;
+                if (userPing[i] <= 0) {
+                    // hacer desconexion
+                    userClean(i, false, false);
+                    // Tarea notificar desconexion y poner NPC si...
+                }
+            }
         }
     }
 }

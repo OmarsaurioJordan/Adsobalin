@@ -6,11 +6,14 @@ import javafx.scene.image.Image;
 import logic.abstractos.Movil;
 import logic.abstractos.Objeto;
 import logic.interfaz.Adsobalin;
+import logic.sincronia.Conector;
 
 public class Sombra extends Movil {
     
     // para sonar una vez al iniciar
     private boolean noHaSonadoIni = true;
+    // ping si no recibe actualizacion en un tiempo se destruye
+    public float myPing = Conector.PING;
     
     private Image sprite;
     
@@ -44,6 +47,11 @@ public class Sombra extends Movil {
         }
         // sincronizar el movimiento final
         moverSync(delta);
+        // eliminarse si no hay actualizacion
+        myPing -= delta;
+        if (myPing <= 0) {
+            morir();
+        }
     }
     
     @Override

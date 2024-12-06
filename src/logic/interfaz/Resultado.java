@@ -178,6 +178,7 @@ public class Resultado extends GUIs {
     
     private void ejecutar() {
         // regresara al lobby para iniciar otra partida
-        
+        Adsobalin.userReLobby();
+        raiz.setScene(new Lobby(raiz));
     }
 }

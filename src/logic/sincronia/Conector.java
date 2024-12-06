@@ -184,7 +184,7 @@ public class Conector {
             }
             
             // verificar si los clientes se han desconectado
-            // Tarea
+            Adsobalin.userPingStep(LAN_SPEED_MS / 1000f);
         }
         else if (Adsobalin.estado != Adsobalin.EST_MENU) {
             switch (Adsobalin.estado) {
@@ -200,6 +200,7 @@ public class Conector {
             // verificar si el servidor sigue conectado
             serverPing -= LAN_SPEED_MS / 1000f;
             if (serverPing <= 0) {
+                serverPing = 0f;
                 Platform.runLater(() -> {
                     raiz.setScene(new Menu(raiz));
                 });

@@ -4,22 +4,22 @@ TAREAS ADSOBALIN:
 - evitar cambio de tamaño de pantalla al pasar de interfaz.
 - no se está guardando la información al salir estando en lobby???
 - notificar que server se desconectó al volver el menú.
+- notificar que usuario se conecto / desconecto.
 1
 - hacer alertas que atraigan NPCs.
 - atraer NPC al ser golpeado (verificar código...).
 - poner supervisión de mira con producto punto.
 3
 - X, notificaciones deslizantes.
-4
-- X, envio de creación de proyectiles.
-- X, envío de solicitud de daño.
 5
 - sonidos de efectos 2D, falta kill.
+- sonidos de efectos 2D deben sincronizarse todos.
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
 6
-- disminuir ping clientes para desconectarlos.
-- reiniciar lobby desde resultados, borrar cliente sin IP.
 - al conexión o desconexión, activar o desactivar NPC.
-- verificar al llegar un mensaje, que la ip este en la lista server.
+- verificar al llegar un mensaje, que la ip este en la lista server, con nombre.
+P:
+- desconexión de jugador y borrado del avatar.
+- reiniciar juego a lobby otra vez.
 .

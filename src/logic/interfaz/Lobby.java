@@ -236,7 +236,7 @@ public class Lobby extends GUIs {
         }
         // el servidor puede intentar hacer el cambio inmediatamente
         if (Adsobalin.isServer) {
-            Adsobalin.userClean(Adsobalin.indice);
+            Adsobalin.userClean(Adsobalin.indice, false, true);
             Adsobalin.grupo = grupo;
             autoAsignar();
         }
