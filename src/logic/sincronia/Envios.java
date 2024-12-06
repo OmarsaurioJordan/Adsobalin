@@ -38,6 +38,8 @@ public abstract class Envios {
     public static byte[] players_orden = new byte[18];
     // historial reciente de proyectiles
     public static ArrayList<Integer> histoProy = new ArrayList<>();
+    // historial reciente de golpes
+    public static ArrayList<Integer> histoGolpe = new ArrayList<>();
     
     public static boolean sendHola(String nombre, String destino,
             int estilo, int grupo) {
@@ -82,16 +84,34 @@ public abstract class Envios {
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
     }
     
-    public static boolean sendGolpe(int golpeador, int victima,
-            int indDisparo, String destino) {
+    public static void sendGolpe(int golpeador, int golpeado,
+            boolean isKill, int llave, float angulo) {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_GOLPE,
-            0);
+            3 + 2 * Integer.BYTES + Float.BYTES);
         
         // ingresar los datos especificos
+        buff.put((byte)golpeador);
+        buff.put((byte)golpeado);
+        buff.putInt(llave);
+        buff.putFloat(angulo);
+        int clave = (int)(Adsobalin.DADO.nextFloat() * 9999999f);
+        clave = Integer.parseInt((Adsobalin.indice + 1) + "" + clave);
+        buff.putInt(clave);
+        if (isKill) {
+            buff.put((byte)1);
+        }
+        else {
+            buff.put((byte)0);
+        }
         
         // empaquetar el buffer y enviarlo
-        return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+        if (Adsobalin.isServer) {
+            Conector.enviaAll(Conector.buf2arr(buff), "");
+        }
+        else {
+            Conector.enviaMsj(Conector.buf2arr(buff), Conector.myServer);
+        }
     }
     
     public static void sendDisparo(int ind, int llave,
@@ -357,6 +377,18 @@ public abstract class Envios {
             // cuando se superen las 100 entradas, borrara las 50 mas antiguas
             if (histoProy.size() > 100) {
                 histoProy.subList(0, 50).clear();
+            }
+            return true;
+        }
+        return false;
+    }
+    
+    public static boolean verifyGolpe(int clave) {
+        if (!histoGolpe.contains(clave)) {
+            histoGolpe.add(clave);
+            // cuando se superen las 100 entradas, borrara las 50 mas antiguas
+            if (histoGolpe.size() > 100) {
+                histoGolpe.subList(0, 50).clear();
             }
             return true;
         }

@@ -22,19 +22,23 @@ public abstract class Proyectil extends Objeto {
     // grupo al que pertenece
     protected int grupo = Adsobalin.GRU_AZUL;
     // identificador unico al azar: 00 + xxxxxxx (indice + azar)
-    protected int llave = 0;
+    public int llave = 0;
+    // si fue creado por un NPC
+    protected boolean isFromNPC = false;
     
     public Proyectil(float[] posicion, int myTipo) {
         super(posicion, myTipo, RADIO);
         Sonidos.sonidoPos(Sonidos.SND_DISPARO, posicion);
     }
     
-    protected Image setProyectilImg(float angulo, int grupo, int origen) {
+    protected Image setProyectilImg(float angulo, int grupo,
+            int origen, boolean isFromNPC) {
         // nota esto va a parte del constructor para que todos los objetos
         // del juego tengan un constructor solo con posicion y tipo
         this.angulo = angulo;
         this.grupo = grupo;
         this.origen = origen;
+        this.isFromNPC = isFromNPC;
         String bcol = "rojos/rojoproyectil.png";
         if (grupo == Adsobalin.GRU_AZUL) {
             bcol = "azules/azulproyectil.png";

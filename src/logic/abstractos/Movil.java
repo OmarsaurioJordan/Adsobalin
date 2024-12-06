@@ -187,13 +187,13 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    public boolean golpear(int indOrigenProy) {
+    public boolean golpear() {
         // retorna verdadero si muere
         if (tempInmune == 0) {
             vida = Math.max(0, vida - 1);
             chillar();
             if (vida == 0) {
-                morir(indOrigenProy);
+                morir();
                 return true;
             }
             else {
@@ -234,7 +234,7 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    public void morir(int indOrigenProy) {
+    public void morir() {
         Mundo.deleteObjeto(this);
         // crear cadaver
         Cadaver cdvr = (Cadaver)Mundo.newObjeto(Cadaver.class, posicion);

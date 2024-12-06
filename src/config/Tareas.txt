@@ -3,6 +3,7 @@ TAREAS ADSOBALIN:
 - poner en pantalla completa con F4.
 - evitar cambio de tamaño de pantalla al pasar de interfaz.
 - no se está guardando la información al salir estando en lobby???
+- notificar que server se desconectó al volver el menú.
 1
 - hacer alertas que atraigan NPCs.
 - atraer NPC al ser golpeado (verificar código...).
@@ -20,4 +21,5 @@ TAREAS ADSOBALIN:
 - disminuir ping clientes para desconectarlos.
 - reiniciar lobby desde resultados, borrar cliente sin IP.
 - al conexión o desconexión, activar o desactivar NPC.
+- verificar al llegar un mensaje, que la ip este en la lista server.
 .

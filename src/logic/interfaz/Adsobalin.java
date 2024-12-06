@@ -134,15 +134,17 @@ public class Adsobalin extends Application {
     }
     
     public static void addPoints(boolean isKill, int indWin, int indLos) {
-        int damage = 1;
-        if (isKill) {
-            damage = Movil.VIDA_MAX;
-            if (!userIsNPC(indLos)) {
-                damage = (int)(damage * 1.5f);
+        if (isServer) {
+            int damage = 1;
+            if (isKill) {
+                damage = Movil.VIDA_MAX;
+                if (!userIsNPC(indLos)) {
+                    damage = (int)(damage * 1.5f);
+                }
             }
+            userPoints[indWin] += damage;
+            gruPoints[userGetGrupo(indWin)] += damage;
         }
-        userPoints[indWin] += damage;
-        gruPoints[userGetGrupo(indWin)] += damage;
     }
     
     public static int otroGrupo(int grupo) {

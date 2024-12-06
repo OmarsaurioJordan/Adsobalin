@@ -383,6 +383,36 @@ public class Mundo extends GUIs {
         return pool.contains(obj);
     }
     
+    public static Movil getMovil(int ind) {
+        Object obj;
+        Movil mov;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Movil.class.isInstance(obj)) {
+                mov = (Movil)obj;
+                if (mov.indice == ind) {
+                    return mov;
+                }
+            }
+        }
+        return null;
+    }
+    
+    public static void deleteProy(int llave) {
+        Object obj;
+        Proyectil pry;
+        for (int n = 0; n < pool.size(); n++) {
+            obj = pool.get(n);
+            if (Proyectil.class.isInstance(obj)) {
+                pry = (Proyectil)obj;
+                if (pry.llave == llave) {
+                    deleteObjeto(pry);
+                    break;
+                }
+            }
+        }
+    }
+    
     public static float[] lugarRespawn(int grupo) {
         ArrayList<float[]> points = new ArrayList<>();
         Object obj;
@@ -482,10 +512,10 @@ public class Mundo extends GUIs {
                 aut = (Sombra)obj;
                 if (aut.indice == ind) {
                     if (pos[0] == 0 && pos[1] == 0) {
-                        deleteObjeto(aut);
+                        aut.morir();
                     }
                     else if (aut.estilo != estilo) {
-                        deleteObjeto(aut);
+                        aut.morir();
                         break;
                     }
                     else {

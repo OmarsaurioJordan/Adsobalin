@@ -6,10 +6,10 @@ import javafx.scene.image.Image;
 import logic.abstractos.Objeto;
 import logic.abstractos.Proyectil;
 import logic.abstractos.Movil;
+import logic.interfaz.Adsobalin;
+import logic.sincronia.Envios;
 
 public class Balin extends Proyectil {
-    
-    private boolean isFromNPC = false;
     
     private Image sprite;
     
@@ -20,8 +20,7 @@ public class Balin extends Proyectil {
     public void setProyectil(float angulo, int grupo,
             int origen, boolean isFromNPC, int llave) {
         // el origen es el Movil.indice de quien lo lanzo
-        sprite = setProyectilImg(angulo, grupo, origen);
-        this.isFromNPC = isFromNPC;
+        sprite = setProyectilImg(angulo, grupo, origen, isFromNPC);
         this.llave = llave;
     }
     
@@ -33,12 +32,14 @@ public class Balin extends Proyectil {
             if (otro.getClass() == Player.class && isFromNPC) {
                 // hacer damage directamente y enviar solicitud para puntos
                 Movil mov = (Movil)otro;
+                Adsobalin.addPoints(false, origen, mov.indice);
                 mov.angHit = angulo;
-                if (mov.golpear(origen)) {
-                    
+                if (mov.golpear()) {
+                    Adsobalin.addPoints(true, origen, mov.indice);
+                    Envios.sendGolpe(origen, mov.indice, true, llave, angulo);
                 }
                 else {
-                    
+                    Envios.sendGolpe(origen, mov.indice, false, llave, angulo);
                 }
             }
         }

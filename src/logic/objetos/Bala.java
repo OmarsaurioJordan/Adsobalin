@@ -20,7 +20,7 @@ public class Bala extends Proyectil {
     public void setProyectil(float angulo, int grupo, int origen,
             boolean isFromNPC) {
         // el origen es el indice de quien lo lanzo
-        sprite = setProyectilImg(angulo, grupo, origen);
+        sprite = setProyectilImg(angulo, grupo, origen, isFromNPC);
         // generar la llave al azar, que contiene el indice
         llave = (int)(Adsobalin.DADO.nextFloat() * 9999999f);
         llave = Integer.parseInt((Adsobalin.indice + 1) + "" + llave);
@@ -39,13 +39,20 @@ public class Bala extends Proyectil {
                 Movil mov = (Movil)otro;
                 Adsobalin.addPoints(false, origen, mov.indice);
                 mov.angHit = angulo;
-                if (mov.golpear(origen)) {
+                if (mov.golpear()) {
                     Adsobalin.addPoints(true, origen, mov.indice);
+                    Envios.sendGolpe(origen, mov.indice, true, llave, angulo);
+                }
+                else {
+                    Envios.sendGolpe(origen, mov.indice, false, llave, angulo);
                 }
             }
-            else if (otro.getClass() == Sombra.class) {
+            else if (!isFromNPC && otro.getClass() == Sombra.class) {
                 // enviar solicitud de damage
-                
+                Sombra aut = (Sombra)otro;
+                Adsobalin.addPoints(false, origen, aut.indice);
+                aut.angHit = angulo;
+                Envios.sendGolpe(origen, aut.indice, false, llave, angulo);
             }
         }
     }

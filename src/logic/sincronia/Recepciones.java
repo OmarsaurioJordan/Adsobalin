@@ -13,6 +13,8 @@ import logic.interfaz.Resultado;
 import logic.objetos.Arbol;
 import logic.objetos.Balin;
 import logic.objetos.Cadaver;
+import logic.abstractos.Movil;
+import logic.objetos.Sombra;
 
 public class Recepciones {
     
@@ -282,6 +284,37 @@ public class Recepciones {
                             Conector.enviaAll(Conector.buf2arr(data), emisor);
                         }
                         break;
+                    
+                    case Envios.MSJ_GOLPE:
+                        // verificar que esta en modo juego
+                        Mundo mum = null;
+                        try {
+                            mum = (Mundo)raiz.getScene();
+                        }
+                        catch (Exception e) {
+                            mum = null;
+                        }
+                        // abortar si es un cliente
+                        if (!Adsobalin.isServer && mum == null) {
+                            break;
+                        }
+                        // obtener todos los datos, para poder reenviarlo
+                        int golpeador = data.get();
+                        int golpeado = data.get();
+                        int llaved = data.getInt();
+                        float angud = data.getFloat();
+                        int clave = data.getInt();
+                        boolean isKill = data.get() == 1;
+                        // crear el proyectil
+                        if (mum != null && Envios.verifyGolpe(clave)) {
+                            recGolpe(golpeador, golpeado,
+                                    llaved, angud, isKill);
+                        }
+                        // el servidor debe rebotar el mensaje
+                        if (Adsobalin.isServer) {
+                            Conector.enviaAll(Conector.buf2arr(data), emisor);
+                        }
+                        break;
                 }
             }
         }
@@ -442,5 +475,33 @@ public class Recepciones {
             Mundo.tiempoRestante = tiempo;
         }
         return true;
+    }
+    
+    private boolean recGolpe(int golpeador, int golpeado,
+            int llave, float angulo, boolean isKill) {
+        // poner puntos si es servidor
+        Adsobalin.addPoints(isKill, golpeador, golpeado);
+        // eliminar el disparo
+        Mundo.deleteProy(llave);
+        // hallar al ente que es golpeado para ponerle su angulo de golpe
+        Movil mov = Mundo.getMovil(golpeado);
+        if (mov != null) {
+            mov.angHit = angulo;
+        }
+        // hacer notificacion
+        if (isKill) {
+            // Tarea
+            return true;
+        }
+        // solo cuando es un objeto no sombra, sera damageado
+        if (mov != null) {
+            if (!Sombra.class.isInstance(mov)) {
+                if (mov.golpear()) {
+                    Adsobalin.addPoints(true, golpeador, golpeado);
+                    Envios.sendGolpe(golpeador, golpeado, true, llave, angulo);
+                }
+            }
+        }
+        return false;
     }
 }
