@@ -479,6 +479,10 @@ public class Recepciones {
     
     private boolean recGolpe(int golpeador, int golpeado,
             int llave, float angulo, boolean isKill) {
+        // evita fallos
+        if (golpeado == -1 || golpeador == -1) {
+            return false;
+        }
         // poner puntos si es servidor
         Adsobalin.addPoints(isKill, golpeador, golpeado);
         // eliminar el disparo
@@ -502,6 +506,6 @@ public class Recepciones {
                 }
             }
         }
-        return false;
+        return true;
     }
 }
