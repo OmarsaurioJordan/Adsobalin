@@ -600,7 +600,7 @@ public class Mundo extends GUIs {
             if (tempRespawnPlayer == 0) {
                 Player ply = (Player)newObjeto(Player.class,
                         lugarRespawn(Adsobalin.grupo));
-                ply.setAvatar(Adsobalin.userGetInd("127.0.0.1"));
+                ply.setAvatar(Adsobalin.indice);
             }
         }
         

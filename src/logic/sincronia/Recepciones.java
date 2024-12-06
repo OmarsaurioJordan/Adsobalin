@@ -272,10 +272,6 @@ public class Recepciones {
                         posd[1] = data.getFloat();
                         float angd = data.getFloat();
                         boolean isFromNPC = data.get() == 1;
-                        
-                        System.out.println("O:" + origen + " G:" +
-                                Adsobalin.userGetGrupo(origen));
-                        
                         // crear el proyectil
                         if (mud != null && Envios.verifyProy(llave)) {
                             Balin b = (Balin)mud.newObjeto(Balin.class, posd);
@@ -309,9 +305,6 @@ public class Recepciones {
                         float angud = data.getFloat();
                         int clave = data.getInt();
                         boolean isKill = data.get() == 1;
-                        
-                        System.out.println(golpeador + "->" + golpeado);
-                        
                         // crear el proyectil
                         if (mum != null && Envios.verifyGolpe(clave)) {
                             recGolpe(golpeador, golpeado,
