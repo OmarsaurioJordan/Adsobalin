@@ -335,6 +335,7 @@ public class Recepciones {
                 Envios.sendWelcome(Adsobalin.userName[ind], emisor,
                         Adsobalin.userStyle[ind],
                         Adsobalin.userGetGrupo(ind), ind);
+                Mundo.setRespawnNPC(ind);
             }
             else {
                 // evitar que se dupliquen estilos o nombres, no modificara
@@ -346,8 +347,10 @@ public class Recepciones {
                 }
                 // primero se eliminan los datos del usuario
                 Adsobalin.userClean(ind, false, true);
+                Mundo.setRespawnNPC(ind);
                 // se agrega el nuevo usuario para actualizarlo
-                newUser(estilo, grupo, nombre, emisor);
+                ind = newUser(estilo, grupo, nombre, emisor);
+                Mundo.setRespawnNPC(ind);
             }
         }
         else if (Adsobalin.userHayCupo() == -1) {
@@ -366,11 +369,12 @@ public class Recepciones {
         }
         else {
             // se agrega el nuevo usuario a la tabla de usuarios
-            newUser(estilo, grupo, nombre, emisor);
+            int ind = newUser(estilo, grupo, nombre, emisor);
+            Mundo.setRespawnNPC(ind);
         }
     }
     
-    private void newUser(int estilo, int grupo,
+    private int newUser(int estilo, int grupo,
             String nombre, String emisor) {
         // el mensaje welcome es para poner al cliente activo y
         // en escucha, pero el servidor en este punto ya comenzara
@@ -385,6 +389,7 @@ public class Recepciones {
                 gui.reDibujar();
             });
         }
+        return ind;
     }
     
     private void recWelcome(int ind, int estilo, int grupo,

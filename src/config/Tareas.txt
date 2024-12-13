@@ -17,9 +17,12 @@ TAREAS ADSOBALIN:
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
 6
-- al conexión o desconexión, activar o desactivar NPC.
 - verificar al llegar un mensaje, que la ip este en la lista server, con nombre.
+- pantalla gris si una vida.
+- conteo de puntos independiente para usuario o NPC, no suman.
 P:
 - desconexión de jugador y borrado del avatar.
 - reiniciar juego a lobby otra vez.
+- desconectar actualiza lobby.
+- conexión desconexión crea elimina NPC.
 .

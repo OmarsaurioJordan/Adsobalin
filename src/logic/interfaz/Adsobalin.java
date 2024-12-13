@@ -10,6 +10,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 import javax.swing.JOptionPane;
 import java.util.Random;
+import javafx.application.Platform;
 import logic.abstractos.Movil;
 
 public class Adsobalin extends Application {
@@ -294,14 +295,29 @@ public class Adsobalin extends Application {
         }
     }
     
-    public static void userPingStep(float delta) {
+    public static void userPingStep(Stage raiz, float delta) {
         for (int i = 0; i < 18; i++) {
+            if (i == Adsobalin.indice) {
+                continue;
+            }
             if (!userName[i].isEmpty()) {
                 userPing[i] -= delta;
                 if (userPing[i] <= 0) {
-                    // hacer desconexion
+                    // hacer desconexion, el avatar morira atomaticamente
                     userClean(i, false, false);
-                    // Tarea notificar desconexion y poner NPC si...
+                    // poner NPC si esta activo, activa respawn
+                    Mundo.setRespawnNPC(i);
+                    // actualizar lobby
+                    try {
+                        if (estado == EST_LOBBY) {
+                            Lobby gui = (Lobby)raiz.getScene();
+                            Platform.runLater(() -> {
+                                gui.reDibujar();
+                            });
+                        }
+                    }
+                    catch (Exception e) {}
+                    // Tarea notificar desconexion
                 }
             }
         }

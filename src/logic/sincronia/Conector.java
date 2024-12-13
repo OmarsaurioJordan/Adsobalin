@@ -184,7 +184,7 @@ public class Conector {
             }
             
             // verificar si los clientes se han desconectado
-            Adsobalin.userPingStep(LAN_SPEED_MS / 1000f);
+            Adsobalin.userPingStep(raiz, LAN_SPEED_MS / 1000f);
         }
         else if (Adsobalin.estado != Adsobalin.EST_MENU) {
             switch (Adsobalin.estado) {

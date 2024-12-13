@@ -441,7 +441,15 @@ public class Mundo extends GUIs {
     public static void setRespawnNPC(int indNPC) {
         if (isNPCinGame(indNPC)) {
             if (Adsobalin.userIsNPC(indNPC)) {
-                npcRespawn[indNPC] = TEMP_RESPAWN_MAX;
+                npcRespawn[indNPC] = TEMP_RESPAWN_MAX +
+                        Adsobalin.DADO.nextFloat();
+            }
+            else {
+                Movil mov = getMovil(indNPC);
+                if (mov != null) {
+                    mov.morir();
+                }
+                npcRespawn[indNPC] = 0f;
             }
         }
     }
