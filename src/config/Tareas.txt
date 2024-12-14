@@ -1,4 +1,5 @@
 TAREAS ADSOBALIN:
+.
 interfaz
 - poner en pantalla completa con F4.
 - evitar cambio de tamaño de pantalla al pasar de interfaz.
@@ -8,13 +9,16 @@ NPCs
 - atraer NPC al ser golpeado (verificar código...).
 - poner supervisión de mira con producto punto.
 sonido
-- sonidos de efectos 2D, falta kill.
-- sonidos de efectos 2D deben sincronizarse todos.
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
 extra
 - verificar al llegar un mensaje, que la ip este en la lista server, con nombre.
 - pantalla gris si una vida.
+.
+.
+.
+.
+.
 probar
 - desconexión de jugador y borrado del avatar.
 - reiniciar juego a lobby otra vez.

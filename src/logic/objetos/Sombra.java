@@ -45,6 +45,11 @@ public class Sombra extends Movil {
         }
         // sincronizar el movimiento final
         moverSync(delta);
+        // sonar el chillido
+        if (!isHit && tempGolpe != 0) {
+            chillar();
+        }
+        isHit = tempGolpe != 0;
         // eliminarse si no hay actualizacion
         myPing -= delta;
         if (myPing <= 0) {

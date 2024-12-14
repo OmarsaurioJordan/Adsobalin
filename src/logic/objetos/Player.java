@@ -160,6 +160,11 @@ public class Player extends Movil {
         moverSync(delta);
         // mover la camara
         moverCamara(delta);
+        // sonar el chillido
+        if (!isHit && tempGolpe != 0) {
+            chillar();
+        }
+        isHit = tempGolpe != 0;
     }
     
     @Override

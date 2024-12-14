@@ -370,6 +370,13 @@ public class Adsobalin extends Application {
                 boolean isAzul = userGetGrupo(golpeado) == GRU_AZUL;
                 mun.setNotificacion(txt, isAzul);
             }
+            // hacer sonido si lo elimino el jugador actual
+            if (golpeador == indice) {
+                Movil mov = mun.getMovil(golpeador);
+                if (mov != null) {
+                    Sonidos.sonidoPos(Sonidos.SND_KILL_PLAYER, mov.posicion);
+                }
+            }
         }
     }
     

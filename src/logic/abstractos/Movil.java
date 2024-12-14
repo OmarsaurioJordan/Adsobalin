@@ -27,19 +27,19 @@ public abstract class Movil extends Objeto {
     // la municion maxima almacenada
     public static final int MUNICION_MAX = 12;
     // segundos que dura la cadencia entre disparos
-    public static final float TEMP_DISPARO_MAX = 0.2f;
+    public static final float TEMP_DISPARO_MAX = 0.3f;
     // segundos que dura la recarga de 1 municion
-    public static final float TEMP_RECARGA_MAX = 0.2f;
+    public static final float TEMP_RECARGA_MAX = 0.15f;
     // segundos que dura la iluminacion al ser golpeado
-    public static final float TEMP_GOLPE_MAX = 0.5f;
+    public static final float TEMP_GOLPE_MAX = 0.3f;
     // segundos que dura la inmunidad inicial parpadeante
-    public static final float TEMP_INMUNE_MAX = 5f;
+    public static final float TEMP_INMUNE_MAX = 4f;
     // segundos que dura la curacion de una sola vida
-    public static final float TEMP_CURACION_MAX = 1f;
+    public static final float TEMP_CURACION_MAX = 1.5f;
     // segundos que hay que esperar para poder curar vidas
-    public static final float TEMP_REGENERACION_MAX = 6f;
+    public static final float TEMP_REGENERACION_MAX = 7f;
     // segundos intermitencia
-    public static final float TEMP_INTERMIT_MAX = 0.25f;
+    public static final float TEMP_INTERMIT_MAX = 0.22f;
     
     // los moviles mueven su ubicacion y luego la posicion la sigue
     public float[] ubicacion = {0f, 0f};
@@ -71,6 +71,8 @@ public abstract class Movil extends Objeto {
     
     // ajustes de color al ser golpeado
     private ColorAdjust ajusteCol = new ColorAdjust();
+    // para que suene cuando es golpeado
+    protected boolean isHit = false;
     
     // son los puntos de impacto antes de morir
     public int vida = VIDA_MAX;
@@ -191,7 +193,6 @@ public abstract class Movil extends Objeto {
         // retorna verdadero si muere
         if (tempInmune == 0) {
             vida = Math.max(0, vida - 1);
-            chillar();
             if (vida == 0) {
                 Adsobalin.notificaKill(quien, indice);
                 morir();

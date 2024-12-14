@@ -274,6 +274,11 @@ public class Automata extends Movil {
         }
         // sincronizar el movimiento final
         moverSync(delta);
+        // sonar el chillido
+        if (!isHit && tempGolpe != 0) {
+            chillar();
+        }
+        isHit = tempGolpe != 0;
     }
     
     @Override
