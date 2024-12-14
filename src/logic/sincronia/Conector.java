@@ -210,6 +210,8 @@ public class Conector {
                 serverPing = 0f;
                 Platform.runLater(() -> {
                     raiz.setScene(new Menu(raiz));
+                    Menu m = (Menu)raiz.getScene();
+                    m.setMensaje("se perdió la conexión", false);
                 });
             }
         }

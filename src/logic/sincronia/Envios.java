@@ -24,6 +24,7 @@ public abstract class Envios {
     public static final byte MSJ_RESULT = 9; // S
     public static final byte MSJ_PLANO = 10; // C
     public static final byte MSJ_PING = 11; // C
+    public static final byte MSJ_CONEX = 12; // S
     
     // listado de tipos de submensajes
     public static final byte SUB_VERSION = 0;
@@ -329,6 +330,24 @@ public abstract class Envios {
         
         // empaquetar el buffer y enviarlo
         return Conector.enviaMsj(Conector.buf2arr(buff), destino);
+    }
+    
+    public static boolean sendConex(int indQuien, boolean isConex) {
+        // crear un buffer para armar el mensaje
+        ByteBuffer buff = Conector.newBuffer(MSJ_CONEX, 2);
+        
+        // ingresar los datos especificos
+        buff.put((byte)indQuien);
+        if (isConex) {
+            buff.put((byte)1);
+        }
+        else {
+            buff.put((byte)0);
+        }
+        
+        // empaquetar el buffer y enviarlo
+        Conector.enviaAll(Conector.buf2arr(buff), Adsobalin.userIP[indQuien]);
+        return true;
     }
     
     private static byte putServerOrden() {

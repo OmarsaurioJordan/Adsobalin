@@ -39,7 +39,7 @@ public class Bala extends Proyectil {
                 Movil mov = (Movil)otro;
                 Adsobalin.addPoints(false, origen, mov.indice);
                 mov.angHit = angulo;
-                if (mov.golpear()) {
+                if (mov.golpear(origen)) {
                     Adsobalin.addPoints(true, origen, mov.indice);
                     Envios.sendGolpe(origen, mov.indice, true, llave, angulo);
                 }

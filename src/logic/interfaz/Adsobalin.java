@@ -12,6 +12,7 @@ import javax.swing.JOptionPane;
 import java.util.Random;
 import javafx.application.Platform;
 import logic.abstractos.Movil;
+import logic.sincronia.Envios;
 
 public class Adsobalin extends Application {
     
@@ -321,8 +322,59 @@ public class Adsobalin extends Application {
                         }
                     }
                     catch (Exception e) {}
-                    // Tarea notificar desconexion
+                    // notificar desconexion
+                    Envios.sendConex(i, false);
+                    notificaConex(i, false);
                 }
+            }
+        }
+    }
+    
+    public static void notificaKill(int golpeador, int golpeado) {
+        Mundo mun = null;
+        try {
+            mun = (Mundo)conector.getRaiz().getScene();
+        }
+        catch (Exception e) {
+            mun = null;
+        }
+        // luego de verificar que esta en modo juego
+        if (mun != null) {
+            // solo se muestran notificaciones cuando muere un jugador, no NPC
+            if (!userIsNPC(golpeado)) {
+                String txt = userName[golpeado] + " < ";
+                if (!userIsNPC(golpeador)) {
+                    txt += userName[golpeador];
+                }
+                else {
+                    txt += "***";
+                }
+                boolean isAzul = userGetGrupo(golpeado) == GRU_AZUL;
+                mun.setNotificacion(txt, isAzul);
+            }
+        }
+    }
+    
+    public static void notificaConex(int ind, boolean isConex) {
+        Mundo mun = null;
+        try {
+            mun = (Mundo)conector.getRaiz().getScene();
+        }
+        catch (Exception e) {
+            mun = null;
+        }
+        // luego de verificar que esta en modo juego
+        if (mun != null) {
+            String txt = userName[ind];
+            if (!txt.isEmpty()) {
+                if (isConex) {
+                    txt += " (Hi)";
+                }
+                else {
+                    txt += " (X)";
+                }
+                boolean isAzul = userGetGrupo(ind) == GRU_AZUL;
+                mun.setNotificacion(txt, isAzul);
             }
         }
     }

@@ -187,12 +187,13 @@ public abstract class Movil extends Objeto {
         }
     }
     
-    public boolean golpear() {
+    public boolean golpear(int quien) {
         // retorna verdadero si muere
         if (tempInmune == 0) {
             vida = Math.max(0, vida - 1);
             chillar();
             if (vida == 0) {
+                Adsobalin.notificaKill(quien, indice);
                 morir();
                 return true;
             }

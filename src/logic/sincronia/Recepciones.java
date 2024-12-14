@@ -100,6 +100,7 @@ public class Recepciones {
                         if (!ukey) {
                             break;
                         }
+                        // ahora si empieza a leer el mensaje
                         float tiempo = data.getFloat();
                         int radioMundial = data.getInt();
                         Adsobalin.gruPoints[0] = data.getInt();
@@ -113,8 +114,8 @@ public class Recepciones {
                             Adsobalin.userName[bestInd] = bestName;
                         }
                         if (recNPC(tiempo, radioMundial)) {
-                            try {
-                                Mundo mun = (Mundo)raiz.getScene();
+                            Mundo mun = getMundo();
+                            if (mun != null) {
                                 int ind = data.get();
                                 String servName = Conector.buffGetString(data);
                                 float[] pos = {0f, 0f};
@@ -140,7 +141,6 @@ public class Recepciones {
                                     }
                                 }
                             }
-                            catch (Exception e) {}
                         }
                         break;
                     
@@ -154,13 +154,7 @@ public class Recepciones {
                         // es cliente y tiene un servidor asociado
                         if (!Adsobalin.isServer &&
                                 !Conector.myServer.isEmpty()) {
-                            Mundo mun = null;
-                            try {
-                                mun = (Mundo)raiz.getScene();
-                            }
-                            catch (Exception e) {
-                                mun = null;
-                            }
+                            Mundo mun = getMundo();
                             if (mun != null) {
                                 if (mun.temp_get_mapa != -1) {
                                     mun.temp_get_mapa = -1f;
@@ -210,13 +204,7 @@ public class Recepciones {
                     
                     case Envios.MSJ_PLAYER:
                         // verificar que esta en modo juego
-                        Mundo mun = null;
-                        try {
-                            mun = (Mundo)raiz.getScene();
-                        }
-                        catch (Exception e) {
-                            mun = null;
-                        }
+                        Mundo mun = getMundo();
                         // abortar si es un cliente
                         if (!Adsobalin.isServer && mun == null) {
                             break;
@@ -253,13 +241,7 @@ public class Recepciones {
                     
                     case Envios.MSJ_DISPARO:
                         // verificar que esta en modo juego
-                        Mundo mud = null;
-                        try {
-                            mud = (Mundo)raiz.getScene();
-                        }
-                        catch (Exception e) {
-                            mud = null;
-                        }
+                        Mundo mud = getMundo();
                         // abortar si es un cliente
                         if (!Adsobalin.isServer && mud == null) {
                             break;
@@ -287,13 +269,7 @@ public class Recepciones {
                     
                     case Envios.MSJ_GOLPE:
                         // verificar que esta en modo juego
-                        Mundo mum = null;
-                        try {
-                            mum = (Mundo)raiz.getScene();
-                        }
-                        catch (Exception e) {
-                            mum = null;
-                        }
+                        Mundo mum = getMundo();
                         // abortar si es un cliente
                         if (!Adsobalin.isServer && mum == null) {
                             break;
@@ -305,7 +281,7 @@ public class Recepciones {
                         float angud = data.getFloat();
                         int clave = data.getInt();
                         boolean isKill = data.get() == 1;
-                        // crear el proyectil
+                        // procesar la recepcion de peticion de golpe
                         if (mum != null && Envios.verifyGolpe(clave)) {
                             recGolpe(golpeador, golpeado,
                                     llaved, angud, isKill);
@@ -315,12 +291,30 @@ public class Recepciones {
                             Conector.enviaAll(Conector.buf2arr(data), emisor);
                         }
                         break;
+                    
+                    case Envios.MSJ_CONEX:
+                        if (Adsobalin.isServer) {
+                            break;
+                        }
+                        Adsobalin.notificaConex(data.get(), data.get() == 1);
+                        break;
                 }
             }
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+    
+    private Mundo getMundo() {
+        Mundo mun = null;
+        try {
+            mun = (Mundo)raiz.getScene();
+        }
+        catch (Exception e) {
+            mun = null;
+        }
+        return mun;
     }
     
     private void recHola(int version, int estilo, int grupo,
@@ -499,13 +493,13 @@ public class Recepciones {
         }
         // hacer notificacion
         if (isKill) {
-            // Tarea
+            Adsobalin.notificaKill(golpeador, golpeado);
             return true;
         }
         // solo cuando es un objeto no sombra, sera damageado
         if (mov != null) {
             if (!Sombra.class.isInstance(mov)) {
-                if (mov.golpear()) {
+                if (mov.golpear(golpeador)) {
                     Adsobalin.addPoints(true, golpeador, golpeado);
                     Envios.sendGolpe(golpeador, golpeado, true, llave, angulo);
                 }
