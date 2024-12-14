@@ -4,6 +4,9 @@ package logic.sincronia;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.NetworkInterface;
+import java.net.Inet4Address;
+import java.util.Enumeration;
 import java.nio.ByteBuffer;
 import javafx.application.Platform;
 import javafx.stage.Stage;
@@ -206,5 +209,32 @@ public class Conector {
                 });
             }
         }
+    }
+    
+    public static String getMyIP() {
+        // codigo obtenido de internet para hallar la IP LAN
+        try {
+            Enumeration<NetworkInterface> intrfcs =
+                    NetworkInterface.getNetworkInterfaces();
+            while (intrfcs.hasMoreElements()) {
+                NetworkInterface intrfz = intrfcs.nextElement();
+                // ignorar interfaces no activas o loopback
+                if (!intrfz.isUp() || intrfz.isLoopback()) {
+                    continue;
+                }
+                Enumeration<InetAddress> inetAddresses =
+                        intrfz.getInetAddresses();
+                while (inetAddresses.hasMoreElements()) {
+                    InetAddress intdrss = inetAddresses.nextElement();
+                    // filtrar solo direcciones IPv4
+                    if (intdrss instanceof Inet4Address &&
+                            !intdrss.isLoopbackAddress()) {
+                        return intdrss.getHostAddress();
+                    }
+                }
+            }
+        }
+        catch (Exception e) {return "naaaj";}
+        return "";
     }
 }

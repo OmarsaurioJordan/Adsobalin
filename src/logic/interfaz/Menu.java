@@ -1,6 +1,7 @@
 package logic.interfaz;
 // interfaz principal para inicio y configuracion del software
 
+import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -8,6 +9,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.shape.Circle;
+import javafx.scene.control.Label;
 import logic.sincronia.Envios;
 import logic.sincronia.Conector;
 
@@ -60,6 +62,9 @@ public class Menu extends GUIs {
         
         // colocar la version de compilacion arriba a la izquierda
         setLabel("versión\n   " + Adsobalin.VERSION, ww * 0.05f, hh * 0.05f);
+        
+        // colocar la IP LAN propia
+        setLabel(Conector.getMyIP(), ww * 0.75f, hh * 0.05f);
         
         // colocar una caja de escritura al lado izquierdo, para nombre
         setLabel("Nombre", ww * 0.4f - 100f * esc + 10f * esc,
