@@ -22,18 +22,18 @@ public class Adsobalin extends Application {
     public static Random DADO = new Random(System.currentTimeMillis());
     
     // la talla de todos los componentes visuales, todo es escalable
-    public static final double WIDTH = 720d; // 720
-    public static final double HEIGHT = 480d; // 480
+    public static final double WIDTH = 720d;
+    public static final double HEIGHT = 480d;
     public static final double RATIOWH = WIDTH / HEIGHT;
-    public static final double ESCALA = WIDTH / 720d; // no cambiar
     public static final double HEADER = 40d;
     // es true si llena el largo de la ventana principal, sino, llena el alto
     public static boolean isWidth = true;
     
     // la fuente de texto usada en todo el software
-    public static Font letras = new Font("Verdana", 18 * ESCALA);
-    public static Font letrimedias = new Font("Verdana", 27 * ESCALA);
-    public static Font letrotas = new Font("Verdana", 36 * ESCALA);
+    public static Font letricas = new Font("Verdana", 14);
+    public static Font letras = new Font("Verdana", 18);
+    public static Font letrimedias = new Font("Verdana", 27);
+    public static Font letrotas = new Font("Verdana", 36);
     
     // indices para grupos
     public static final int GRU_AZUL = 0;

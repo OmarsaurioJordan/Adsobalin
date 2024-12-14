@@ -6,6 +6,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.robot.Robot;
 import javafx.scene.image.Image;
 import javafx.scene.Cursor;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.abstractos.*;
@@ -20,7 +21,10 @@ public class Mundo extends GUIs {
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
     public static final float TEMP_RESPAWN_MAX = 7f;
-    public static final float RAD_RESPAWN = 100f * (float)Adsobalin.ESCALA;
+    public static final float RAD_RESPAWN = 100f;
+    public static final float NOTIFI_TIME = 7f;
+    public static final float NOTIFI_HEIGTH = (float)Adsobalin.HEIGHT * 0.72f;
+    public static final float NOTIFI_SEPARACION = 32f;
     
     // guardara todos los objetos que existen instanciados en el juego
     public static ArrayList<Object> pool = new ArrayList<>();
@@ -59,8 +63,7 @@ public class Mundo extends GUIs {
     
     // imagen del mouse
     private Image mouseImg = new Image("assets/entorno/mouse.png",
-        72f * 0.75f * Adsobalin.ESCALA,
-        72f * 0.75f * Adsobalin.ESCALA, false, false);
+        72f * 0.75f, 72f * 0.75f, false, false);
     // difuminado de la camara
     private Image difuminado = new Image("assets/entorno/camara.png",
         Adsobalin.WIDTH, Adsobalin.HEIGHT, false, false);
@@ -69,15 +72,23 @@ public class Mundo extends GUIs {
     
     // imagen de vida
     private Image vidaImg = new Image("assets/entorno/vida.png",
-        72f * 0.4f * Adsobalin.ESCALA,
-        72f * 0.4f * Adsobalin.ESCALA, false, false);
+        72f * 0.4f, 72f * 0.4f, false, false);
     // imagen de municion
     private Image municionImg = new Image("assets/entorno/municion.png",
-        110f * 0.75f * Adsobalin.ESCALA,
-        110f * 0.75f * Adsobalin.ESCALA, false, false);
+        110f * 0.75f, 110f * 0.75f, false, false);
+    // imagen de notificacion
+    private Image notifiImgAzul = new Image("assets/interfaz/notifyAzul.png",
+        180f * 0.75f, 40f * 0.75f, false, false);
+    private Image notifiImgRojo = new Image("assets/interfaz/notifyRojo.png",
+        180f * 0.75f, 40f * 0.75f, false, false);
     
     // hilo para todo el main loop del juego
     private AnimationTimer aniLoop;
+    
+    // estructuras para las notificaciones
+    private ArrayList<Float> notifiReloj = new ArrayList<>();
+    private ArrayList<String> notifiMsj = new ArrayList<>();
+    private ArrayList<Boolean> notifiAzul = new ArrayList<>();
     
     public Mundo(Stage raiz, boolean[] npcok, int talla,
             int obstaculos, int tiempo) {
@@ -88,7 +99,7 @@ public class Mundo extends GUIs {
             radioMundo = talla;
         }
         else {
-            radioMundo = (int)(((RADIO / 2) * (1 + talla)) * Adsobalin.ESCALA);
+            radioMundo = (int)((RADIO / 2) * (1 + talla));
         }
         centroMundo[0] = radioMundo;
         centroMundo[1] = radioMundo;
@@ -580,6 +591,20 @@ public class Mundo extends GUIs {
         return cdvrs;
     }
     
+    public void setNotificacion(String txt, boolean isAzul) {
+        notifiMsj.add(txt);
+        notifiAzul.add(isAzul);
+        if (notifiReloj.isEmpty()) {
+            notifiReloj.add(NOTIFI_TIME);
+        }
+        else {
+            int tot = notifiReloj.size();
+            float tMax = notifiReloj.get(tot - 1);
+            float tPaso = NOTIFI_SEPARACION / (NOTIFI_HEIGTH / NOTIFI_TIME);
+            notifiReloj.add(Math.max(NOTIFI_TIME, tMax + tPaso));
+        }
+    }
+    
     private void step(float delta) {
         // ejecuta toda la logica del juego:
         // obtener y procesar la posicion del mouse
@@ -609,6 +634,20 @@ public class Mundo extends GUIs {
                 Player ply = (Player)newObjeto(Player.class,
                         lugarRespawn(Adsobalin.grupo));
                 ply.setAvatar(Adsobalin.indice);
+            }
+        }
+        
+        // mover notificaciones
+        float actT;
+        for (int i = notifiReloj.size() - 1; i > -1; i--) {
+            actT = notifiReloj.get(i) - delta;
+            if (actT <= 0) {
+                notifiReloj.remove(i);
+                notifiMsj.remove(i);
+                notifiAzul.remove(i);
+            }
+            else {
+                notifiReloj.set(i, actT);
             }
         }
         
@@ -770,10 +809,31 @@ public class Mundo extends GUIs {
                     width * 0.02f, height * 0.3f);
         }
         
+        // dibujar las notificaciones
+        drawNotificaciones(gc, width, height);
+        
         // dibujar el mouse
         float[] mPos = Tools.vecResta(mousePos, camaraPos);
         gc.drawImage(mouseImg, mPos[0] - mouseImg.getWidth() / 2f,
                 mPos[1] - mouseImg.getHeight() / 2f);
+    }
+    
+    private void drawNotificaciones(GraphicsContext gc,
+            float width, float height) {
+        gc.setFont(Adsobalin.letricas);
+        gc.setFill(Color.BLACK);
+        float speed = NOTIFI_HEIGTH / NOTIFI_TIME;
+        float y;
+        for (int i = 0; i < notifiReloj.size(); i++) {
+            y = height - NOTIFI_HEIGTH + notifiReloj.get(i) * speed;
+            if (notifiAzul.get(i)) {
+                gc.drawImage(notifiImgAzul, width * 0.005f, y);
+            }
+            else {
+                gc.drawImage(notifiImgRojo, width * 0.005f, y);
+            }
+            gc.fillText(notifiMsj.get(i), width * 0.005f + 8f, y + 20f);
+        }
     }
     
     // obtiener y procesar la posicion del mouse

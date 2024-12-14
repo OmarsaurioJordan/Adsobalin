@@ -45,7 +45,7 @@ public abstract class GUIs extends Scene {
         txt.setFont(Adsobalin.letras);
         txt.setLayoutX(posX);
         txt.setLayoutY(posY);
-        txt.setPrefWidth(200f * Adsobalin.ESCALA);
+        txt.setPrefWidth(200f);
         gui.getChildren().add(txt);
         return txt;
     }
@@ -54,7 +54,7 @@ public abstract class GUIs extends Scene {
             float posX, float posY, float talla, boolean isRight) {
         // crear boton triangular posicionado en la interfaz x,y
         // primero se obtienen las 3 imagenes de estado del boton
-        float lado = talla * 0.75f * (float)Adsobalin.ESCALA;
+        float lado = talla * 0.75f;
         Image normal = new Image(pathMocho + "0.png",
             lado, lado, false, false);
         Image sobre = new Image(pathMocho + "1.png",
@@ -71,7 +71,7 @@ public abstract class GUIs extends Scene {
         
         // se crea la mascara de colision con forma triangular
         Polygon triangulo = new Polygon();
-        double desf = 5f * Adsobalin.ESCALA;
+        double desf = 5f;
         if (isRight) {
             triangulo.getPoints().addAll(
                     desf * 2f, desf,
@@ -122,8 +122,7 @@ public abstract class GUIs extends Scene {
     
     protected void fontSize(Label label, double newSize) {
         Font actual = label.getFont();
-        label.setFont(new Font(actual.getName(),
-                newSize * Adsobalin.ESCALA));
+        label.setFont(new Font(actual.getName(), newSize));
     }
     
     public void setMensaje(String texto, boolean isOk) {

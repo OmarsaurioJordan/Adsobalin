@@ -10,9 +10,7 @@ import logic.interfaz.Adsobalin;
 public class Arbol extends Solido {
     
     private Image sprite = new Image("assets/entorno/arbol.png",
-        160f * 0.75f * (float)Adsobalin.ESCALA,
-        160f * 0.75f * (float)Adsobalin.ESCALA,
-        false, false);
+        160f * 0.75f, 160f * 0.75f, false, false);
     
     public Arbol(float[] posicion) {
         super(posicion, Objeto.OBJ_ARBOL);

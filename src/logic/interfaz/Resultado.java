@@ -29,7 +29,6 @@ public class Resultado extends GUIs {
         // variables compactas para escritura eficiente
         float ww = (float)Adsobalin.WIDTH;
         float hh = (float)Adsobalin.HEIGHT;
-        float esc = (float)Adsobalin.ESCALA;
         
         // pintar el fondo de la interfaz
         pintarFondo();
@@ -57,16 +56,16 @@ public class Resultado extends GUIs {
             for (int y = 0; y < 9; y++) {
                 // espacio para nombres
                 nombres[n] = setLabel("*" + letra[x] + (y + 1) + "*",
-                        ww * 0.25f - 100f * esc + x * (ww * 0.3f),
-                        hh * 0.28f + y * (32f * esc));
-                nombres[n].setPrefWidth(90f * Adsobalin.ESCALA);
+                        ww * 0.25f - 100f + x * (ww * 0.3f),
+                        hh * 0.28f + y * 32f);
+                nombres[n].setPrefWidth(90f);
                 nombres[n].setAlignment(Pos.CENTER);
                 nombres[n].setBackground(bck[x]);
                 // espacio para puntajes
                 puntos[n] = setLabel("0",
                         ww * 0.25f + x * (ww * 0.3f),
-                        hh * 0.28f + y * (32f * esc));
-                puntos[n].setPrefWidth(90f * Adsobalin.ESCALA);
+                        hh * 0.28f + y * 32f);
+                puntos[n].setPrefWidth(90f);
                 puntos[n].setAlignment(Pos.CENTER);
                 puntos[n].setBackground(bck[x]);
                 n++;
@@ -77,7 +76,7 @@ public class Resultado extends GUIs {
         for (int y = 0; y < 2; y++) {
             punGrupos[y] = setLabel("0", ww * 0.73f,
                     hh * 0.32f + y * hh * 0.15f);
-            punGrupos[y].setPrefWidth(160f * Adsobalin.ESCALA);
+            punGrupos[y].setPrefWidth(160f);
             punGrupos[y].setAlignment(Pos.CENTER);
             punGrupos[y].setFont(Adsobalin.letrotas);
             punGrupos[y].setBackground(bck[y]);

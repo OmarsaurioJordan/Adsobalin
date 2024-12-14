@@ -62,9 +62,7 @@ public class Cadaver extends Objeto {
             bcol = bcol.replace("kill", "hueso");
         }
         sprite = new Image("assets/" + bcol,
-            220f * 0.75f * (float)Adsobalin.ESCALA,
-            220f * 0.75f * (float)Adsobalin.ESCALA,
-            false, false);
+            220f * 0.75f, 220f * 0.75f, false, false);
     }
     
     @Override

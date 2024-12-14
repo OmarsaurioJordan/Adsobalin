@@ -14,7 +14,7 @@ import logic.interfaz.Sonidos;
 public class Player extends Movil {
     
     // para manejar la camara
-    private static float MIRA_MAX = 100f * (float)Adsobalin.ESCALA;
+    private static float MIRA_MAX = 100f;
     private static float[] DESF_MIRA = {
         (float)Adsobalin.WIDTH / 2f,
         (float)Adsobalin.HEIGHT / 2f
@@ -36,9 +36,7 @@ public class Player extends Movil {
             bcol = "azules/azul";
         }
         sprite = new Image("assets/" + bcol + estilo + ".png",
-            120f * 0.75f * (float)Adsobalin.ESCALA,
-            120f * 0.75f * (float)Adsobalin.ESCALA,
-            false, false);
+            120f * 0.75f, 120f * 0.75f, false, false);
     }
     
     private void moverComando(float delta) {

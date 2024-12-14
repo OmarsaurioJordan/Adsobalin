@@ -7,8 +7,8 @@ import logic.abstractos.Tools;
 public class Sonidos {
     
     // constantes para alcance del sonido
-    public static final float DIST_OIDO = 420f * (float)Adsobalin.ESCALA;
-    public static final float DIST_BALANCE = 210f * (float)Adsobalin.ESCALA;
+    public static final float DIST_OIDO = 420f;
+    public static final float DIST_BALANCE = 210f;
     
     // listado de sonidos
     public static final int SND_DISPARO = 0;

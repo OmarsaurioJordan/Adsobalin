@@ -25,9 +25,7 @@ public class Base extends Solido {
             bcol = "rojos/rojo";
         }
         sprite = new Image("assets/" + bcol + "base.png",
-            170f * 0.75f * (float)Adsobalin.ESCALA,
-            170f * 0.75f * (float)Adsobalin.ESCALA,
-            false, false);
+            170f * 0.75f, 170f * 0.75f, false, false);
     }
     
     @Override

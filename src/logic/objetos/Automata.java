@@ -51,9 +51,7 @@ public class Automata extends Movil {
             bcol = "azules/azul0.png";
         }
         sprite = new Image("assets/" + bcol,
-            120f * 0.75f * (float)Adsobalin.ESCALA,
-            120f * 0.75f * (float)Adsobalin.ESCALA,
-            false, false);
+            120f * 0.75f, 120f * 0.75f, false, false);
     }
     
     private boolean existeObjetivo() {

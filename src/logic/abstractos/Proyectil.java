@@ -9,11 +9,11 @@ import logic.interfaz.Sonidos;
 public abstract class Proyectil extends Objeto {
     
     // radio para todos los proyectiles colisionables
-    public static float RADIO = 6f * (float)Adsobalin.ESCALA;
+    public static float RADIO = 6f;
     // segundos que dura la existencia del proyectil
     public static final float TEMP_EXISTENCIA_MAX = 1f;
     // es la rapidez con que se mueven los proyectiles
-    public static final float VELOCIDAD = 600f * (float)Adsobalin.ESCALA;
+    public static final float VELOCIDAD = 600f;
     
     // segundos que dura la existencia del proyectil
     protected float tempExistencia = TEMP_EXISTENCIA_MAX;
@@ -44,9 +44,7 @@ public abstract class Proyectil extends Objeto {
             bcol = "azules/azulproyectil.png";
         }
         Image sprite = new Image("assets/" + bcol,
-            110f * 0.75f * (float)Adsobalin.ESCALA,
-            110f * 0.75f * (float)Adsobalin.ESCALA,
-            false, false);
+            110f * 0.75f, 110f * 0.75f, false, false);
         return sprite;
     }
     

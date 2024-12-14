@@ -1,7 +1,6 @@
 package logic.interfaz;
 // interfaz principal para inicio y configuracion del software
 
-import javafx.geometry.Pos;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -9,7 +8,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
 import javafx.scene.shape.Circle;
-import javafx.scene.control.Label;
 import logic.sincronia.Envios;
 import logic.sincronia.Conector;
 
@@ -43,19 +41,18 @@ public class Menu extends GUIs {
         // variables compactas para escritura eficiente
         float ww = (float)Adsobalin.WIDTH;
         float hh = (float)Adsobalin.HEIGHT;
-        float esc = (float)Adsobalin.ESCALA;
         
         // pintar el fondo de la interfaz
         pintarFondo();
         
         // colocar el titulo principal arriba en el centro
-        float[] wh = {489f * 0.5f * esc, 323f * 0.5f * esc};
+        float[] wh = {489f * 0.5f, 323f * 0.5f};
         Image titulo = new Image("assets/interfaz/titulo.png",
             wh[0], wh[1], false, false);
         gc.drawImage(titulo, ww / 2f - wh[0] / 2f, hh * 0.05f);
         
         // colocar el simbolo de omwekiatl en la esquina inferior izquierda
-        wh[0] = 175f * 0.6f * esc; wh[1] = 200f * 0.6f * esc;
+        wh[0] = 175f * 0.6f; wh[1] = 200f * 0.6f;
         Image creditos = new Image("assets/interfaz/creditos.png",
             wh[0], wh[1], false, false);
         gc.drawImage(creditos, ww * 0.02f, hh * 0.98f - wh[1]);
@@ -67,8 +64,8 @@ public class Menu extends GUIs {
         setLabel(Conector.getMyIP(), ww * 0.75f, hh * 0.05f);
         
         // colocar una caja de escritura al lado izquierdo, para nombre
-        setLabel("Nombre", ww * 0.4f - 100f * esc + 10f * esc,
-                323f * 0.5f * esc + hh * 0.2f - 32f * esc);
+        setLabel("Nombre", ww * 0.4f - 100f + 10f,
+                323f * 0.5f + hh * 0.2f - 32f);
         TextField fNombre = fieldNombre;
         fNombre.setFont(Adsobalin.letras);
         fNombre.textProperty().addListener((obs, oldV, newV) -> {
@@ -76,14 +73,14 @@ public class Menu extends GUIs {
                 fNombre.setText(oldV);
             }
         });
-        fNombre.setLayoutX(ww * 0.4f - 100f * esc);
-        fNombre.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
-        fNombre.setPrefWidth(100f * esc);
+        fNombre.setLayoutX(ww * 0.4f - 100f);
+        fNombre.setLayoutY(323f * 0.5f + hh * 0.2f);
+        fNombre.setPrefWidth(100f);
         gui.getChildren().add(fNombre);
         
         // colocar una caja de escritura al lado derecho, para IP
-        setLabel("IP de server o vacío", ww * 0.5f + 10f * esc,
-                323f * 0.5f * esc + hh * 0.2f - 32f * esc);
+        setLabel("IP de server o vacío", ww * 0.5f + 10f,
+                323f * 0.5f + hh * 0.2f - 32f);
         TextField fIP = fieldIP;
         fIP.setFont(Adsobalin.letras);
         fIP.textProperty().addListener((obs, oldV, newV) -> {
@@ -92,8 +89,8 @@ public class Menu extends GUIs {
             }
         });
         fIP.setLayoutX(ww * 0.5);
-        fIP.setLayoutY(323f * 0.5f * esc + hh * 0.2f);
-        fIP.setPrefWidth(200f * esc);
+        fIP.setLayoutY(323f * 0.5f + hh * 0.2f);
+        fIP.setPrefWidth(200f);
         gui.getChildren().add(fIP);
         
         // colocar el gran boton de play abajo a la derecha
@@ -179,7 +176,7 @@ public class Menu extends GUIs {
     
     private Button setAvatar(float posX, float posY) {
         // primero se obtienen las imagenes de estado del boton
-        float lado = 120f * 0.75f * (float)Adsobalin.ESCALA;
+        float lado = 120f * 0.75f;
         for (int i = 0; i < 29; i++) {
             rojo[i] = new Image("assets/rojos/rojo" + i + ".png",
                 lado, lado, false, false);
@@ -198,8 +195,8 @@ public class Menu extends GUIs {
         
         // se crea la mascara de colision con forma circular
         Circle circulo = new Circle(lado / 2f);
-        circulo.setCenterX(lado / 2f + 7f * Adsobalin.ESCALA);
-        circulo.setCenterY(lado / 2f + 2f * Adsobalin.ESCALA);
+        circulo.setCenterX(lado / 2f + 7f);
+        circulo.setCenterY(lado / 2f + 2f);
         boton.setClip(circulo);
         
         // se establece el comportamiento del mouse para cambiar estados

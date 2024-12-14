@@ -42,7 +42,6 @@ public class Lobby extends GUIs {
         // variables compactas para escritura eficiente
         float ww = (float)Adsobalin.WIDTH;
         float hh = (float)Adsobalin.HEIGHT;
-        float esc = (float)Adsobalin.ESCALA;
         
         // pintar el fondo de la interfaz
         pintarFondo();
@@ -71,17 +70,17 @@ public class Lobby extends GUIs {
             for (int y = 0; y < 9; y++) {
                 auxLabel = setLabel(
                         "*" + letra[x] + (y + 1) + "*",
-                        ww * 0.4f - 100f * esc + x * (ww * 0.2f),
-                        hh * 0.28f + y * (32f * esc)
+                        ww * 0.4f - 100f + x * (ww * 0.2f),
+                        hh * 0.28f + y * 32f
                 );
-                auxLabel.setPrefWidth(100f * Adsobalin.ESCALA);
+                auxLabel.setPrefWidth(100f);
                 auxLabel.setAlignment(Pos.CENTER);
                 auxLabel.setBackground(bck[x]);
                 nombres.add(auxLabel);
                 // poner tambien un checkbox para el NPC
                 auxChk = setCheckBox("",
-                    ww * 0.4f - 130f * esc + x * (ww * 0.2f),
-                    hh * 0.28f + y * (32f * esc));
+                    ww * 0.4f - 130f + x * (ww * 0.2f),
+                    hh * 0.28f + y * 32f);
                 auxChk.setSelected(true);
                 auxChk.setOnAction(event -> reDibujar());
                 activaNPCs.add(auxChk);
@@ -130,7 +129,7 @@ public class Lobby extends GUIs {
         
         // poner el boton de cambio de grupo abajo a la izquierda
         Label txt = setLabel("cambiar\nde grupo", ww * 0.03f, hh * 0.75f);
-        txt.setPrefWidth(100f * Adsobalin.ESCALA);
+        txt.setPrefWidth(100f);
         Button cmbGrupo = setButton("assets/interfaz/right",
                 ww * 0.05f, hh * 0.9f, 72f, true);
         cmbGrupo.setOnAction(event -> cambioGrupo());

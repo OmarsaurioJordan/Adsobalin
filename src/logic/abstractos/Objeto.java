@@ -70,7 +70,7 @@ public abstract class Objeto {
     public static void drawText(GraphicsContext gc,
             String txt, float[] posicion) {
         float[] pos = realPos(posicion);
-        float desf = 10f * (float)Adsobalin.ESCALA;
+        float desf = 10f;
         gc.fillText(txt, pos[0] - desf, pos[1] - desf * 2f);
     }
     

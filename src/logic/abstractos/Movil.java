@@ -17,9 +17,9 @@ import logic.objetos.Cadaver;
 public abstract class Movil extends Objeto {
     
     // radio para todos los moviles colisionables
-    public static float RADIO = 12f * (float)Adsobalin.ESCALA;
+    public static float RADIO = 12f;
     // es la rapidez con que se mueven los entes
-    public static final float VELOCIDAD = 200f * (float)Adsobalin.ESCALA;
+    public static final float VELOCIDAD = 200f;
     // es la rapidez con que la mira del avatar sigue al mouse
     public static final float VELROT_MIRA = 6f;
     // los puntos de vida maximos

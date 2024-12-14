@@ -31,9 +31,7 @@ public class Sombra extends Movil {
             bcol = "azules/azul";
         }
         sprite = new Image("assets/" + bcol + estilo + ".png",
-            120f * 0.75f * (float)Adsobalin.ESCALA,
-            120f * 0.75f * (float)Adsobalin.ESCALA,
-            false, false);
+            120f * 0.75f, 120f * 0.75f, false, false);
     }
     
     @Override

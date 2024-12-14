@@ -65,6 +65,10 @@ public class Conector {
         hilo.start();
     }
     
+    public Stage getRaiz() {
+        return raiz;
+    }
+    
     public void setEscuchar(Stage raiz) {
         // si pudo abrir el socket, creara un hilo para
         // recibir los mensajes entrantes, el demon lo auto cierra

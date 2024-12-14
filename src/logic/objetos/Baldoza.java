@@ -11,9 +11,7 @@ public class Baldoza extends Decorado {
     
     private Image sprite = new Image("assets/entorno/baldoza" +
         Adsobalin.DADO.nextInt(12) + ".png",
-        80f * 0.75f * (float)Adsobalin.ESCALA,
-        80f * 0.75f * (float)Adsobalin.ESCALA,
-        false, false);
+        80f * 0.75f, 80f * 0.75f, false, false);
     
     public Baldoza(float[] posicion) {
         super(posicion, Objeto.OBJ_BALDOZA);
