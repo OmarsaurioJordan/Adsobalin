@@ -796,7 +796,7 @@ public class Mundo extends GUIs {
         else {
             gc.setFill(Color.SILVER);
         }
-        gc.fillText("P: " + Adsobalin.userPoints[Adsobalin.indice],
+        gc.fillText("P: " + Adsobalin.userGetPoints(Adsobalin.indice),
                 width * 0.01f, height * 0.20f);
         gc.setFont(Adsobalin.letras);
         gc.setFill(Color.SILVER);
@@ -805,8 +805,8 @@ public class Mundo extends GUIs {
                     width * 0.02f, height * 0.25f);
         }
         else {
-            gc.fillText("B: " + Adsobalin.userPoints[utr],
-                    width * 0.02f, height * 0.25f);
+            gc.fillText("B: " + Adsobalin.userGetPoints(utr),
+                width * 0.02f, height * 0.25f);
             gc.fillText(Adsobalin.userName[utr],
                     width * 0.02f, height * 0.3f);
         }

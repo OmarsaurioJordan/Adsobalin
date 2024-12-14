@@ -107,6 +107,7 @@ public class Recepciones {
                         Adsobalin.gruPoints[1] = data.getInt();
                         for (int i = 0; i < 18; i++) {
                             Adsobalin.userPoints[i] = data.getInt();
+                            Adsobalin.userNPCpoints[i] = data.getInt();
                         }
                         byte bestInd = data.get();
                         String bestName = Conector.buffGetString(data);

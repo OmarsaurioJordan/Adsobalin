@@ -75,7 +75,8 @@ public class Adsobalin extends Application {
     public static String[] userName = new String[18];
     public static int[] userStyle = new int[18];
     public static float[] userPing = new float[18];
-    public static int [] userPoints = new int[18];
+    public static int[] userPoints = new int[18];
+    public static int[] userNPCpoints = new int[18];
     
     // objeto que manejara todos los sonidos
     public static Sonidos masterSound = new Sonidos();
@@ -144,7 +145,12 @@ public class Adsobalin extends Application {
                     damage = (int)(damage * 1.5f);
                 }
             }
-            userPoints[indWin] += damage;
+            if (userIsNPC(indWin)) {
+                userNPCpoints[indWin] += damage;
+            }
+            else {
+                userPoints[indWin] += damage;
+            }
             gruPoints[userGetGrupo(indWin)] += damage;
         }
     }
@@ -169,12 +175,14 @@ public class Adsobalin extends Application {
         // retorna ind con usuario que tiene mejores puntos, o -1 si empate
         int best = -1;
         int pts = 0;
+        int act;
         for (int i = 0; i < 18; i++) {
-            if (userPoints[i] > pts) {
-                pts = userPoints[i];
+            act = userGetPoints(i);
+            if (act > pts) {
+                pts = act;
                 best = i;
             }
-            else if (userPoints[i] == pts) {
+            else if (act == pts) {
                 best = -1;
             }
         }
@@ -262,6 +270,7 @@ public class Adsobalin extends Application {
             userPing[ind] = Conector.PING;
             if (estado != EST_JUEGO) {
                 userPoints[ind] = 0;
+                userNPCpoints[ind] = 0;
             }
         }
         return ind;
@@ -273,6 +282,7 @@ public class Adsobalin extends Application {
         userPing[ind] = 0f;
         if (estado != EST_JUEGO || forcePts) {
             userPoints[ind] = 0;
+            userNPCpoints[ind] = 0;
         }
         if (estado != EST_JUEGO || forceIP) {
             userIP[ind] = "";
@@ -296,8 +306,16 @@ public class Adsobalin extends Application {
             }
             else {
                 userPoints[i] = 0;
+                userNPCpoints[i] = 0;
             }
         }
+    }
+    
+    public static int userGetPoints(int ind) {
+        if (userIsNPC(ind)) {
+            return userNPCpoints[ind];
+        }
+        return userPoints[ind];
     }
     
     public static void userPingStep(Stage raiz, float delta) {

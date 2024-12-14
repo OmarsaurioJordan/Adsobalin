@@ -1,26 +1,26 @@
 TAREAS ADSOBALIN:
-0
+interfaz
 - poner en pantalla completa con F4.
 - evitar cambio de tamaño de pantalla al pasar de interfaz.
 - no se está guardando la información al salir estando en lobby???
-1
+NPCs
 - hacer alertas que atraigan NPCs.
 - atraer NPC al ser golpeado (verificar código...).
 - poner supervisión de mira con producto punto.
-5
+sonido
 - sonidos de efectos 2D, falta kill.
 - sonidos de efectos 2D deben sincronizarse todos.
 - sonidos efectos 1D.
 - música de fondo para menú, lobby, juego y resultados.
-6
+extra
 - verificar al llegar un mensaje, que la ip este en la lista server, con nombre.
 - pantalla gris si una vida.
-- conteo de puntos independiente para usuario o NPC, no suman.
-P:
+probar
 - desconexión de jugador y borrado del avatar.
 - reiniciar juego a lobby otra vez.
 - desconectar actualiza lobby.
 - conexión desconexión crea elimina NPC.
 - notificaciones kill, conex, desconex.
 - ver mensaje de servidor desconectado en menu.
+- probar si puntos usr vs NPC trabajan bien.
 .

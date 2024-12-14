@@ -135,23 +135,20 @@ public class Resultado extends GUIs {
     }
     
     private Map.Entry<String, Integer> getMovilName(int indMovil) {
+        int pts = Adsobalin.userGetPoints(indMovil);
         if (Adsobalin.userIsNPC(indMovil)) {
             if (Mundo.isNPCinGame(indMovil)) {
-                return Map.entry(nombres[indMovil].getText(),
-                        Adsobalin.userPoints[indMovil]);
+                return Map.entry(nombres[indMovil].getText(), pts);
             }
             else {
-                return Map.entry("****",
-                        Adsobalin.userPoints[indMovil]);
+                return Map.entry("****", pts);
             }
         }
         else if (Adsobalin.indice == indMovil) {
-            return Map.entry("(" + Adsobalin.userName[indMovil] + ")",
-                    Adsobalin.userPoints[indMovil]);
+            return Map.entry("(" + Adsobalin.userName[indMovil] + ")", pts);
         }
         else {
-            return Map.entry(Adsobalin.userName[indMovil],
-                    Adsobalin.userPoints[indMovil]);
+            return Map.entry(Adsobalin.userName[indMovil], pts);
         }
     }
     

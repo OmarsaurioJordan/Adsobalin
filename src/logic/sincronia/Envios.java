@@ -187,7 +187,7 @@ public abstract class Envios {
         // crear un buffer para armar el mensaje
         ByteBuffer buff = Conector.newBuffer(MSJ_NPC,
             1 + Float.BYTES + Integer.BYTES * 3 +
-            Integer.BYTES * 18 + 2 + 2 * (Adsobalin.NAME_LEN + 1) +
+            Integer.BYTES * 18 * 2 + 2 + 2 * (Adsobalin.NAME_LEN + 1) +
             18 * (Float.BYTES * 3 + 3));
         
         // ingresar los datos especificos
@@ -198,6 +198,7 @@ public abstract class Envios {
         buff.putInt(Adsobalin.gruPoints[1]);
         for (int i = 0; i < 18; i++) {
             buff.putInt(Adsobalin.userPoints[i]);
+            buff.putInt(Adsobalin.userNPCpoints[i]);
         }
         int utr = Adsobalin.userBestPoints();
         buff.put((byte)utr);
