@@ -213,6 +213,10 @@ public class Adsobalin extends Application {
         return userGetGrupo(ind);
     }
     
+    public static void userForceName(int ind, String nombre) {
+        userName[ind] = nombre;
+    }
+    
     public static int userGetGrupo(int ind) {
         if (ind < 9) {
             return GRU_AZUL;

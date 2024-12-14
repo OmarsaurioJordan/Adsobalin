@@ -542,8 +542,10 @@ public class Mundo extends GUIs {
                         aut.ubicacion = pos.clone();
                         aut.anguMira = ang;
                         aut.setTemps(hit, inmune);
-                        if (!name.isEmpty()) {
-                            aut.nombre = name;
+                        aut.nombre = name;
+                        // poner nombre en el listado general
+                        if (!Adsobalin.isServer) {
+                            Adsobalin.userForceName(ind, name);
                         }
                     }
                     okey = true;
