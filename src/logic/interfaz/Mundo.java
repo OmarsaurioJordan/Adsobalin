@@ -18,6 +18,7 @@ public class Mundo extends GUIs {
     // constantes globales de la simulacion
     public static final double FPS = 60d;
     public static final int RADIO = 720;
+    public static final int PUNTOS_KILL = 3;
     public static int radioMundo;
     public static float[] centroMundo = new float[2];
     public static final float TEMP_RESPAWN_MAX = 7f;
@@ -81,6 +82,9 @@ public class Mundo extends GUIs {
         180f * 0.75f, 40f * 0.75f, false, false);
     private Image notifiImgRojo = new Image("assets/interfaz/notifyRojo.png",
         180f * 0.75f, 40f * 0.75f, false, false);
+    // para el fondo gris cuando casi muere
+    private Image grisaceo = new Image("assets/entorno/grisaceo.png",
+        Adsobalin.WIDTH, Adsobalin.HEIGHT, false, false);
     
     // hilo para todo el main loop del juego
     private AnimationTimer aniLoop;
@@ -205,6 +209,9 @@ public class Mundo extends GUIs {
         raiz.setOnCloseRequest(event -> {
             aniLoop.stop();
         });
+        
+        // sonido de inicio
+        Sonidos.sonarUno(Sonidos.UNO_JUEGO);
     }
     
     public void limpiarAll() {
@@ -689,8 +696,9 @@ public class Mundo extends GUIs {
         if (tiempoRestante == 0) {
             aniLoop.stop();
             pool.clear();
-            
             raiz.setScene(new Resultado(raiz));
+            Resultado res = (Resultado)raiz.getScene();
+            res.sonar();
         }
     }
     
@@ -718,6 +726,17 @@ public class Mundo extends GUIs {
                 mvl = (Movil)obj;
                 mvl.drawName(gc);
             }
+        }
+        
+        // poner gris el juego si hay poca vida
+        Movil mov = getMovil(Adsobalin.indice);
+        if (mov != null) {
+            if (mov.vida == 1) {
+                mov = null;
+            }
+        }
+        if (mov == null) {
+            gc.drawImage(grisaceo, 0f, 0f);
         }
         
         // dibujar la mira difuminada de la camara sobre todo

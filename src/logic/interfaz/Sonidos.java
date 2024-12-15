@@ -10,7 +10,7 @@ public class Sonidos {
     public static final float DIST_OIDO = 420f;
     public static final float DIST_BALANCE = 210f;
     
-    // listado de sonidos
+    // listado de sonidos 2D
     public static final int SND_DISPARO = 0;
     public static final int SND_CURACION = 1;
     public static final int SND_IMPACTO = 2;
@@ -23,6 +23,14 @@ public class Sonidos {
     public static final int SND_INI_PLAYER = 21; // 22,23
     public static final int SND_KILL_PLAYER = 24; // 25,26
     private static final AudioClip[] SND = new AudioClip[27];
+    
+    // listado de sonidos puntuales 1D
+    public static final int UNO_ERROR = 0;
+    public static final int UNO_JUEGO = 1;
+    public static final int UNO_FIN_SI = 2;
+    public static final int UNO_FIN_NO = 3;
+    public static final int UNO_LOBBY = 4;
+    private static final AudioClip[] UNO = new AudioClip[5];
     
     public Sonidos() {
         SND[SND_DISPARO] = new AudioClip(getClass().getResource(
@@ -51,6 +59,16 @@ public class Sonidos {
             SND[SND_KILL_PLAYER + i] = new AudioClip(getClass().getResource(
                     "/assets/sonidos2d/kill_player" + i + ".wav").toString());
         }
+        UNO[UNO_ERROR] = new AudioClip(getClass().getResource(
+                "/assets/sonidos1d/error.wav").toString());
+        UNO[UNO_JUEGO] = new AudioClip(getClass().getResource(
+                "/assets/sonidos1d/inicio_juego.wav").toString());
+        UNO[UNO_FIN_SI] = new AudioClip(getClass().getResource(
+                "/assets/sonidos1d/fin_triunfo.wav").toString());
+        UNO[UNO_FIN_NO] = new AudioClip(getClass().getResource(
+                "/assets/sonidos1d/fin_fracaso.wav").toString());
+        UNO[UNO_LOBBY] = new AudioClip(getClass().getResource(
+                "/assets/sonidos1d/cash.wav").toString());
     }
     
     public static void sonidoPos(int indSnd, float[] fuente) {
@@ -76,5 +94,9 @@ public class Sonidos {
             SND[indSnd].setBalance(bal);
             SND[indSnd].play();
         }
+    }
+    
+    public static void sonarUno(int indUno) {
+        UNO[indUno].play();
     }
 }

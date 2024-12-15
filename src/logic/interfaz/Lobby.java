@@ -183,6 +183,9 @@ public class Lobby extends GUIs {
             }
             chkConex.setDisable(true);
         }
+        
+        // sonido de inicio
+        Sonidos.sonarUno(Sonidos.UNO_LOBBY);
     }
     
     public void reDibujar() {

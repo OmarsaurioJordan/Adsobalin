@@ -110,7 +110,14 @@ public class Adsobalin extends Application {
             reEscalar(raiz, raiz.getWidth(), (double)newH - HEADER);
         });
         
-        //raiz.setMaximized(true);
+        raiz.sceneProperty().addListener((obs, oldScene, newScene) -> {
+            if (raiz.isMaximized()) {
+                raiz.setMaximized(false);
+                raiz.setMaximized(true);
+            }
+        });
+        
+        raiz.setMaximized(true);
         raiz.show();
     }
     
@@ -140,9 +147,11 @@ public class Adsobalin extends Application {
         if (isServer) {
             int damage = 1;
             if (isKill) {
-                damage = Movil.VIDA_MAX;
-                if (!userIsNPC(indLos)) {
-                    damage = (int)(damage * 1.5f);
+                // cuando se elimina hay mas puntos otorgados
+                damage = Mundo.PUNTOS_KILL;
+                // y si un jugador elimina a otro, hay mas puntos
+                if (!userIsNPC(indLos) && !userIsNPC(indWin)) {
+                    damage *= 2;
                 }
             }
             if (userIsNPC(indWin)) {

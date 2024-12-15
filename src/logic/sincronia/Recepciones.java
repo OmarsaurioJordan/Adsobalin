@@ -454,12 +454,9 @@ public class Recepciones {
         if (Adsobalin.estado != Adsobalin.EST_FINAL) {
             Platform.runLater(() -> {
                 raiz.setScene(new Resultado(raiz));
-            });
-        }
-        else {
-            Platform.runLater(() -> {
                 Resultado res = (Resultado)raiz.getScene();
                 res.setAllData(txt);
+                res.sonar();
             });
         }
     }

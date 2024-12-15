@@ -152,6 +152,18 @@ public class Resultado extends GUIs {
         }
     }
     
+    public void sonar() {
+        int ptsAzul = Integer.parseInt(punGrupos[0].getText());
+        int ptsRojo = Integer.parseInt(punGrupos[1].getText());
+        if ((Adsobalin.grupo == Adsobalin.GRU_AZUL && ptsAzul > ptsRojo) ||
+                (Adsobalin.grupo == Adsobalin.GRU_ROJO && ptsRojo > ptsAzul)) {
+            Sonidos.sonarUno(Sonidos.UNO_FIN_SI);
+        }
+        else {
+            Sonidos.sonarUno(Sonidos.UNO_FIN_NO);
+        }
+    }
+    
     public String getAllData() {
         return allData;
     }

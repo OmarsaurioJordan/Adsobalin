@@ -155,7 +155,10 @@ public abstract class GUIs extends Scene {
         fadeOut.setDelay(Duration.seconds(1));
         fadeOut.setOnFinished(event -> gui.getChildren().remove(msj));
 
-        // iniciar la animacion
+        // iniciar la animacion y sonar
         fadeOut.play();
+        if (!isOk) {
+            Sonidos.sonarUno(Sonidos.UNO_ERROR);
+        }
     }
 }
