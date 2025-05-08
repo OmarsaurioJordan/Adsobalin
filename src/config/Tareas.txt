@@ -1,13 +1,13 @@
 TAREAS ADSOBALIN:
 .
 interfaz
-* poner en pantalla completa con F4.
-* no se está guardando la información al salir estando en lobby???
+-x poner en pantalla completa con F4.
+-x no se está guardando la información al salir estando en lobby???
 NPCs
-- hacer alertas que atraigan NPCs.
-- poner supervisión de mira con producto punto.
+-x hacer alertas que atraigan NPCs.
+-- poner supervisión de mira con producto punto.
 sonido
-* música de fondo para menú, lobby, juego y resultados.
+-x música de fondo para menú, lobby, juego y resultados.
 .
 .
 .
