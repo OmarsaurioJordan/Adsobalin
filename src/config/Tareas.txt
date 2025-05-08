@@ -9,8 +9,6 @@ NPCs
 sonido
 -x música de fondo para menú, lobby, juego y resultados.
 .
-.
-.
 probar
 - desconexión de jugador y borrado del avatar.
 - reiniciar juego a lobby otra vez.

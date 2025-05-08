@@ -57,7 +57,7 @@ public class Mundo extends GUIs {
     // posicion del mouse
     public static float[] mousePos = {0f, 0f};
     // sistema para obtener coordenadas de mouse
-    private static Robot adquisidor = new Robot();
+    private static Robot adquisidor = null;
     
     // temporizador para obtener la informacion del mapa del servidor
     public float temp_get_mapa = 1f;
@@ -859,6 +859,9 @@ public class Mundo extends GUIs {
     
     // obtiener y procesar la posicion del mouse
     private void getMouse() {
+        if (adquisidor == null) {
+            adquisidor = new Robot();
+        }
         float wReal = (float)raiz.getWidth();
         float hReal = (float)(raiz.getHeight() - Adsobalin.HEADER);
         float[] mouse = {
