@@ -1,32 +1,37 @@
-ADSOBALIN es un videojuego 2D cenital de disparos multijugador, creado como proyecto para una clase de Java (en el SENA para el programa ADSO en 2024)
+ADSOBALIN is a top-down 2D multiplayer shooter videogame, created as a project for a Java class (at SENA, for the ADSO program, in 2024).
 
-Características:
-- soporta hasta 18 jugadores
-- se enfrentan 2 grupos: rojos vs azules
-- tiene NPCs como bots con los que se puede jugar, de aliados o enemigos
-- notificaciónes de muerte de otros usuarios
-- apuntar y disparar con mouse, moverse con teclado
-- conexión LAN y sincronización con mensajes UDP
-- personalización de nombre y estética del jugador
-- lobby para seleccionar NPCs, esperar jugadores y configurar el mapa de la partida
-- estadísticas de la partida en UI
-- tiempo de juego, vidas, munición y respawn en UI
-- modomultijugador cooperativo (aliados) vs competitivo (enemigos)
-- tabla de resultados, con puntos obtenidos y puesto
+Features:
 
-Requiere:
-- Java SDK 17
-- Java FX 17
+* Supports up to 18 players
+* Two opposing teams: red vs blue
+* Includes NPCs acting as bots, which can be played with as allies or enemies
+* Death notifications when other players are eliminated
+* Aim and shoot with the mouse, move with the keyboard
+* LAN connection and synchronization via UDP messages
+* Player name and visual customization
+* Lobby system to select NPCs, wait for players, and configure the match map
+* Match statistics displayed in the UI
+* Game time, lives, ammo, and respawn shown in the UI
+* Cooperative multiplayer mode (allies) and competitive mode (enemies)
+* Results table with points earned and final ranking
+* Code written with variable and method names in Spanish… sorry XD
 
-Trabajo Futuro:
-- mejorar los gráficos para que se vea más profesional o temático
-- hacer la opción de renderizado 3D usando el mismo backend
-- agregar música de fondo
-- opcionalmente agregar algún poder especial, recargable o recolectable
-- poner partículas para embellecer
-- poner sombras y luces con shaders
+Requirements:
 
-Licencia:
-- siéntase libre de usar el código con propósitos académicos de enseñanza o de aprendizaje
-- siempre y cuando dé crédito al creador, puede modificar copias de este repositorio
-- se prohibe su uso comercial, no debe ganar dinero con algo que no es suyo
+* Java SDK 17
+* JavaFX 17
+
+Future Work:
+
+* Improve graphics to make them look more professional or thematic
+* Add an optional 3D rendering mode using the same backend
+* Add background music
+* Optionally add a special ability, either rechargeable or collectible
+* Add particle effects for visual polish
+* Add shadows and lighting using shaders
+
+License:
+
+* Feel free to use the code for academic, teaching, or learning purposes
+* As long as you give credit to the creator, you may modify copies of this repository
+* Commercial use is prohibited; you must not make money from something that is not yours
